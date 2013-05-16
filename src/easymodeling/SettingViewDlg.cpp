@@ -1,5 +1,5 @@
 /*
-* Copyright (c) 2013 XZRUNNER http://runnersoft.net
+* Copyright (c) 2013 Guang Zhu http://runnersoft.net
 *
 * This software is provided 'as-is', without any express or implied
 * warranty.  In no event will the authors be held liable for any damages
