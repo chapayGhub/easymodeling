@@ -67,11 +67,14 @@ void StagePanel::insertSprite(d2d::ISprite* sprite)
 		wxString path = d2d::FilenameTools::getFilePathExceptExtension(sprite->getSymbol().getFilepath());
 		wxString polygonPath = path + "_" + d2d::FileNameParser::getFileTag(d2d::FileNameParser::e_polyline) + ".txt";
 		wxString circlePath = path + "_" + d2d::FileNameParser::getFileTag(d2d::FileNameParser::e_circle) + ".txt";
+		wxString shapePath = path + "_" + d2d::FileNameParser::getFileTag(d2d::FileNameParser::e_shape) + ".json";
 		BodyData* data = new BodyData; 
 		if (d2d::FilenameTools::isExist(polygonPath))
 			loadPolygonBody(polygonPath, *data);
 		else if (d2d::FilenameTools::isExist(circlePath))
 			loadCircleBody(circlePath, *data);
+		else if (d2d::FilenameTools::isExist(shapePath))
+			loadShapesBody(shapePath, *data);
 		else
 			assert(0);
 
@@ -178,6 +181,42 @@ void StagePanel::loadPolygonBody(const wxString& filepath, BodyData& body) const
 	}
 
 	for_each(chains.begin(), chains.end(), DeletePointerFunctor<d2d::ChainShape>());
+}
+
+void StagePanel::loadShapesBody(const wxString& filepath, BodyData& body) const
+{
+	std::vector<d2d::IShape*> shapes;
+	d2d::EShapeFileAdapter adapter(shapes);
+	adapter.load(filepath.c_str());
+
+	for (size_t i = 0, n = shapes.size();  i< n; ++i)
+	{
+		FixtureData* fixture = new FixtureData;
+		fixture->body = &body;
+		if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(shapes[i]))
+		{
+			PolygonShape* shape = new PolygonShape;
+			shape->m_vertices = chain->getVertices();
+			fixture->shape = shape;
+		}
+		else if (d2d::RectShape* rect = dynamic_cast<d2d::RectShape*>(shapes[i]))
+		{
+			PolygonShape* shape = new PolygonShape;
+			shape->m_vertices.resize(4);
+			shape->m_vertices[0] = d2d::Vector(rect->m_rect.xMin, rect->m_rect.yMin);
+			shape->m_vertices[1] = d2d::Vector(rect->m_rect.xMax, rect->m_rect.yMin);
+			shape->m_vertices[2] = d2d::Vector(rect->m_rect.xMax, rect->m_rect.yMax);
+			shape->m_vertices[3] = d2d::Vector(rect->m_rect.xMin, rect->m_rect.yMax);
+			fixture->shape = shape;
+		}
+		else if (d2d::CircleShape* circle = dynamic_cast<d2d::CircleShape*>(shapes[i]))
+		{
+			CircleShape* shape = new CircleShape;
+			shape->m_radius = circle->radius;
+			fixture->shape = shape;
+		}
+		body.m_fixtures.push_back(fixture);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////

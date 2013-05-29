@@ -110,7 +110,7 @@ void Frame::onAbout(wxCommandEvent& event)
 {
 	wxString msg;
 	msg.Printf(wxT("Version: ") + VERSION);
-	wxMessageBox(msg, wxT("About DoodleEditor"), wxOK | wxICON_INFORMATION, this);
+	wxMessageBox(msg, wxT("About EasyModeling"), wxOK | wxICON_INFORMATION, this);
 }
 
 void Frame::onSettingOperatingMenu(wxCommandEvent& event)

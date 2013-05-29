@@ -97,6 +97,6 @@ void PrismaticJoint::drawAnchor(const d2d::Vector& pos, DrawType type) const
 		break;
 	}
 
-	d2d::PrimitiveDraw::drawCircle(pos, JOINT_RADIUS_IN, color);
-	d2d::PrimitiveDraw::drawRing(pos, JOINT_RADIUS_OUT, color);
+	d2d::PrimitiveDraw::drawCircle(pos, JOINT_RADIUS_IN, true, 2, color);
+	d2d::PrimitiveDraw::drawCircle(pos, JOINT_RADIUS_OUT, false, 2, color);
 }

@@ -1,2 +1,5 @@
+*.suo
+*.ncb
+*.user
 platform/msvc2008/easymodeling/
 !platform/msvc2008/easymodeling/x86/Release/easymodeling.exe

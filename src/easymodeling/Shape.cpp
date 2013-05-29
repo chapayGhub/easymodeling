@@ -37,13 +37,13 @@ bool CircleShape::isContain(const d2d::Vector& pos, const d2d::Vector& offset, f
 
 bool CircleShape::isIntersect(const d2d::Rect& aabb, const d2d::Vector& offset, float delta) const
 {
-	return d2d::Math::isCircleIntersectAABB(m_center + offset, m_radius, aabb);
+	return d2d::Math::isCircleIntersectRect(m_center + offset, m_radius, aabb);
 }
 
 void CircleShape::draw(const d2d::Colorf& cFace, const d2d::Colorf& cEdge) const
 {
-	d2d::PrimitiveDraw::drawCircle(d2d::Vector(), m_radius, cFace);
-	d2d::PrimitiveDraw::drawRing(d2d::Vector(), m_radius, cEdge, 2, 32);
+	d2d::PrimitiveDraw::drawCircle(d2d::Vector(), m_radius, true, 2, cFace);
+	d2d::PrimitiveDraw::drawCircle(d2d::Vector(), m_radius, false, 2, cEdge, 32);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ bool PolygonShape::isIntersect(const d2d::Rect& aabb, const d2d::Vector& offset,
 	std::vector<d2d::Vector> vertices(m_vertices);
 	for (size_t i = 0, n = vertices.size(); i < n ; ++i)
 		vertices[i] = d2d::Math::rotateVector(vertices[i], delta) + offset;
-	return d2d::Math::isPolylineIntersectAABB(vertices, true, aabb);
+	return d2d::Math::isPolylineIntersectRect(vertices, true, aabb);
 }
 
 void PolygonShape::draw(const d2d::Colorf& cFace, const d2d::Colorf& cEdge) const

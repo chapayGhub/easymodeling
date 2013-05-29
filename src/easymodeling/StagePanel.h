@@ -53,6 +53,7 @@ namespace emodeling
 	private:
 		void loadCircleBody(const wxString& filepath, BodyData& body) const;
 		void loadPolygonBody(const wxString& filepath, BodyData& body) const;
+		void loadShapesBody(const wxString& filepath, BodyData& body) const;
 
 	private:
 		class PointQueryVisitor : public d2d::IVisitor
