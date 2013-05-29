@@ -4,7 +4,7 @@ easymodeling
 Modeling tools for Box2D, to create body, fixture and joint.
 
 ##Preview
-![preview](https://github.com/xzrunner/homepage/blob/gh-pages/emodeling/preview.jpg)
+![preview](../../../homepage/blob/gh-pages/emodeling/preview.jpg?raw=true)
 
 ##About
 EasyModeling was inspired by [R.U.B.E Box2d editor](https://www.iforce2d.net/rube/).
@@ -12,7 +12,7 @@ EasyModeling was inspired by [R.U.B.E Box2d editor](https://www.iforce2d.net/rub
 This editor used to create Box2D's body, fixture, joint and adjust their attributes. 
 
 ##Binaries
-[easymodeling.exe](https://github.com/xzrunner/easymodeling/blob/master/platform/msvc2008/easymodeling/x86/Release/easymodeling.exe)
+[easymodeling.exe](platform/msvc2008/easymodeling/x86/Release/easymodeling.exe?raw=true)
 
 maybe you need these dll files: [freetype6.dll](http://cn.dll-files.com/freetype6.dll.html) [zlib1.dll](http://cn.dll-files.com/zlib1.dll.html)
 
