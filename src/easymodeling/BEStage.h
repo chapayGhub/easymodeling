@@ -46,9 +46,9 @@ namespace emodeling
 		void storeShapes() const;
 
 	private:
-		bool m_bSymbol;
-
 		const d2d::ISymbol& m_symbol;
+
+		d2d::ISprite* m_sprite;
 
 		mutable std::vector<d2d::IShape*> m_shapes;
 

@@ -24,8 +24,8 @@ using namespace emodeling;
 BEStage::BEStage(wxWindow* parent, d2d::ISymbol* symbol)
 	: EditPanel(parent)
 	, MultiShapesImpl(parent)
-	, m_bSymbol(true)
 	, m_symbol(*symbol)
+	, m_sprite(NULL)
 {
 	m_canvas = new BECanvas(this);
 	loadShapes();
@@ -34,8 +34,8 @@ BEStage::BEStage(wxWindow* parent, d2d::ISymbol* symbol)
 BEStage::BEStage(wxWindow* parent, d2d::ISprite* sprite)
 	: EditPanel(parent)
 	, MultiShapesImpl(parent)
-	, m_bSymbol(false)
 	, m_symbol(sprite->getSymbol())
+	, m_sprite(sprite)
 {
 	m_canvas = new BECanvas(this);
 	loadShapes();
@@ -78,18 +78,32 @@ void BEStage::insertShape(d2d::IShape* shape)
 
 void BEStage::clear()
 {
-	for_each(m_shapes.begin(), m_shapes.end(), DeletePointerFunctor<d2d::IShape>());
+	for (size_t i = 0, n = m_shapes.size(); i < n; ++i)
+		m_shapes[i]->release();
 	m_shapes.clear();
 }
 
 void BEStage::loadShapes()
 {
-	wxString path = d2d::FilenameTools::getFilePathExceptExtension(m_symbol.getFilepath());
-	wxString shapePath = path + "_" + d2d::FileNameParser::getFileTag(d2d::FileNameParser::e_shape) + ".json";
-	if (d2d::FilenameTools::isExist(shapePath))
+	if (!m_sprite)
 	{
-		d2d::EShapeFileAdapter adapter(m_shapes);
-		adapter.load(shapePath.c_str());
+		wxString path = d2d::FilenameTools::getFilePathExceptExtension(m_symbol.getFilepath());
+		wxString shapePath = path + "_" + d2d::FileNameParser::getFileTag(d2d::FileNameParser::e_shape) + ".json";
+		if (d2d::FilenameTools::isExist(shapePath))
+		{
+			d2d::EShapeFileAdapter adapter(m_shapes);
+			adapter.load(shapePath.c_str());
+		}
+	}
+	else if (m_sprite->getUserData())
+	{
+// 		BodyData* bd = static_cast<BodyData*>(m_sprite->getUserData());
+// 		m_shapes.reserve(bd->m_fixtures.size());
+// 		for (size_t i = 0, n = bd->m_fixtures.size(); i < n; ++i)
+// 		{
+// 
+// 			m_shapes.push_back(bd->m_fixtures[i]->shape);
+// 		}
 	}
 }
 
@@ -97,8 +111,15 @@ void BEStage::storeShapes() const
 {
 	if (m_shapes.empty()) return;
 
-	wxString path = d2d::FilenameTools::getFilePathExceptExtension(m_symbol.getFilepath());
-	wxString shapePath = path + "_" + d2d::FileNameParser::getFileTag(d2d::FileNameParser::e_shape) + ".json";
-	d2d::EShapeFileAdapter adapter(m_shapes);
-	adapter.store(shapePath.c_str());
+	if (!m_sprite)
+	{
+		wxString path = d2d::FilenameTools::getFilePathExceptExtension(m_symbol.getFilepath());
+		wxString shapePath = path + "_" + d2d::FileNameParser::getFileTag(d2d::FileNameParser::e_shape) + ".json";
+		d2d::EShapeFileAdapter adapter(m_shapes);
+		adapter.store(shapePath.c_str());
+	}
+	else
+	{
+
+	}
 }
