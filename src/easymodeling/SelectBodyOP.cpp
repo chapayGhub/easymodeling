@@ -20,6 +20,8 @@
 #include "BodyPropertySetting.h"
 #include "DrawUtils.h"
 #include "StagePanel.h"
+#include "BEDialog.h"
+#include "Context.h"
 
 using namespace emodeling;
 
@@ -50,11 +52,27 @@ bool SelectBodyOP::onMouseMove(int x, int y)
 	m_mouseOn = NULL;
 
 	d2d::Vector pos = m_editPanel->transPosScreenToProject(x, y);
-	d2d::ISprite* sprite = static_cast<StagePanel*>(m_editPanel)->querySpriteByPos(pos);
-	if (sprite)
-		m_mouseOn = static_cast<BodyData*>(sprite->getUserData());
+	d2d::ISprite* selected = m_spritesImpl->querySpriteByPos(pos);
+	if (selected)
+		m_mouseOn = static_cast<BodyData*>(selected->getUserData());
 
 	m_editPanel->Refresh();
+
+	return false;
+}
+
+bool SelectBodyOP::onMouseLeftDClick(int x, int y)
+{
+	if (d2d::SelectSpritesOP::onMouseLeftDClick(x, y)) return true;
+
+	d2d::Vector pos = m_editPanel->transPosScreenToProject(x, y);
+	d2d::ISprite* selected = m_spritesImpl->querySpriteByPos(pos);
+	if (selected)
+	{
+		BEDialog dlg(Context::Instance()->stage, selected);
+		dlg.ShowModal();
+		Context::Instance()->stage->resetCanvas();
+	}
 
 	return false;
 }

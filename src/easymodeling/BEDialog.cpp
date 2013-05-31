@@ -32,6 +32,17 @@ BEDialog::BEDialog(wxWindow* parent, d2d::ISymbol* symbol)
  	: wxDialog(parent, wxID_ANY, "Edit Symbol", wxDefaultPosition, 
 	wxSize(800, 600), wxCLOSE_BOX | wxCAPTION | wxMAXIMIZE_BOX)
 	, m_symbol(symbol)
+	, m_sprite(NULL)
+	, m_root(NULL)
+{
+	initLayout();
+}
+
+BEDialog::BEDialog(wxWindow* parent, d2d::ISprite* sprite)
+ 	: wxDialog(parent, wxID_ANY, "Edit Symbol", wxDefaultPosition, 
+	wxSize(800, 600), wxCLOSE_BOX | wxCAPTION | wxMAXIMIZE_BOX)
+	, m_symbol(NULL)
+	, m_sprite(sprite)
 	, m_root(NULL)
 {
 	initLayout();
@@ -54,7 +65,7 @@ void BEDialog::initLayout()
 	wxSplitterWindow* horizontal = new wxSplitterWindow(vertical);
 
 	d2d::PropertySettingPanel* property = new d2d::PropertySettingPanel(horizontal);
-	BEStage* stage = new BEStage(vertical, m_symbol);
+	BEStage* stage = m_symbol ? new BEStage(vertical, m_symbol) : new BEStage(vertical, m_sprite);
 	BEToolbar* toolbar = new BEToolbar(horizontal, property, stage);
 
 	horizontal->SetSashGravity(0.6f);

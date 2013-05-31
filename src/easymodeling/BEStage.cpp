@@ -18,6 +18,9 @@
 
 #include "BEStage.h"
 #include "BECanvas.h"
+#include "BodyData.h"
+#include "FixtureData.h"
+#include "Shape.h"
 
 using namespace emodeling;
 
@@ -97,13 +100,22 @@ void BEStage::loadShapes()
 	}
 	else if (m_sprite->getUserData())
 	{
-// 		BodyData* bd = static_cast<BodyData*>(m_sprite->getUserData());
-// 		m_shapes.reserve(bd->m_fixtures.size());
-// 		for (size_t i = 0, n = bd->m_fixtures.size(); i < n; ++i)
-// 		{
-// 
-// 			m_shapes.push_back(bd->m_fixtures[i]->shape);
-// 		}
+ 		BodyData* bd = static_cast<BodyData*>(m_sprite->getUserData());
+ 		m_shapes.reserve(bd->m_fixtures.size());
+ 		for (size_t i = 0, n = bd->m_fixtures.size(); i < n; ++i)
+ 		{
+			IShape* shape = bd->m_fixtures[i]->shape;
+			if (shape->getType() == IShape::e_circle)
+			{
+				CircleShape* circle = static_cast<CircleShape*>(shape);
+ 				m_shapes.push_back(new d2d::CircleShape(circle->m_center, circle->m_radius));
+			}
+			else if (shape->getType() == IShape::e_polygon)
+			{
+				PolygonShape* poly = static_cast<PolygonShape*>(shape);
+				m_shapes.push_back(new d2d::PolygonShape(poly->m_vertices));
+			}
+ 		}
 	}
 }
 
@@ -120,6 +132,21 @@ void BEStage::storeShapes() const
 	}
 	else
 	{
-
+		BodyData* bd = static_cast<BodyData*>(m_sprite->getUserData());
+		for (size_t i = 0, n = m_shapes.size(); i < n; ++i)
+		{
+			d2d::IShape* shape = m_shapes[i];
+			if (d2d::CircleShape* circle = dynamic_cast<d2d::CircleShape*>(shape))
+			{
+				CircleShape* dst = static_cast<CircleShape*>(bd->m_fixtures[i]->shape);
+				dst->m_center = circle->center;
+				dst->m_radius = circle->radius;
+			}
+			else if (d2d::PolygonShape* poly = dynamic_cast<d2d::PolygonShape*>(shape))
+			{
+				PolygonShape* dst = static_cast<PolygonShape*>(bd->m_fixtures[i]->shape);
+				dst->m_vertices = poly->getVertices();
+			}
+		}
 	}
 }

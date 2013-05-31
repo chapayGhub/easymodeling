@@ -27,6 +27,7 @@ namespace emodeling
 	{
 	public:
 		BEDialog(wxWindow* parent, d2d::ISymbol* symbol);
+		BEDialog(wxWindow* parent, d2d::ISprite* sprite);
 		virtual ~BEDialog();
 
 	private:
@@ -36,6 +37,7 @@ namespace emodeling
 
 	private:
 		d2d::ISymbol* m_symbol;
+		d2d::ISprite* m_sprite;
 
 		wxWindow* m_root;
 

@@ -36,6 +36,7 @@ namespace emodeling
 
 		virtual bool onKeyDown(int keyCode);
 		virtual bool onMouseMove(int x, int y);
+		virtual bool onMouseLeftDClick(int x, int y);
 
 		virtual bool onDraw() const;
 		virtual bool clear();
