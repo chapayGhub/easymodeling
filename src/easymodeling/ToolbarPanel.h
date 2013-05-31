@@ -23,14 +23,10 @@
 
 namespace emodeling
 {
-	class StagePanel;
-
 	class ToolbarPanel : public d2d::ToolbarPanel
 	{
 	public:
-		ToolbarPanel(wxWindow* parent, StagePanel* editPanel,
-			d2d::LibraryPanel* libraryPanel,
-			d2d::PropertySettingPanel* propertyPanel);
+		ToolbarPanel(wxWindow* parent);
 
 	protected:
 		virtual wxSizer* initLayout();

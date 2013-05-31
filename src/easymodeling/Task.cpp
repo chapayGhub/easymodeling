@@ -17,19 +17,18 @@
 */
 
 #include "Task.h"
+#include "LibraryPanel.h"
 #include "StagePanel.h"
 #include "ToolbarPanel.h"
 #include "PreviewDialog.h"
 #include "FileIO.h"
+#include "Context.h"
 
 using namespace emodeling;
 
 Task::Task(wxFrame* parent)
 	: m_root(NULL)
 	, m_parent(parent)
-	, m_stageView(NULL)
-	, m_libraryPanel(NULL)
-	, m_stage(NULL)
 {
 	initLayout();
 }
@@ -46,39 +45,39 @@ Task::~Task()
 void Task::loadFromTextFile(const char* filename)
 {
 	std::ifstream fin(filename);
-  	FileIO::load(fin, m_stage, m_libraryPanel);
+  	FileIO::load(fin);
 	fin.close();
 }
 
 void Task::storeToTextFile(const char* filename) const
 {
   	std::ofstream fout(filename);
-  	FileIO::store(fout, m_stage);
+  	FileIO::store(fout);
   	fout.close();
 }
 
 void Task::clear()
 {
-	m_libraryPanel->clear();
-	m_stage->clear();
-	m_libraryPanel->Refresh();
-	m_stage->Refresh();
+	Context* context = Context::Instance();
+	context->library->clear();
+	context->stage->clear();
+	context->library->Refresh();
+	context->stage->Refresh();
 }
 
 void Task::onPreview() const
 {
-	PreviewDialog dlg(m_stage, m_libraryPanel);
+	PreviewDialog dlg;
 	dlg.ShowModal();
-	m_stage->resetCanvas();
+	Context::Instance()->stage->resetCanvas();
 }
 
 d2d::GLCanvas* Task::getCanvas() const
 {
-	if (!m_stageView) return NULL;
-
-	d2d::EditPanel* editPanel = dynamic_cast<d2d::EditPanel*>(m_stageView);
-	if (editPanel) return editPanel->getCanvas();
-	else return NULL;
+	if (d2d::EditPanel* stage = Context::Instance()->stage)
+		return stage->getCanvas();
+	else
+		return NULL;
 }
 
 void Task::initWindows(wxSplitterWindow* leftHorizontalSplitter, 
@@ -87,14 +86,15 @@ void Task::initWindows(wxSplitterWindow* leftHorizontalSplitter,
 					   wxWindow*& library, wxWindow*& property, 
 					   wxWindow*& stage, wxWindow*& toolbar)
 {
-	library = m_libraryPanel = new d2d::LibraryPanel(leftHorizontalSplitter);
-	m_libraryPanel->addPage(new d2d::LibraryImagePage(m_libraryPanel->getNotebook()));
+	Context* context = Context::Instance();
 
-	property = m_propertyPanel = new d2d::PropertySettingPanel(leftHorizontalSplitter);
+	library = context->library = new LibraryPanel(leftHorizontalSplitter);
 
-	stage = m_stage = new StagePanel(leftVerticalSplitter, m_propertyPanel, m_libraryPanel);
+	property = context->property = new d2d::PropertySettingPanel(leftHorizontalSplitter);
 
-	toolbar = new ToolbarPanel(rightVerticalSplitter, m_stage, m_libraryPanel, m_propertyPanel);
+	stage = context->stage = new StagePanel(leftVerticalSplitter);
+
+	toolbar = context->toolbar = new ToolbarPanel(rightVerticalSplitter);
 }
 
 void Task::initLayout()
@@ -108,7 +108,6 @@ void Task::initLayout()
 		library, property, stage, toolbar);
 
 	assert(stage);
-	m_stageView = stage;
 
 	if (library || property)
 	{

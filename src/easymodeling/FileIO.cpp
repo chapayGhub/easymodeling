@@ -25,16 +25,18 @@
 #include "DistanceJoint.h"
 #include "WheelJoint.h"
 #include "Shape.h"
+#include "Context.h"
 
 using namespace emodeling;
 
-void FileIO::load(std::ifstream& fin, StagePanel* stage,
-				  d2d::LibraryPanel* libraryPanel)
+void FileIO::load(std::ifstream& fin)
 {
 	Json::Value value;
 	Json::Reader reader;
 	reader.parse(fin, value);
 	fin.close();
+
+	Context* context = Context::Instance();
 
 	std::vector<BodyData*> bodies;
 
@@ -42,7 +44,7 @@ void FileIO::load(std::ifstream& fin, StagePanel* stage,
 	Json::Value bodyValue = value["body"][i++];
 	while (!bodyValue.isNull()) {
 		BodyData* body = j2bBody(bodyValue);
-		stage->insertSprite(body->m_sprite);
+		context->stage->insertSprite(body->m_sprite);
 		bodies.push_back(body);
 
 		bodyValue = value["body"][i++];
@@ -52,21 +54,21 @@ void FileIO::load(std::ifstream& fin, StagePanel* stage,
 	Json::Value jointValue = value["joint"][i++];
 	while (!jointValue.isNull()) {
 		JointData* joint = j2bJoint(jointValue, bodies);
-		stage->insertJoint(joint);
+		context->stage->insertJoint(joint);
 		jointValue = value["joint"][i++];
 	}
 
-	libraryPanel->loadFromSymbolMgr(*d2d::SymbolMgr::Instance());
-	stage->resetCanvas();
+	context->library->loadFromSymbolMgr(*d2d::SymbolMgr::Instance());
+	context->stage->resetCanvas();
 }
 
-void FileIO::store(std::ofstream& fout, StagePanel* stage)
+void FileIO::store(std::ofstream& fout)
 {
 	std::vector<BodyData*> bodies;
-	stage->traverseBodies(d2d::FetchAllVisitor<BodyData>(bodies));
+	Context::Instance()->stage->traverseBodies(d2d::FetchAllVisitor<BodyData>(bodies));
 
 	std::vector<JointData*> joints;
-	stage->traverseJoints(d2d::FetchAllVisitor<JointData>(joints));
+	Context::Instance()->stage->traverseJoints(d2d::FetchAllVisitor<JointData>(joints));
 
 	Json::Value value;
 

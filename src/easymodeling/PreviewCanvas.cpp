@@ -18,6 +18,7 @@
 
 #include "PreviewCanvas.h"
 #include "PreviewPanel.h"
+#include "Context.h"
 
 using namespace emodeling;
 
@@ -25,10 +26,8 @@ BEGIN_EVENT_TABLE(PreviewCanvas, d2d::GLCanvas)
 	EVT_TIMER(TIMER_ID, PreviewCanvas::onTimer)
 END_EVENT_TABLE()
 
-PreviewCanvas::PreviewCanvas(PreviewPanel* editPanel, 
-							 d2d::LibraryPanel* libraryPanel)
+PreviewCanvas::PreviewCanvas(PreviewPanel* editPanel)
 	: d2d::GLCanvas(editPanel)
-	, m_libraryPanel(libraryPanel)
 	, m_timer(this, TIMER_ID)
 {
 	m_timer.Start(1000 / FRAME_RATE);
@@ -42,7 +41,7 @@ PreviewCanvas::~PreviewCanvas()
 void PreviewCanvas::initGL()
 {
 	d2d::GLCanvas::initGL();
-	m_libraryPanel->reloadTexture();
+	Context::Instance()->library->reloadTexture();
 }
 
 void PreviewCanvas::onDraw()

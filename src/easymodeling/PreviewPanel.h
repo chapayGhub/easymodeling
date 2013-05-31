@@ -23,15 +23,13 @@
 
 namespace emodeling
 {
-	class StagePanel;
 	class BodyData;
 
 	class PreviewPanel : public d2d::EditPanel, 
 		public d2d::PhysicsPanelImpl
 	{
 	public:
-		PreviewPanel(wxWindow* parent, StagePanel* stagePanel,
-			d2d::LibraryPanel* libraryPanel);
+		PreviewPanel(wxWindow* parent);
 
 	private:
 		void createGround();

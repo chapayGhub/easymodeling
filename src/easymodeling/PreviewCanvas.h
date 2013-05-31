@@ -28,8 +28,7 @@ namespace emodeling
 	class PreviewCanvas : public d2d::GLCanvas
 	{
 	public:
-		PreviewCanvas(PreviewPanel* editPanel, 
-			d2d::LibraryPanel* libraryPanel);
+		PreviewCanvas(PreviewPanel* editPanel);
 		virtual ~PreviewCanvas();
 
 	protected:
@@ -47,8 +46,6 @@ namespace emodeling
 		static const int FRAME_RATE = 60;
 
 	private:
-		d2d::LibraryPanel* m_libraryPanel;
-
 		wxTimer m_timer;
 
 		DECLARE_EVENT_TABLE()

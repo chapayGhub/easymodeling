@@ -23,13 +23,10 @@
 
 namespace emodeling
 {
-	class StagePanel;
-
 	class PreviewDialog : public wxDialog
 	{
 	public:
-		PreviewDialog(StagePanel* stagePanel, 
-			d2d::LibraryPanel* libraryPanel);
+		PreviewDialog();
 
 	}; // PreviewDialog
 }

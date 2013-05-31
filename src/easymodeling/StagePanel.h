@@ -29,8 +29,7 @@ namespace emodeling
 	class StagePanel : public d2d::EditPanel, public d2d::SpritesPanelImpl
 	{
 	public:
-		StagePanel(wxWindow* parent, d2d::PropertySettingPanel* propertyPanel,
-			d2d::LibraryPanel* libraryPanel);
+		StagePanel(wxWindow* parent);
 		virtual ~StagePanel();
 
 		virtual void removeSprite(d2d::ISprite* sprite);

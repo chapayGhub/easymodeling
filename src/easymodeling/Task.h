@@ -24,8 +24,6 @@
 
 namespace emodeling
 {
-	class StagePanel;
-
 	class Task
 	{
 	public:
@@ -59,14 +57,6 @@ namespace emodeling
 		wxWindow* m_root;
 
 		wxFrame* m_parent;
-
-		wxWindow* m_stageView;
-
-		d2d::LibraryPanel* m_libraryPanel;
-
-		d2d::PropertySettingPanel* m_propertyPanel;
-
-		StagePanel* m_stage;
 
 	}; // Task
 }

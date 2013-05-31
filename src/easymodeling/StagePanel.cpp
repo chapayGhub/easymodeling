@@ -22,13 +22,13 @@
 #include "JointData.h"
 #include "FixtureData.h"
 #include "Shape.h"
+#include "Context.h"
 
 using namespace emodeling;
 
-StagePanel::StagePanel(wxWindow* parent, d2d::PropertySettingPanel* propertyPanel,
-					   d2d::LibraryPanel* libraryPanel)
+StagePanel::StagePanel(wxWindow* parent)
 	: d2d::EditPanel(parent)
-	, d2d::SpritesPanelImpl(this, libraryPanel)
+	, d2d::SpritesPanelImpl(this, Context::Instance()->library)
 {
 	m_canvas = new StageCanvas(this);
 }
@@ -216,6 +216,8 @@ void StagePanel::loadShapesBody(const wxString& filepath, BodyData& body) const
 			fixture->shape = shape;
 		}
 		body.m_fixtures.push_back(fixture);
+
+		shapes[i]->release();
 	}
 }
 

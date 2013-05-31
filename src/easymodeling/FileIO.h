@@ -24,7 +24,6 @@
 
 namespace emodeling
 {
-	class StagePanel;
 	class BodyData;
 	class FixtureData;
 	class JointData;
@@ -32,9 +31,8 @@ namespace emodeling
 	class FileIO
 	{
 	public:
-		static void load(std::ifstream& fin, StagePanel* stage,
-			d2d::LibraryPanel* libraryPanel);
-		static void store(std::ofstream& fout, StagePanel* stage);
+		static void load(std::ifstream& fin);
+		static void store(std::ofstream& fout);
 
 	private:
 		static Json::Value b2j(BodyData* body);

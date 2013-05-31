@@ -22,21 +22,21 @@
 #include "BodyData.h"
 #include "JointData.h"
 #include "ResolveToB2.h"
+#include "Context.h"
 
 using namespace emodeling;
 
-PreviewPanel::PreviewPanel(wxWindow* parent, StagePanel* stagePanel,
-						   d2d::LibraryPanel* libraryPanel)
+PreviewPanel::PreviewPanel(wxWindow* parent)
 	: d2d::EditPanel(parent)
 {
 	createGround();
 
-	m_canvas = new PreviewCanvas(this, libraryPanel);
+	m_canvas = new PreviewCanvas(this);
 	m_editOP = new d2d::DragPhysicsOP(this, m_world, m_ground);
 
 	std::map<BodyData*, b2Body*> transBody;
-	stagePanel->traverseBodies(LoadBodyVisitor(m_world, transBody));
-	stagePanel->traverseJoints(LoadJointVisitor(m_world, transBody));
+	Context::Instance()->stage->traverseBodies(LoadBodyVisitor(m_world, transBody));
+	Context::Instance()->stage->traverseJoints(LoadJointVisitor(m_world, transBody));
 }
 
 void PreviewPanel::createGround()

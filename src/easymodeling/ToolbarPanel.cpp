@@ -21,17 +21,18 @@
 #include "BodyEditCmpt.h"
 #include "FixtureEditCmpt.h"
 #include "JointEditCmpt.h"
+#include "Context.h"
 
 using namespace emodeling;
 
-ToolbarPanel::ToolbarPanel(wxWindow* parent, StagePanel* editPanel,
-						   d2d::LibraryPanel* libraryPanel,
-						   d2d::PropertySettingPanel* propertyPanel)
-	: d2d::ToolbarPanel(parent, editPanel)
+ToolbarPanel::ToolbarPanel(wxWindow* parent)
+	: d2d::ToolbarPanel(parent, Context::Instance()->stage)
 {
-	addChild(new BodyEditCmpt(this, wxT("Body"), editPanel, propertyPanel));
-	addChild(new FixtureEditCmpt(this, wxT("Fixture"), editPanel, propertyPanel));
-	addChild(new JointEditCmpt(this, wxT("Joint"), editPanel, propertyPanel));
+	Context* context = Context::Instance();
+
+	addChild(new BodyEditCmpt(this, wxT("Body"), context->stage, context->property));
+	addChild(new FixtureEditCmpt(this, wxT("Fixture"), context->stage, context->property));
+	addChild(new JointEditCmpt(this, wxT("Joint"), context->stage, context->property));
 
 	SetSizer(initLayout());	
 }
