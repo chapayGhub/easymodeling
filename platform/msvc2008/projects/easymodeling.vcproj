@@ -42,7 +42,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				AdditionalIncludeDirectories="..\..\..\src\easymodeling;..\..\..\..\drag2d\src\common;..\..\..\..\drag2d\src\drag2d;..\..\..\..\drag2d\platform\msvc2008\include"
-				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
@@ -123,7 +123,7 @@
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
 				AdditionalIncludeDirectories="..\..\..\src\easymodeling;..\..\..\..\drag2d\src\common;..\..\..\..\drag2d\src\drag2d;..\..\..\..\drag2d\platform\msvc2008\include"
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
 				UsePrecompiledHeader="0"
@@ -346,22 +346,14 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="stage"
+			Name="tools"
 			>
 			<File
-				RelativePath="..\..\..\src\easymodeling\StageCanvas.cpp"
+				RelativePath="..\..\..\src\easymodeling\DrawUtils.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\easymodeling\StageCanvas.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\easymodeling\StagePanel.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\easymodeling\StagePanel.h"
+				RelativePath="..\..\..\src\easymodeling\DrawUtils.h"
 				>
 			</File>
 		</Filter>
@@ -414,20 +406,36 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="view"
+			Name="stage"
 			>
 			<File
-				RelativePath="..\..\..\src\easymodeling\DrawUtils.cpp"
+				RelativePath="..\..\..\src\easymodeling\StageCanvas.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\easymodeling\DrawUtils.h"
+				RelativePath="..\..\..\src\easymodeling\StageCanvas.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\easymodeling\StagePanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\easymodeling\StagePanel.h"
 				>
 			</File>
 		</Filter>
 		<Filter
 			Name="frame"
 			>
+			<File
+				RelativePath="..\..\..\src\easymodeling\Context.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\easymodeling\Context.h"
+				>
+			</File>
 			<File
 				RelativePath="..\..\..\src\easymodeling\Frame.cpp"
 				>
@@ -506,6 +514,70 @@
 			</File>
 			<File
 				RelativePath="..\..\..\src\easymodeling\ResolveToB2.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="bodyedit"
+			>
+			<File
+				RelativePath="..\..\..\src\easymodeling\BECanvas.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\easymodeling\BECanvas.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\easymodeling\BEDialog.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\easymodeling\BEDialog.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\easymodeling\BEStage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\easymodeling\BEStage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\easymodeling\BEToolbar.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\easymodeling\BEToolbar.h"
+				>
+			</File>
+		</Filter>
+		<Filter
+			Name="library"
+			>
+			<File
+				RelativePath="..\..\..\src\easymodeling\LibraryList.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\easymodeling\LibraryList.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\easymodeling\LibraryPage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\easymodeling\LibraryPage.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\easymodeling\LibraryPanel.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\easymodeling\LibraryPanel.h"
 				>
 			</File>
 		</Filter>
