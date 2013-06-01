@@ -24,7 +24,6 @@
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
 #include "WheelJoint.h"
-#include "Shape.h"
 #include "Context.h"
 
 using namespace emodeling;
@@ -133,26 +132,20 @@ Json::Value FileIO::b2j(FixtureData* fixture)
 	value["maskBits"] = fixture->maskBits;
 	value["groupIndex"] = fixture->groupIndex;
 	
-	switch (fixture->shape->getType())
+	if (d2d::CircleShape* circle = dynamic_cast<d2d::CircleShape*>(fixture->shape))
 	{
-	case IShape::e_circle:
+		value["circle"]["radius"] = circle->radius;
+		value["circle"]["center"]["x"] = circle->center.x;
+		value["circle"]["center"]["y"] = circle->center.y;
+	}
+	else if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(fixture->shape))
+	{
+		const std::vector<d2d::Vector>& vertices = chain->getVertices();
+		for (size_t i = 0, n = vertices.size(); i < n; ++i)
 		{
-			CircleShape* circle = static_cast<CircleShape*>(fixture->shape);
-			value["circle"]["radius"] = circle->m_radius;
-			value["circle"]["center"]["x"] = circle->m_center.x;
-			value["circle"]["center"]["y"] = circle->m_center.y;
+			value["polygon"]["vertices"][i]["x"] = vertices[i].x;
+			value["polygon"]["vertices"][i]["y"] = vertices[i].y;
 		}
-		break;
-	case IShape::e_polygon:
-		{
-			PolygonShape* poly = static_cast<PolygonShape*>(fixture->shape);
-			for (size_t i = 0, n = poly->m_vertices.size(); i < n; ++i)
-			{
-				value["polygon"]["vertices"][i]["x"] = poly->m_vertices[i].x;
-				value["polygon"]["vertices"][i]["y"] = poly->m_vertices[i].y;
-			}
-		}
-		break;
 	}
 
 	return value;
@@ -352,15 +345,14 @@ FixtureData* FileIO::j2bFixture(Json::Value fixtureValue)
 
 	if (!fixtureValue["circle"].isNull())
 	{
-		CircleShape* circle = new CircleShape;
-		circle->m_radius = fixtureValue["circle"]["radius"].asDouble();
-		circle->m_center.x = fixtureValue["circle"]["center"]["x"].asDouble();
-		circle->m_center.y = fixtureValue["circle"]["center"]["y"].asDouble();
-		fixture->shape = circle;
+		float radius = fixtureValue["circle"]["radius"].asDouble();
+		float x = fixtureValue["circle"]["center"]["x"].asDouble(),
+			y = fixtureValue["circle"]["center"]["y"].asDouble();
+		fixture->shape = new d2d::CircleShape(d2d::Vector(x, y), radius);
 	}
 	else if (!fixtureValue["polygon"].isNull())
 	{
-		PolygonShape* poly = new PolygonShape;
+		std::vector<d2d::Vector> vertices;
 
 		int i = 0;
 		Json::Value verticesValue = fixtureValue["polygon"]["vertices"][i++];
@@ -368,12 +360,12 @@ FixtureData* FileIO::j2bFixture(Json::Value fixtureValue)
 			d2d::Vector pos;
 			pos.x = verticesValue["x"].asDouble();
 			pos.y = verticesValue["y"].asDouble();
-			poly->m_vertices.push_back(pos);
+			vertices.push_back(pos);
 
 			verticesValue = fixtureValue["polygon"]["vertices"][i++];
 		}
 
-		fixture->shape = poly;
+		fixture->shape = new d2d::ChainShape(vertices, true);
 	}
 
 	return fixture;

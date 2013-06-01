@@ -200,14 +200,6 @@
 				RelativePath="..\..\..\src\easymodeling\FixtureData.h"
 				>
 			</File>
-			<File
-				RelativePath="..\..\..\src\easymodeling\Shape.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\easymodeling\Shape.h"
-				>
-			</File>
 			<Filter
 				Name="joint"
 				>

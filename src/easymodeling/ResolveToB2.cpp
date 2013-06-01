@@ -23,7 +23,6 @@
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
 #include "WheelJoint.h"
-#include "Shape.h"
 
 using namespace emodeling;
 
@@ -65,38 +64,32 @@ b2Body* ResolveToB2::createBody(const BodyData& data, b2World* world,
 		fd.filter.maskBits = fData->maskBits;
 		fd.filter.groupIndex = fData->groupIndex;
 
-		switch(fData->shape->getType())
+		if (d2d::CircleShape* circle = dynamic_cast<d2d::CircleShape*>(fData->shape))
 		{
-		case IShape::e_circle:
+			b2CircleShape shape;
+			shape.m_radius = circle->radius / d2d::BOX2D_SCALE_FACTOR;
+			shape.m_p.x = circle->center.x / d2d::BOX2D_SCALE_FACTOR;
+			shape.m_p.y = circle->center.y / d2d::BOX2D_SCALE_FACTOR;
+
+			fd.shape = &shape;
+			body->CreateFixture(&fd);
+		}
+		else if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(fData->shape))
+		{
+			const std::vector<d2d::Vector>& src = chain->getVertices();
+			const size_t size = src.size();
+			std::vector<b2Vec2> dst(size);
+			for (size_t j = 0; j < size; ++j)
 			{
-				CircleShape* circle = static_cast<CircleShape*>(fData->shape);
-				b2CircleShape shape;
-				shape.m_radius = circle->m_radius / d2d::BOX2D_SCALE_FACTOR;
-				shape.m_p.x = circle->m_center.x / d2d::BOX2D_SCALE_FACTOR;
-				shape.m_p.y = circle->m_center.y / d2d::BOX2D_SCALE_FACTOR;
-
-				fd.shape = &shape;
-				body->CreateFixture(&fd);
+				dst[j].x = src[j].x / d2d::BOX2D_SCALE_FACTOR;
+				dst[j].y = src[j].y / d2d::BOX2D_SCALE_FACTOR;
 			}
-			break;
-		case IShape::e_polygon:
-			{
-				PolygonShape* poly = static_cast<PolygonShape*>(fData->shape);
-				const size_t size = poly->m_vertices.size();
-				std::vector<b2Vec2> vertices(size);
-				for (size_t j = 0; j < size; ++j)
-				{
-					vertices[j].x = poly->m_vertices[j].x / d2d::BOX2D_SCALE_FACTOR;
-					vertices[j].y = poly->m_vertices[j].y / d2d::BOX2D_SCALE_FACTOR;
-				}
 
-				b2PolygonShape shape;
-				shape.Set(&vertices[0], size);
+			b2PolygonShape shape;
+			shape.Set(&dst[0], size);
 
-				fd.shape = &shape;
-				body->CreateFixture(&fd);
-			}
-			break;
+			fd.shape = &shape;
+			body->CreateFixture(&fd);
 		}
 	}
 

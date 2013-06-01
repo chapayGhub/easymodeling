@@ -19,7 +19,6 @@
 #include "PackageToBytes.h"
 #include "BodyData.h"
 #include "FixtureData.h"
-#include "Shape.h"
 #include "RevoluteJoint.h"
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
@@ -46,30 +45,22 @@ void PaskageToBytes::packBody(const BodyData& data, std::ofstream& fout)
 		fout.write(reinterpret_cast<const char*>(&fData->friction), sizeof(float));
 		fout.write(reinterpret_cast<const char*>(&fData->restitution), sizeof(float));
 
-		IShape::Type type = fData->shape->getType();
-		fout.write(reinterpret_cast<const char*>(&type), sizeof(int));
-		switch (type)
+		if (d2d::CircleShape* circle = dynamic_cast<d2d::CircleShape*>(fData->shape))
 		{
-		case IShape::e_circle:
+			fout.write(reinterpret_cast<const char*>(&circle->radius), sizeof(float));
+			fout.write(reinterpret_cast<const char*>(&circle->center.x), sizeof(float));
+			fout.write(reinterpret_cast<const char*>(&circle->center.y), sizeof(float));
+		}
+		else if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(fData->shape))
+		{
+			const std::vector<d2d::Vector>& vertices = chain->getVertices();
+			size_t vSize = vertices.size();
+			fout.write(reinterpret_cast<const char*>(&vSize), sizeof(float));
+			for (size_t j = 0; j < vSize; ++j)
 			{
-				CircleShape* circle = static_cast<CircleShape*>(fData->shape);
-				fout.write(reinterpret_cast<const char*>(&circle->m_radius), sizeof(float));
-				fout.write(reinterpret_cast<const char*>(&circle->m_center.x), sizeof(float));
-				fout.write(reinterpret_cast<const char*>(&circle->m_center.y), sizeof(float));
+				fout.write(reinterpret_cast<const char*>(&vertices[j].x), sizeof(float));
+				fout.write(reinterpret_cast<const char*>(&vertices[j].y), sizeof(float));
 			}
-			break;
-		case IShape::e_polygon:
-			{
-				PolygonShape* poly = static_cast<PolygonShape*>(fData->shape);
-				size_t vSize = poly->m_vertices.size();
-				fout.write(reinterpret_cast<const char*>(&vSize), sizeof(float));
-				for (size_t j = 0; j < vSize; ++j)
-				{
-					fout.write(reinterpret_cast<const char*>(&poly->m_vertices[j].x), sizeof(float));
-					fout.write(reinterpret_cast<const char*>(&poly->m_vertices[j].y), sizeof(float));
-				}
-			}
-			break;
 		}
 	}
 }

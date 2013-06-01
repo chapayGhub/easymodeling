@@ -23,7 +23,6 @@
 
 namespace emodeling
 {
-	class IShape;
 	class BodyData;
 
 	class FixtureData
@@ -42,7 +41,7 @@ namespace emodeling
 
 		BodyData* body;
 
-		IShape* shape;
+		d2d::IShape* shape;
 
 		float density;
 

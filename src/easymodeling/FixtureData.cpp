@@ -39,25 +39,57 @@ FixtureData::FixtureData()
 
 FixtureData::~FixtureData()
 {
-	delete shape;
+	shape->release();
 }
 
 bool FixtureData::isContain(const d2d::Vector& pos) const
 {
-	assert(shape);
-	return shape->isContain(pos, body->m_sprite->getPosition(), 
-		body->m_sprite->getAngle());
+	if (d2d::CircleShape* circle = dynamic_cast<d2d::CircleShape*>(shape))
+	{
+		return d2d::Math::getDistance(circle->center + body->m_sprite->getPosition(), pos) < circle->radius;
+	}
+	else if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(shape))
+	{
+		const std::vector<d2d::Vector>& src = chain->getVertices();
+		std::vector<d2d::Vector> dst(src);
+		for (size_t i = 0, n = dst.size(); i < n ; ++i)
+			dst[i] = d2d::Math::rotateVector(dst[i], body->m_sprite->getAngle()) + body->m_sprite->getPosition();
+		return d2d::Math::isPointInArea(pos, dst);
+	}
+	else
+		return false;
 }
 
 bool FixtureData::isIntersect(const d2d::Rect& aabb) const
 {
-	assert(shape);
-	return shape->isIntersect(aabb, body->m_sprite->getPosition(), 
-		body->m_sprite->getAngle());
+	if (d2d::CircleShape* circle = dynamic_cast<d2d::CircleShape*>(shape))
+	{
+		return d2d::Math::isCircleIntersectRect(circle->center + body->m_sprite->getPosition(), 
+			circle->radius, aabb);
+	}
+	else if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(shape))
+	{
+		const std::vector<d2d::Vector>& src = chain->getVertices();
+		std::vector<d2d::Vector> dst(src);
+		for (size_t i = 0, n = dst.size(); i < n ; ++i)
+			dst[i] = d2d::Math::rotateVector(dst[i], body->m_sprite->getAngle()) + body->m_sprite->getPosition();
+		return d2d::Math::isPolylineIntersectRect(dst, true, aabb);
+	}
+	else
+		return false;
 }
 
 void FixtureData::draw(const d2d::Colorf& cFace, const d2d::Colorf& cEdge) const
 {
-	assert(shape);
-	shape->draw(cFace, cEdge);
+	if (d2d::CircleShape* circle = dynamic_cast<d2d::CircleShape*>(shape))
+	{
+		d2d::PrimitiveDraw::drawCircle(circle->center, circle->radius, true, 2, cFace);
+		d2d::PrimitiveDraw::drawCircle(circle->center, circle->radius, false, 2, cEdge, 32);
+	}
+	else if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(shape))
+	{
+		const std::vector<d2d::Vector>& vertices = chain->getVertices();
+		d2d::PrimitiveDraw::drawPolygon(vertices, cFace);
+		d2d::PrimitiveDraw::drawPolyline(vertices, cEdge, true, 2);
+	}
 }

@@ -158,9 +158,7 @@ void StagePanel::loadCircleBody(const wxString& filepath, BodyData& body) const
 
 	FixtureData* fixture = new FixtureData;
 	fixture->body = &body;
-	CircleShape* circle = new CircleShape;
-	circle->m_radius = fa.m_width * 0.5f;
-	fixture->shape = circle;
+	fixture->shape = new d2d::CircleShape(d2d::Vector(), fa.m_width * 0.5f);
 	body.m_fixtures.push_back(fixture);
 }
 
@@ -174,9 +172,7 @@ void StagePanel::loadPolygonBody(const wxString& filepath, BodyData& body) const
 	{
 		FixtureData* fixture = new FixtureData;
 		fixture->body = &body;
-		PolygonShape* shape = new PolygonShape;
-		shape->m_vertices = chains[i]->getVertices();
-		fixture->shape = shape;
+		fixture->shape = new d2d::ChainShape(chains[i]->getVertices(), true);
 		body.m_fixtures.push_back(fixture);
 	}
 
@@ -195,25 +191,21 @@ void StagePanel::loadShapesBody(const wxString& filepath, BodyData& body) const
 		fixture->body = &body;
 		if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(shapes[i]))
 		{
-			PolygonShape* shape = new PolygonShape;
-			shape->m_vertices = chain->getVertices();
-			fixture->shape = shape;
+			fixture->shape = new d2d::ChainShape(chain->getVertices(), true);
 		}
 		else if (d2d::RectShape* rect = dynamic_cast<d2d::RectShape*>(shapes[i]))
 		{
-			PolygonShape* shape = new PolygonShape;
-			shape->m_vertices.resize(4);
-			shape->m_vertices[0] = d2d::Vector(rect->m_rect.xMin, rect->m_rect.yMin);
-			shape->m_vertices[1] = d2d::Vector(rect->m_rect.xMax, rect->m_rect.yMin);
-			shape->m_vertices[2] = d2d::Vector(rect->m_rect.xMax, rect->m_rect.yMax);
-			shape->m_vertices[3] = d2d::Vector(rect->m_rect.xMin, rect->m_rect.yMax);
-			fixture->shape = shape;
+			std::vector<d2d::Vector> vertices(4);
+ 			vertices[0] = d2d::Vector(rect->m_rect.xMin, rect->m_rect.yMin);
+ 			vertices[1] = d2d::Vector(rect->m_rect.xMax, rect->m_rect.yMin);
+ 			vertices[2] = d2d::Vector(rect->m_rect.xMax, rect->m_rect.yMax);
+ 			vertices[3] = d2d::Vector(rect->m_rect.xMin, rect->m_rect.yMax);
+
+			fixture->shape = new d2d::ChainShape(vertices, true);
 		}
 		else if (d2d::CircleShape* circle = dynamic_cast<d2d::CircleShape*>(shapes[i]))
 		{
-			CircleShape* shape = new CircleShape;
-			shape->m_radius = circle->radius;
-			fixture->shape = shape;
+			fixture->shape = new d2d::CircleShape(d2d::Vector(), circle->radius);
 		}
 		body.m_fixtures.push_back(fixture);
 
