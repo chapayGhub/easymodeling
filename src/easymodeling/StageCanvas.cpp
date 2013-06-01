@@ -36,6 +36,7 @@ StageCanvas::~StageCanvas()
 void StageCanvas::onDraw()
 {
 	drawGuideLines();
+
 	drawSprites();
 	static_cast<StagePanel*>(m_editPanel)->traverseJoints(DrawJointVisitor());
 	m_editPanel->drawEditTemp();

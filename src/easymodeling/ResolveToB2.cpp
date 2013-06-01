@@ -74,6 +74,19 @@ b2Body* ResolveToB2::createBody(const Body& data, b2World* world,
 			fd.shape = &shape;
 			body->CreateFixture(&fd);
 		}
+		else if (d2d::RectShape* rect = dynamic_cast<d2d::RectShape*>(fData->shape))
+		{
+			const float hx = (rect->m_rect.xMax - rect->m_rect.xMin) * 0.5f / d2d::BOX2D_SCALE_FACTOR,
+				hy = (rect->m_rect.yMax - rect->m_rect.yMin) * 0.5f / d2d::BOX2D_SCALE_FACTOR;
+			const float cx = (rect->m_rect.xMax + rect->m_rect.xMin) * 0.5f / d2d::BOX2D_SCALE_FACTOR,
+				cy = (rect->m_rect.yMax + rect->m_rect.yMin) * 0.5f / d2d::BOX2D_SCALE_FACTOR;
+
+			b2PolygonShape shape;
+			shape.SetAsBox(hx, hy, b2Vec2(cx, cy), 0);
+
+			fd.shape = &shape;
+			body->CreateFixture(&fd);
+		}
 		else if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(fData->shape))
 		{
 			const std::vector<d2d::Vector>& src = chain->getVertices();

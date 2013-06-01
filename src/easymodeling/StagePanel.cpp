@@ -182,9 +182,15 @@ void StagePanel::loadBody(d2d::ISprite* sprite, Body& body)
 {
 	Fixture* fixture = new Fixture;
 	fixture->body = &body;
-	std::vector<d2d::Vector> vertices;
-	sprite->getBounding()->getBoundPos(vertices);
-	fixture->shape = new d2d::ChainShape(vertices, true);
+
+// 	std::vector<d2d::Vector> vertices;
+// 	sprite->getBounding()->getBoundPos(vertices);
+// 	fixture->shape = new d2d::ChainShape(vertices, true);
+
+	const float width = sprite->getSymbol().getWidth(),
+		height = sprite->getSymbol().getHeight();
+	fixture->shape = new d2d::RectShape(d2d::Vector(0, 0), width * 0.5f, height * 0.5f);
+
 	body.fixtures.push_back(fixture);
 }
 

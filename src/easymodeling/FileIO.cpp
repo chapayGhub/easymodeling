@@ -123,7 +123,6 @@ Json::Value FileIO::b2j(Fixture* fixture)
 	Json::Value value;
 
 	value["name"] = fixture->name.ToStdString();
-
 	value["density"] = fixture->density;
 	value["friction"] = fixture->friction;
 	value["restitution"] = fixture->restitution;
@@ -131,22 +130,7 @@ Json::Value FileIO::b2j(Fixture* fixture)
 	value["categoryBits"] = fixture->categoryBits;
 	value["maskBits"] = fixture->maskBits;
 	value["groupIndex"] = fixture->groupIndex;
-	
-	if (d2d::CircleShape* circle = dynamic_cast<d2d::CircleShape*>(fixture->shape))
-	{
-		value["circle"]["radius"] = circle->radius;
-		value["circle"]["center"]["x"] = circle->center.x;
-		value["circle"]["center"]["y"] = circle->center.y;
-	}
-	else if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(fixture->shape))
-	{
-		const std::vector<d2d::Vector>& vertices = chain->getVertices();
-		for (size_t i = 0, n = vertices.size(); i < n; ++i)
-		{
-			value["polygon"]["vertices"][i]["x"] = vertices[i].x;
-			value["polygon"]["vertices"][i]["y"] = vertices[i].y;
-		}
-	}
+	d2d::EShapeFileAdapter::store(fixture->shape);
 
 	return value;
 }
@@ -342,31 +326,7 @@ Fixture* FileIO::j2bFixture(Json::Value fixtureValue)
 	fixture->categoryBits = fixtureValue["categoryBits"].asInt();
 	fixture->maskBits = fixtureValue["maskBits"].asInt();
 	fixture->groupIndex = fixtureValue["groupIndex"].asInt();
-
-	if (!fixtureValue["circle"].isNull())
-	{
-		float radius = fixtureValue["circle"]["radius"].asDouble();
-		float x = fixtureValue["circle"]["center"]["x"].asDouble(),
-			y = fixtureValue["circle"]["center"]["y"].asDouble();
-		fixture->shape = new d2d::CircleShape(d2d::Vector(x, y), radius);
-	}
-	else if (!fixtureValue["polygon"].isNull())
-	{
-		std::vector<d2d::Vector> vertices;
-
-		int i = 0;
-		Json::Value verticesValue = fixtureValue["polygon"]["vertices"][i++];
-		while (!verticesValue.isNull()) {
-			d2d::Vector pos;
-			pos.x = verticesValue["x"].asDouble();
-			pos.y = verticesValue["y"].asDouble();
-			vertices.push_back(pos);
-
-			verticesValue = fixtureValue["polygon"]["vertices"][i++];
-		}
-
-		fixture->shape = new d2d::ChainShape(vertices, true);
-	}
+	fixture->shape = d2d::EShapeFileAdapter::loadShape(fixtureValue);
 
 	return fixture;
 }

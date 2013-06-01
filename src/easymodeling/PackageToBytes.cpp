@@ -51,11 +51,18 @@ void PaskageToBytes::packBody(const Body& data, std::ofstream& fout)
 			fout.write(reinterpret_cast<const char*>(&circle->center.x), sizeof(float));
 			fout.write(reinterpret_cast<const char*>(&circle->center.y), sizeof(float));
 		}
+		else if (d2d::RectShape* rect = dynamic_cast<d2d::RectShape*>(fData->shape))
+		{
+			fout.write(reinterpret_cast<const char*>(&rect->m_rect.xMin), sizeof(float));
+			fout.write(reinterpret_cast<const char*>(&rect->m_rect.xMax), sizeof(float));
+			fout.write(reinterpret_cast<const char*>(&rect->m_rect.yMin), sizeof(float));
+			fout.write(reinterpret_cast<const char*>(&rect->m_rect.yMax), sizeof(float));
+		}
 		else if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(fData->shape))
 		{
 			const std::vector<d2d::Vector>& vertices = chain->getVertices();
 			size_t vSize = vertices.size();
-			fout.write(reinterpret_cast<const char*>(&vSize), sizeof(float));
+			fout.write(reinterpret_cast<const char*>(&vSize), sizeof(size_t));
 			for (size_t j = 0; j < vSize; ++j)
 			{
 				fout.write(reinterpret_cast<const char*>(&vertices[j].x), sizeof(float));
