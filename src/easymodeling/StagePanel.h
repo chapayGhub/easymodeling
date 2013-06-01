@@ -50,9 +50,8 @@ namespace emodeling
 		void traverseJoints(d2d::IVisitor& visitor) const;
 
 	private:
-		void loadCircleBody(const wxString& filepath, Body& body) const;
-		void loadPolygonBody(const wxString& filepath, Body& body) const;
-		void loadShapesBody(const wxString& filepath, Body& body) const;
+		static void loadBody(const wxString& filepath, Body& body);
+		static void loadBody(d2d::ISprite* sprite, Body& body);
 
 	private:
 		class PointQueryVisitor : public d2d::IVisitor

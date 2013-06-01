@@ -66,7 +66,7 @@ void Frame::onOpen(wxCommandEvent& event)
 	if (!m_task) return;
 
 	wxFileDialog dlg(this, wxT("Open"), wxEmptyString, wxEmptyString, 
-		wxT("*_") + FILE_TAG + wxT(".txt"), wxFD_OPEN);
+		wxT("*_") + FILE_TAG + wxT(".json"), wxFD_OPEN);
 	if (dlg.ShowModal() == wxID_OK)
 	{
 		m_task->clear();
@@ -92,7 +92,7 @@ void Frame::onSaveAs(wxCommandEvent& event)
 	if (!m_task) return;
 
 	wxFileDialog dlg(this, wxT("Save"), wxEmptyString, wxEmptyString, 
-		wxT("*_") + FILE_TAG + wxT(".txt"), wxFD_SAVE);
+		wxT("*_") + FILE_TAG + wxT(".json"), wxFD_SAVE);
 	if (dlg.ShowModal() == wxID_OK)
 	{
 		wxString fixed = d2d::FilenameTools::getFilenameAddTag(dlg.GetPath(), FILE_TAG, "txt");
@@ -201,7 +201,7 @@ void Frame::setCurrFilename()
 			wxString::FromDouble(id++) + 
 			wxT("_") + 
 			FILE_TAG + 
-			wxT(".txt");
+			wxT(".json");
 
 		if (!d2d::FilenameTools::isExist(str))
 		{

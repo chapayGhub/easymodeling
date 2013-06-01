@@ -58,29 +58,23 @@ void StagePanel::insertSprite(d2d::ISprite* sprite)
 	
 	if (sprite->getUserData())
 	{
-		Body* data = static_cast<Body*>(sprite->getUserData());
-		m_bodies.push_back(data);
+		Body* body = static_cast<Body*>(sprite->getUserData());
+		m_bodies.push_back(body);
 	}
 	else
 	{
-		wxString path = d2d::FilenameTools::getFilePathExceptExtension(sprite->getSymbol().getFilepath());
-		wxString polygonPath = path + "_" + d2d::FileNameParser::getFileTag(d2d::FileNameParser::e_polyline) + ".txt";
-		wxString circlePath = path + "_" + d2d::FileNameParser::getFileTag(d2d::FileNameParser::e_circle) + ".txt";
-		wxString shapePath = path + "_" + d2d::FileNameParser::getFileTag(d2d::FileNameParser::e_shape) + ".json";
-		Body* data = new Body; 
-		if (d2d::FilenameTools::isExist(polygonPath))
-			loadPolygonBody(polygonPath, *data);
-		else if (d2d::FilenameTools::isExist(circlePath))
-			loadCircleBody(circlePath, *data);
-		else if (d2d::FilenameTools::isExist(shapePath))
-			loadShapesBody(shapePath, *data);
+		Body* body = new Body;
+
+		wxString path = d2d::FilenameTools::getFilePathExceptExtension(sprite->getSymbol().getFilepath())
+			+ "_" + d2d::FileNameParser::getFileTag(d2d::FileNameParser::e_shape) + ".json";
+		if (d2d::FilenameTools::isExist(path))
+			loadBody(path, *body);
 		else
-			assert(0);
+			loadBody(sprite, *body);
 
-		data->sprite = sprite;
-		sprite->setUserData(data);
-
-		m_bodies.push_back(data);
+		body->sprite = sprite;
+		sprite->setUserData(body);
+		m_bodies.push_back(body);
 	}
 }
 
@@ -150,35 +144,7 @@ void StagePanel::traverseJoints(d2d::IVisitor& visitor) const
 	}
 }
 
-void StagePanel::loadCircleBody(const wxString& filepath, Body& body) const
-{
-	d2d::CircleFileAdapter fa;
-	fa.load(filepath);
-
-	Fixture* fixture = new Fixture;
-	fixture->body = &body;
-	fixture->shape = new d2d::CircleShape(d2d::Vector(), fa.m_width * 0.5f);
-	body.fixtures.push_back(fixture);
-}
-
-void StagePanel::loadPolygonBody(const wxString& filepath, Body& body) const
-{
-	std::vector<d2d::ChainShape*> chains;
-	d2d::PolylineFileAdapter fileAdapter(chains);
-	fileAdapter.load(filepath.c_str());
-
-	for (size_t i = 0, n = chains.size(); i < n; ++i)
-	{
-		Fixture* fixture = new Fixture;
-		fixture->body = &body;
-		fixture->shape = new d2d::ChainShape(chains[i]->getVertices(), true);
-		body.fixtures.push_back(fixture);
-	}
-
-	for_each(chains.begin(), chains.end(), DeletePointerFunctor<d2d::ChainShape>());
-}
-
-void StagePanel::loadShapesBody(const wxString& filepath, Body& body) const
+void StagePanel::loadBody(const wxString& filepath, Body& body)
 {
 	std::vector<d2d::IShape*> shapes;
 	d2d::EShapeFileAdapter adapter(shapes);
@@ -210,6 +176,16 @@ void StagePanel::loadShapesBody(const wxString& filepath, Body& body) const
 
 		shapes[i]->release();
 	}
+}
+
+void StagePanel::loadBody(d2d::ISprite* sprite, Body& body)
+{
+	Fixture* fixture = new Fixture;
+	fixture->body = &body;
+	std::vector<d2d::Vector> vertices;
+	sprite->getBounding()->getBoundPos(vertices);
+	fixture->shape = new d2d::ChainShape(vertices, true);
+	body.fixtures.push_back(fixture);
 }
 
 //////////////////////////////////////////////////////////////////////////
