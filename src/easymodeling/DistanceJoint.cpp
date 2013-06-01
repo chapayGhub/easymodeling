@@ -35,6 +35,12 @@ bool DistanceJoint::isContain(const d2d::Vector& pos) const
 		|| d2d::Math::getDistance(getWorldAnchorB(), pos) < JOINT_RADIUS_OUT;
 }
 
+bool DistanceJoint::isIntersect(const d2d::Rect& rect) const
+{
+	return d2d::Math::isPointInRect(getWorldAnchorA(), rect) 
+		|| d2d::Math::isPointInRect(getWorldAnchorB(), rect);
+}
+
 void DistanceJoint::draw(DrawType type) const
 {
 	const d2d::Vector anchorA = getWorldAnchorA(),

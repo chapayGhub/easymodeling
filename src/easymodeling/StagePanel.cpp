@@ -109,6 +109,15 @@ Joint* StagePanel::queryJointByPos(const d2d::Vector& pos) const
 	return NULL;
 }
 
+void StagePanel::queryJointsByRect(const d2d::Rect& rect, std::vector<Joint*>& result) const
+{
+	for (size_t i = 0, n = m_joints.size(); i < n; ++i)
+	{
+		if (m_joints[i]->isIntersect(rect))
+			result.push_back(m_joints[i]);
+	}
+}
+
 void StagePanel::removeJoint(Joint* joint)
 {
 	for (size_t i = 0, n = m_joints.size(); i < n; ++i)

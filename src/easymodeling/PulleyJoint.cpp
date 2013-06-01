@@ -43,6 +43,14 @@ bool PulleyJoint::isContain(const d2d::Vector& pos) const
 		|| d2d::Math::getDistance(groundAnchorB, pos) < JOINT_RADIUS_OUT;
 }
 
+bool PulleyJoint::isIntersect(const d2d::Rect& rect) const
+{
+	return d2d::Math::isPointInRect(getWorldAnchorA(), rect) 
+		|| d2d::Math::isPointInRect(getWorldAnchorB(), rect)
+		|| d2d::Math::isPointInRect(groundAnchorA, rect) 
+		|| d2d::Math::isPointInRect(groundAnchorB, rect);
+}
+
 void PulleyJoint::draw(DrawType type) const
 {
 	const d2d::Vector anchorA = getWorldAnchorA(),

@@ -16,39 +16,30 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef EMODELING_ROPE_JOINT_H
-#define EMODELING_ROPE_JOINT_H
+#include "GearJoint.h"
 
-#include "Joint.h"
+using namespace emodeling;
 
-namespace emodeling
+GearJoint::GearJoint(Body* b0, Body* b1, Joint* j1, Joint* j2)
+	: Joint(b0, b1, e_gearJoint)
+	, joint1(j1)
+	, joint2(j2)
+	, ratio(1.0f)
 {
-	class RopeJoint : public Joint
-	{
-	public:
-		RopeJoint(Body* b0, Body* b1);
-
-		virtual bool isContain(const d2d::Vector& pos) const;
-		virtual bool isIntersect(const d2d::Rect& rect) const;
-
-		virtual void draw(DrawType type) const;
-
-		d2d::Vector getWorldAnchorA() const;
-		d2d::Vector getWorldAnchorB() const;
-
-		void setLocalAnchorA(const d2d::Vector& world);
-		void setLocalAnchorB(const d2d::Vector& world);
-
-	private:
-		void drawAnchor(const d2d::Vector& pos, DrawType type) const;
-
-	public:
-		d2d::Vector localAnchorA;
-		d2d::Vector localAnchorB;
-
-		float maxLength;
-
-	}; // RopeJoint
 }
 
-#endif // EMODELING_ROPE_JOINT_H
+bool GearJoint::isContain(const d2d::Vector& pos) const
+{
+	return joint1->isContain(pos) || joint2->isContain(pos);
+}
+
+bool GearJoint::isIntersect(const d2d::Rect& rect) const
+{
+	return joint1->isIntersect(rect) || joint2->isIntersect(rect);
+}
+
+void GearJoint::draw(DrawType type) const
+{
+	joint1->draw(type);
+	joint2->draw(type);
+}

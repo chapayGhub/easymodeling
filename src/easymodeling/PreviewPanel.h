@@ -24,6 +24,7 @@
 namespace emodeling
 {
 	class Body;
+	class Joint;
 
 	class PreviewPanel : public d2d::EditPanel, 
 		public d2d::PhysicsPanelImpl
@@ -38,29 +39,48 @@ namespace emodeling
 		class LoadBodyVisitor : public d2d::IVisitor
 		{
 		public:
-			LoadBodyVisitor(b2World* world, std::map<Body*, b2Body*>& transBody);
+			LoadBodyVisitor(b2World* world, std::map<Body*, b2Body*>& mapBody);
 			virtual void visit(d2d::ICloneable* object, bool& bFetchNext);
 
 		private:
 			b2World* m_world;
 
-			std::map<Body*, b2Body*>& m_transBody;
+			std::map<Body*, b2Body*>& m_mapBody;
 
 		}; // LoadBodyVisitor
 
 		class LoadJointVisitor : public d2d::IVisitor
 		{
 		public:
-			LoadJointVisitor(b2World* world, const std::map<Body*, b2Body*>& transBody);
+			LoadJointVisitor(b2World* world, const std::map<Body*, b2Body*>& mapBody,
+				std::map<Joint*, b2Joint*>& mapJoint);
 
 			virtual void visit(d2d::ICloneable* object, bool& bFetchNext);
 
 		private:
 			b2World* m_world;
 
-			const std::map<Body*, b2Body*>& m_transBody;
+			const std::map<Body*, b2Body*>& m_mapBody;
+
+			std::map<Joint*, b2Joint*>& m_mapJoint;
 
 		}; // LoadJointVisitor
+
+		class LoadGearJointVisitor : public d2d::IVisitor
+		{
+		public:
+			LoadGearJointVisitor(b2World* world, const std::map<Body*, b2Body*>& mapBody,
+				const std::map<Joint*, b2Joint*>& mapJoint);
+
+			virtual void visit(d2d::ICloneable* object, bool& bFetchNext);
+
+		private:
+			b2World* m_world;
+
+			const std::map<Body*, b2Body*>& m_mapBody;
+			const std::map<Joint*, b2Joint*>& m_mapJoint;
+
+		}; // LoadGearJointVisitor
 
 	private:
 		b2Body* m_ground;

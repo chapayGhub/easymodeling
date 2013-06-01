@@ -34,9 +34,11 @@ PreviewPanel::PreviewPanel(wxWindow* parent)
 	m_canvas = new PreviewCanvas(this);
 	m_editOP = new d2d::DragPhysicsOP(this, m_world, m_ground);
 
-	std::map<Body*, b2Body*> transBody;
-	Context::Instance()->stage->traverseBodies(LoadBodyVisitor(m_world, transBody));
-	Context::Instance()->stage->traverseJoints(LoadJointVisitor(m_world, transBody));
+	std::map<Body*, b2Body*> mapBody;
+	Context::Instance()->stage->traverseBodies(LoadBodyVisitor(m_world, mapBody));
+	std::map<Joint*, b2Joint*> mapJoint;
+	Context::Instance()->stage->traverseJoints(LoadJointVisitor(m_world, mapBody, mapJoint));
+	Context::Instance()->stage->traverseJoints(LoadGearJointVisitor(m_world, mapBody, mapJoint));
 
 	const World& world = Context::Instance()->world;
 	m_world->SetGravity(b2Vec2(world.gravity.x, world.gravity.y));
@@ -76,9 +78,9 @@ void PreviewPanel::createGround()
 //////////////////////////////////////////////////////////////////////////
 
 PreviewPanel::LoadBodyVisitor::
-LoadBodyVisitor(b2World* world, std::map<Body*, b2Body*>& transBody) 
+LoadBodyVisitor(b2World* world, std::map<Body*, b2Body*>& mapBody) 
 	: m_world(world)
-	, m_transBody(transBody)
+	, m_mapBody(mapBody)
 {}
 
 void PreviewPanel::LoadBodyVisitor::
@@ -86,7 +88,7 @@ visit(d2d::ICloneable* object, bool& bFetchNext)
 {
 	Body* data = static_cast<Body*>(object);
 
-	b2Body* body = ResolveToB2::createBody(*data, m_world, m_transBody);
+	b2Body* body = ResolveToB2::createBody(*data, m_world, m_mapBody);
 
 	bFetchNext = true;
 }
@@ -96,9 +98,11 @@ visit(d2d::ICloneable* object, bool& bFetchNext)
 //////////////////////////////////////////////////////////////////////////
 
 PreviewPanel::LoadJointVisitor::
-LoadJointVisitor(b2World* world, const std::map<Body*, b2Body*>& transBody) 
+LoadJointVisitor(b2World* world, const std::map<Body*, b2Body*>& mapBody,
+				 std::map<Joint*, b2Joint*>& mapJoint) 
 	: m_world(world) 
-	, m_transBody(transBody)
+	, m_mapBody(mapBody)
+	, m_mapJoint(mapJoint)
 {}
 
 void PreviewPanel::LoadJointVisitor::
@@ -106,7 +110,32 @@ visit(d2d::ICloneable* object, bool& bFetchNext)
 {
 	Joint* data = static_cast<Joint*>(object);
 
-	ResolveToB2::createJoint(*data, m_world, m_transBody);
+	b2Joint* joint = ResolveToB2::createJoint(*data, m_world, m_mapBody);
+	if (joint)
+		m_mapJoint.insert(std::make_pair(data, joint));
 
 	bFetchNext = true;
 }
+
+//////////////////////////////////////////////////////////////////////////
+// class PreviewPanel::LoadGearJointVisitor
+//////////////////////////////////////////////////////////////////////////
+
+PreviewPanel::LoadGearJointVisitor::
+LoadGearJointVisitor(b2World* world, const std::map<Body*, b2Body*>& mapBody,
+					 const std::map<Joint*, b2Joint*>& mapJoint) 
+	: m_world(world) 
+	, m_mapBody(mapBody)
+	, m_mapJoint(mapJoint)
+{}
+
+void PreviewPanel::LoadGearJointVisitor::
+visit(d2d::ICloneable* object, bool& bFetchNext)
+{
+	Joint* data = static_cast<Joint*>(object);
+
+	ResolveToB2::createJoint(*data, m_world, m_mapBody, m_mapJoint);
+
+	bFetchNext = true;
+}
+

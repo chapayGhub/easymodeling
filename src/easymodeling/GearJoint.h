@@ -16,39 +16,30 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef EMODELING_ROPE_JOINT_H
-#define EMODELING_ROPE_JOINT_H
+#ifndef EMODELING_GEAR_JOINT_H
+#define EMODELING_GEAR_JOINT_H
 
 #include "Joint.h"
 
 namespace emodeling
 {
-	class RopeJoint : public Joint
+	class GearJoint : public Joint
 	{
 	public:
-		RopeJoint(Body* b0, Body* b1);
+		GearJoint(Body* b0, Body* b1, Joint* j1, Joint* j2);
 
 		virtual bool isContain(const d2d::Vector& pos) const;
 		virtual bool isIntersect(const d2d::Rect& rect) const;
 
 		virtual void draw(DrawType type) const;
 
-		d2d::Vector getWorldAnchorA() const;
-		d2d::Vector getWorldAnchorB() const;
-
-		void setLocalAnchorA(const d2d::Vector& world);
-		void setLocalAnchorB(const d2d::Vector& world);
-
-	private:
-		void drawAnchor(const d2d::Vector& pos, DrawType type) const;
-
 	public:
-		d2d::Vector localAnchorA;
-		d2d::Vector localAnchorB;
+		Joint* joint1;
+		Joint* joint2;
 
-		float maxLength;
+		float ratio;
 
-	}; // RopeJoint
+	}; // GearJoint
 }
 
-#endif // EMODELING_ROPE_JOINT_H
+#endif // EMODELING_GEAR_JOINT_H

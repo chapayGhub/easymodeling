@@ -39,10 +39,7 @@ namespace emodeling
 	private:
 		void onCreateJoint(wxCommandEvent& event);
 
-//			void createJointsSizer();
-
-// 			wxSizer* createRevoluteJointSizer() const;
-// 			wxSizer* createWheelJointSizer() const;
+		void onTypeChanged(wxCommandEvent& event);
 
 	private:
 		class SelectWheelDialog : public wxDialog
@@ -67,8 +64,6 @@ namespace emodeling
 		wxChoice* m_typeChoice;
 
 		wxButton* m_btnOK;
-
-//			std::vector<wxSizer*> m_jointsSizer;
 
 	}; // JointEditCmpt
 }

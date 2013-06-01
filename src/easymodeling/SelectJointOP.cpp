@@ -23,6 +23,7 @@
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
 #include "PulleyJoint.h"
+#include "GearJoint.h"
 #include "WheelJoint.h"
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
@@ -62,16 +63,41 @@ bool SelectJointOP::onKeyDown(int keyCode)
 bool SelectJointOP::onMouseLeftDown(int x, int y)
 {
 	d2d::Vector pos = m_editPanel->transPosScreenToProject(x, y);
-	Joint* joint = static_cast<StagePanel*>(m_editPanel)->queryJointByPos(pos);
-	if (joint && !m_selected || !joint && m_selected)
+	Joint* selected = static_cast<StagePanel*>(m_editPanel)->queryJointByPos(pos);
+	if (selected && !m_selected || !selected && m_selected)
 		m_editPanel->Refresh();
+	if (selected)
+	{
+		if (wxGetKeyState(WXK_CONTROL))
+		{
+			if (jointSelection.isExist(selected))
+				jointSelection.erase(selected);
+			else
+				jointSelection.insert(selected);
+		}
+		else
+		{
+			if (!jointSelection.isExist(selected))
+			{
+				jointSelection.clear();
+				jointSelection.insert(selected);
+			}
+		}
 
-	m_selected = joint;
+		if (m_callback)
+			m_callback->updateControlValue();
+	}
+	else
+	{
+		m_selection->clear();
+	}
+
+	m_selected = selected;
 
 	if (m_selected)
 	{
 		m_propertyPanel->setPropertySetting(new JointPropertySetting(m_editPanel, m_selected));
-		m_selection->clear();
+//		m_selection->clear();
 	}
 	else
 	{
@@ -79,11 +105,19 @@ bool SelectJointOP::onMouseLeftDown(int x, int y)
 		SelectBodyOP::onMouseLeftDown(x, y);
 	}
 
+	m_firstPos = pos;
+
 	return false;
 }
 
 bool SelectJointOP::onMouseLeftUp(int x, int y)
 {
+	//d2d::Vector pos = m_editPanel->transPosScreenToProject(x, y);
+	//selectedJoints.clear();
+	//static_cast<StagePanel*>(m_editPanel)->queryJointsByRect(d2d::Rect(pos, m_firstPos), selectedJoints);
+	//if (selectedJoints.size() == 1)
+	//	m_propertyPanel->setPropertySetting(new JointPropertySetting(m_editPanel, selectedJoints[0]));
+
 	if (SelectBodyOP::onMouseLeftUp(x, y)) return true;
 
 	if (m_selected)
@@ -171,6 +205,10 @@ bool SelectJointOP::onMouseDrag(int x, int y)
 					joint->groundAnchorB = pos;					
 			}
 			break;
+		case Joint::e_gearJoint:
+			{
+			}
+			break;
 		case Joint::e_wheelJoint:
 			{
 				WheelJoint* joint = static_cast<WheelJoint*>(m_selected);
@@ -217,7 +255,6 @@ bool SelectJointOP::onMouseDrag(int x, int y)
 			break;
 		case Joint::e_motorJoint:
 			{
-				// 
 			}
 			break;
 		}

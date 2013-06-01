@@ -31,9 +31,12 @@ namespace emodeling
 	{
 	public:
 		static b2Body* createBody(const Body& data, b2World* world,
-			std::map<Body*, b2Body*>& bodyMap);
+			std::map<Body*, b2Body*>& mapBody);
 		static b2Joint* createJoint(const Joint& data, b2World* world,
-			const std::map<Body*, b2Body*>& bodyMap);
+			const std::map<Body*, b2Body*>& mapBody);
+		static b2Joint* createJoint(const Joint& data, b2World* world,
+			const std::map<Body*, b2Body*>& mapBody,
+			const std::map<Joint*, b2Joint*>& mapJoint); 
 
 	}; // ResolveToB2
 }

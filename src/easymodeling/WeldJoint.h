@@ -29,6 +29,7 @@ namespace emodeling
 		WeldJoint(Body* b0, Body* b1);
 
 		virtual bool isContain(const d2d::Vector& pos) const;
+		virtual bool isIntersect(const d2d::Rect& rect) const;
 
 		virtual void draw(DrawType type) const;
 

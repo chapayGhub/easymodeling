@@ -21,6 +21,7 @@
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
 #include "PulleyJoint.h"
+#include "GearJoint.h"
 #include "WheelJoint.h"
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
@@ -33,6 +34,43 @@ JointPropertySetting::JointPropertySetting(d2d::EditPanel* editPanel, Joint* joi
 	: d2d::IPropertySetting(editPanel, wxT("Joint"))
 {
 	m_joint = joint;
+
+	switch (joint->type)
+	{
+	case Joint::e_revoluteJoint:
+		m_type = wxT("Revolute Joint");
+		break;
+	case Joint::e_prismaticJoint:
+		m_type = wxT("Prismatic Joint");
+		break;
+	case Joint::e_distanceJoint:
+		m_type = wxT("Distance Joint");
+		break;
+	case Joint::e_pulleyJoint:
+		m_type = wxT("Pulley Joint");
+		break;
+	case Joint::e_mouseJoint:
+		m_type = wxT("Mouse Joint");
+		break;
+	case Joint::e_gearJoint:
+		m_type = wxT("Gear Joint");
+		break;
+	case Joint::e_wheelJoint:
+		m_type = wxT("Wheel Joint");
+		break;
+	case Joint::e_weldJoint:
+		m_type = wxT("Weld Joint");
+		break;
+	case Joint::e_frictionJoint:
+		m_type = wxT("Friction Joint");
+		break;
+	case Joint::e_ropeJoint:
+		m_type = wxT("Rope Joint");
+		break;
+	case Joint::e_motorJoint:
+		m_type = wxT("Motor Joint");
+		break;
+	}
 }
 
 void JointPropertySetting::updatePanel(d2d::PropertySettingPanel* panel)
@@ -80,6 +118,12 @@ void JointPropertySetting::updatePanel(d2d::PropertySettingPanel* panel)
 			createPropertyPanel(static_cast<PulleyJoint*>(m_joint), pg);
 		else
 			updatePropertyPanel(static_cast<PulleyJoint*>(m_joint), pg);
+		break;
+	case Joint::e_gearJoint:
+		if (build) 
+			createPropertyPanel(static_cast<GearJoint*>(m_joint), pg);
+		else
+			updatePropertyPanel(static_cast<GearJoint*>(m_joint), pg);
 		break;
 	case Joint::e_wheelJoint:
 		if (build) 
@@ -136,6 +180,9 @@ void JointPropertySetting::onPropertyGridChange(const wxString& name, const wxAn
 		break;
 	case Joint::e_pulleyJoint:
 		onPropertyGridChange(static_cast<PulleyJoint*>(m_joint), name, value);
+		break;
+	case Joint::e_gearJoint:
+		onPropertyGridChange(static_cast<GearJoint*>(m_joint), name, value);
 		break;
 	case Joint::e_wheelJoint:
 		onPropertyGridChange(static_cast<WheelJoint*>(m_joint), name, value);
@@ -484,6 +531,25 @@ void JointPropertySetting::onPropertyGridChange(PulleyJoint* joint,
 	else if (name == wxT("groundAnchorB.y"))
 		joint->groundAnchorB.y = wxANY_AS(value, float);
 	else if (name == wxT("ratio"))
+		joint->ratio = wxANY_AS(value, float);
+}
+
+void JointPropertySetting::createPropertyPanel(GearJoint* joint, wxPropertyGrid* pg)
+{
+	pg->Append(new wxFloatProperty(wxT("ratio"), wxPG_LABEL, joint->ratio));
+	pg->SetPropertyAttribute(wxT("ratio"), "Precision", 2);
+}
+
+void JointPropertySetting::updatePropertyPanel(GearJoint* joint, wxPropertyGrid* pg)
+{
+	pg->GetProperty(wxT("ratio"))->SetValue(joint->ratio);
+}
+
+void JointPropertySetting::onPropertyGridChange(GearJoint* joint, 
+												const wxString& name, 
+												const wxAny& value)
+{
+	if (name == wxT("ratio"))
 		joint->ratio = wxANY_AS(value, float);
 }
 

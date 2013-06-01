@@ -57,6 +57,7 @@ namespace emodeling
 		virtual Joint* clone() { return NULL; }
 
 		virtual bool isContain(const d2d::Vector& pos) const = 0;
+		virtual bool isIntersect(const d2d::Rect& rect) const = 0;
 
 		virtual void draw(DrawType type) const = 0;
 

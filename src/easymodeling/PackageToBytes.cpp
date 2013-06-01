@@ -23,6 +23,7 @@
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
 #include "PulleyJoint.h"
+#include "GearJoint.h"
 #include "WheelJoint.h"
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
@@ -190,6 +191,15 @@ void PaskageToBytes::packJoint(const Joint& data, std::ofstream& fout,
 			fout.write(reinterpret_cast<const char*>(&joint->groundAnchorA.y), sizeof(float));
 			fout.write(reinterpret_cast<const char*>(&joint->groundAnchorB.x), sizeof(float));
 			fout.write(reinterpret_cast<const char*>(&joint->groundAnchorB.y), sizeof(float));
+
+			fout.write(reinterpret_cast<const char*>(&joint->ratio), sizeof(float));
+		}
+		break;
+	case Joint::e_gearJoint:
+		{
+			GearJoint* joint = static_cast<GearJoint*>(const_cast<Joint*>(&data));
+
+			// todo: 
 
 			fout.write(reinterpret_cast<const char*>(&joint->ratio), sizeof(float));
 		}

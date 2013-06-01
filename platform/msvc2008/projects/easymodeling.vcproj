@@ -224,6 +224,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\easymodeling\GearJoint.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\easymodeling\GearJoint.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\easymodeling\Joint.cpp"
 					>
 				</File>
@@ -530,6 +538,14 @@
 						RelativePath="..\..\..\src\easymodeling\BodyEditCmpt.h"
 						>
 					</File>
+					<File
+						RelativePath="..\..\..\src\easymodeling\SelectBodyOP.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\easymodeling\SelectBodyOP.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="fixture"
@@ -542,6 +558,14 @@
 						RelativePath="..\..\..\src\easymodeling\FixtureEditCmpt.h"
 						>
 					</File>
+					<File
+						RelativePath="..\..\..\src\easymodeling\SelectFixtureOP.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\easymodeling\SelectFixtureOP.h"
+						>
+					</File>
 				</Filter>
 				<Filter
 					Name="joint"
@@ -552,26 +576,6 @@
 					</File>
 					<File
 						RelativePath="..\..\..\src\easymodeling\JointEditCmpt.h"
-						>
-					</File>
-				</Filter>
-				<Filter
-					Name="edit"
-					>
-					<File
-						RelativePath="..\..\..\src\easymodeling\SelectBodyOP.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\src\easymodeling\SelectBodyOP.h"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\src\easymodeling\SelectFixtureOP.cpp"
-						>
-					</File>
-					<File
-						RelativePath="..\..\..\src\easymodeling\SelectFixtureOP.h"
 						>
 					</File>
 					<File

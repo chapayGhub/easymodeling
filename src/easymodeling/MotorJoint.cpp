@@ -37,6 +37,12 @@ bool MotorJoint::isContain(const d2d::Vector& pos) const
 	return d2d::Math::getDistance(center, pos) < JOINT_RADIUS_OUT;
 }
 
+bool MotorJoint::isIntersect(const d2d::Rect& rect) const
+{
+	const d2d::Vector center = (bodyA->sprite->getPosition() + bodyB->sprite->getPosition()) * 0.5f;
+	return d2d::Math::isPointInRect(center, rect);
+}
+
 void MotorJoint::draw(DrawType type) const
 {
 	const d2d::Vector center = (bodyA->sprite->getPosition() + bodyB->sprite->getPosition()) * 0.5f;

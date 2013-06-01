@@ -24,6 +24,7 @@
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
 #include "PulleyJoint.h"
+#include "GearJoint.h"
 #include "WheelJoint.h"
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
@@ -57,11 +58,23 @@ void FileIO::load(std::ifstream& fin)
 	}
 
 	i = 0;
+	std::vector<Joint*> joints;
 	Json::Value jointValue = value["joint"][i++];
 	while (!jointValue.isNull()) {
 		Joint* joint = j2bJoint(jointValue, bodies);
+		joints.push_back(joint);
 		context->stage->insertJoint(joint);
 		jointValue = value["joint"][i++];
+	}
+
+	for (size_t i = 0, n = joints.size(); i < n; ++i)
+	{
+		if (joints[i]->type == Joint::e_gearJoint)
+		{
+			GearJoint* joint = static_cast<GearJoint*>(joints[i]);
+			joint->joint1 = joints[value["joint"][i]["joint1"].asInt()];
+			joint->joint2 = joints[value["joint"][i]["joint2"].asInt()];
+		}
 	}
 
 	context->library->loadFromSymbolMgr(*d2d::SymbolMgr::Instance());
@@ -87,9 +100,21 @@ void FileIO::store(std::ofstream& fout)
 		value["body"][i] = b2j(bodies[i]);
 	}
 
+	std::map<Joint*, int> jointIndexMap;
 	for (size_t i = 0, n = joints.size(); i < n; ++i)
 	{
+		jointIndexMap[joints[i]] = i;
 		value["joint"][i] = b2j(joints[i], bodyIndexMap);
+	}
+
+	for (size_t i = 0, n = joints.size(); i < n; ++i)
+	{
+		if (joints[i]->type == Joint::e_gearJoint)
+		{
+			GearJoint* joint = static_cast<GearJoint*>(joints[i]);
+			value["joint"][i]["joint1"] = jointIndexMap.find(joint->joint1)->second;
+			value["joint"][i]["joint2"] = jointIndexMap.find(joint->joint2)->second;
+		}
 	}
 
 	Json::StyledStreamWriter writer;
@@ -266,17 +291,16 @@ Json::Value FileIO::b2j(Joint* joint, const std::map<Body*, int>& bodyIndexMap)
 
 			PulleyJoint* pJoint = static_cast<PulleyJoint*>(joint);
 
-			value["anchorA"]["x"] = pJoint->localAnchorA.x;
-			value["anchorA"]["y"] = pJoint->localAnchorA.y;
-			value["anchorB"]["x"] = pJoint->localAnchorB.x;
-			value["anchorB"]["y"] = pJoint->localAnchorB.y;
-
-			value["groundAnchorA"]["x"] = pJoint->groundAnchorA.x;
-			value["groundAnchorA"]["y"] = pJoint->groundAnchorA.y;
-			value["groundAnchorB"]["x"] = pJoint->groundAnchorB.x;
-			value["groundAnchorB"]["y"] = pJoint->groundAnchorB.y;
-
 			value["ratio"] = pJoint->ratio;
+		}
+		break;
+	case Joint::e_gearJoint:
+		{
+			value["type"] = "gear";
+
+			GearJoint* gJoint = static_cast<GearJoint*>(joint);
+
+			value["ratio"] = gJoint->ratio;
 		}
 		break;
 	case Joint::e_wheelJoint:
@@ -469,7 +493,7 @@ Fixture* FileIO::j2bFixture(Json::Value fixtureValue)
 }
 
 Joint* FileIO::j2bJoint(Json::Value jointValue,
-							 const std::vector<Body*>& bodies)
+						const std::vector<Body*>& bodies)
 {
 	Joint* joint = NULL;
 
@@ -558,6 +582,14 @@ Joint* FileIO::j2bJoint(Json::Value jointValue,
 		pJoint->ratio = jointValue["ratio"].asDouble();
 
 		joint = pJoint;
+	}
+	else if (type == "gear")
+	{
+		GearJoint* gJoint = new GearJoint(bodies[bodyIndexA], bodies[bodyIndexB], NULL, NULL);
+
+		gJoint->ratio = jointValue["ratio"].asDouble();
+
+		joint = gJoint;
 	}
 	else if (type == "wheel")
 	{

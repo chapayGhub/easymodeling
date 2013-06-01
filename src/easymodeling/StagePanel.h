@@ -40,6 +40,7 @@ namespace emodeling
 		virtual void querySpritesByRect(const d2d::Rect& rect, std::vector<d2d::ISprite*>& result) const;		
 
 		Joint* queryJointByPos(const d2d::Vector& pos) const;
+		void queryJointsByRect(const d2d::Rect& rect, std::vector<Joint*>& result) const;
 
 		void insertJoint(Joint* joint) {
 			m_joints.push_back(joint);

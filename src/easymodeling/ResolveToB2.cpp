@@ -23,6 +23,7 @@
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
 #include "PulleyJoint.h"
+#include "GearJoint.h"
 #include "WheelJoint.h"
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
@@ -32,7 +33,7 @@
 using namespace emodeling;
 
 b2Body* ResolveToB2::createBody(const Body& data, b2World* world,
-								std::map<Body*, b2Body*>& bodyMap)
+								std::map<Body*, b2Body*>& mapBody)
 {
 	b2BodyDef bd;
 	switch (data.type)
@@ -54,7 +55,7 @@ b2Body* ResolveToB2::createBody(const Body& data, b2World* world,
 	bd.active = data.active;
 	bd.gravityScale = data.gravityScale;
 	b2Body* body = world->CreateBody(&bd);
-	bodyMap.insert(std::make_pair(const_cast<Body*>(&data), body));
+	mapBody.insert(std::make_pair(const_cast<Body*>(&data), body));
 
 	b2Vec2 pos;
 	pos.x = data.sprite->getPosition().x / d2d::BOX2D_SCALE_FACTOR;
@@ -120,7 +121,7 @@ b2Body* ResolveToB2::createBody(const Body& data, b2World* world,
 }
 
 b2Joint* ResolveToB2::createJoint(const Joint& data, b2World* world,
-								  const std::map<Body*, b2Body*>& bodyMap)
+								  const std::map<Body*, b2Body*>& mapBody)
 {
 	b2Joint* bJoint = NULL;
 
@@ -133,9 +134,9 @@ b2Joint* ResolveToB2::createJoint(const Joint& data, b2World* world,
 			RevoluteJoint* joint = static_cast<RevoluteJoint*>(const_cast<Joint*>(&data));
 
 			std::map<Body*, b2Body*>::const_iterator 
-				itrA = bodyMap.find(joint->bodyA),
-				itrB = bodyMap.find(joint->bodyB);
-			assert(itrA != bodyMap.end() && itrB != bodyMap.end());
+				itrA = mapBody.find(joint->bodyA),
+				itrB = mapBody.find(joint->bodyB);
+			assert(itrA != mapBody.end() && itrB != mapBody.end());
 			b2Body* bodyA = itrA->second;
 			b2Body* bodyB = itrB->second;
 			jd.Initialize(bodyA, bodyB, b2Vec2(0, 0));
@@ -160,9 +161,9 @@ b2Joint* ResolveToB2::createJoint(const Joint& data, b2World* world,
 			PrismaticJoint* joint = static_cast<PrismaticJoint*>(const_cast<Joint*>(&data));
 
 			std::map<Body*, b2Body*>::const_iterator 
-				itrA = bodyMap.find(joint->bodyA),
-				itrB = bodyMap.find(joint->bodyB);
-			assert(itrA != bodyMap.end() && itrB != bodyMap.end());
+				itrA = mapBody.find(joint->bodyA),
+				itrB = mapBody.find(joint->bodyB);
+			assert(itrA != mapBody.end() && itrB != mapBody.end());
 			b2Body* bodyA = itrA->second;
 			b2Body* bodyB = itrB->second;
 
@@ -190,9 +191,9 @@ b2Joint* ResolveToB2::createJoint(const Joint& data, b2World* world,
 			DistanceJoint* joint = static_cast<DistanceJoint*>(const_cast<Joint*>(&data));
 
 			std::map<Body*, b2Body*>::const_iterator 
-				itrA = bodyMap.find(joint->bodyA),
-				itrB = bodyMap.find(joint->bodyB);
-			assert(itrA != bodyMap.end() && itrB != bodyMap.end());
+				itrA = mapBody.find(joint->bodyA),
+				itrB = mapBody.find(joint->bodyB);
+			assert(itrA != mapBody.end() && itrB != mapBody.end());
 			jd.bodyA = itrA->second;
 			jd.bodyB = itrB->second;
 			jd.collideConnected = joint->collideConnected;
@@ -212,9 +213,9 @@ b2Joint* ResolveToB2::createJoint(const Joint& data, b2World* world,
 			PulleyJoint* joint = static_cast<PulleyJoint*>(const_cast<Joint*>(&data));
 
 			std::map<Body*, b2Body*>::const_iterator 
-				itrA = bodyMap.find(joint->bodyA),
-				itrB = bodyMap.find(joint->bodyB);
-			assert(itrA != bodyMap.end() && itrB != bodyMap.end());
+				itrA = mapBody.find(joint->bodyA),
+				itrB = mapBody.find(joint->bodyB);
+			assert(itrA != mapBody.end() && itrB != mapBody.end());
 			b2Body* bodyA = itrA->second;
 			b2Body* bodyB = itrB->second;
 
@@ -231,6 +232,10 @@ b2Joint* ResolveToB2::createJoint(const Joint& data, b2World* world,
 			bJoint = world->CreateJoint(&jd);
 		}
 		break;
+	case Joint::e_gearJoint:
+		{
+		}
+		break;
 	case Joint::e_wheelJoint:
 		{
 			b2WheelJointDef jd;
@@ -238,9 +243,9 @@ b2Joint* ResolveToB2::createJoint(const Joint& data, b2World* world,
 			WheelJoint* joint = static_cast<WheelJoint*>(const_cast<Joint*>(&data));
 
 			std::map<Body*, b2Body*>::const_iterator 
-				itrA = bodyMap.find(joint->bodyA),
-				itrB = bodyMap.find(joint->bodyB);
-			assert(itrA != bodyMap.end() && itrB != bodyMap.end());
+				itrA = mapBody.find(joint->bodyA),
+				itrB = mapBody.find(joint->bodyB);
+			assert(itrA != mapBody.end() && itrB != mapBody.end());
 			b2Body* bodyA = itrA->second;
 			b2Body* bodyB = itrB->second;
 
@@ -264,9 +269,9 @@ b2Joint* ResolveToB2::createJoint(const Joint& data, b2World* world,
 			WeldJoint* joint = static_cast<WeldJoint*>(const_cast<Joint*>(&data));
 
 			std::map<Body*, b2Body*>::const_iterator 
-				itrA = bodyMap.find(joint->bodyA),
-				itrB = bodyMap.find(joint->bodyB);
-			assert(itrA != bodyMap.end() && itrB != bodyMap.end());
+				itrA = mapBody.find(joint->bodyA),
+				itrB = mapBody.find(joint->bodyB);
+			assert(itrA != mapBody.end() && itrB != mapBody.end());
 			jd.bodyA = itrA->second;
 			jd.bodyB = itrB->second;
 			jd.collideConnected = joint->collideConnected;
@@ -286,9 +291,9 @@ b2Joint* ResolveToB2::createJoint(const Joint& data, b2World* world,
 			FrictionJoint* joint = static_cast<FrictionJoint*>(const_cast<Joint*>(&data));
 
 			std::map<Body*, b2Body*>::const_iterator 
-				itrA = bodyMap.find(joint->bodyA),
-				itrB = bodyMap.find(joint->bodyB);
-			assert(itrA != bodyMap.end() && itrB != bodyMap.end());
+				itrA = mapBody.find(joint->bodyA),
+				itrB = mapBody.find(joint->bodyB);
+			assert(itrA != mapBody.end() && itrB != mapBody.end());
 			jd.bodyA = itrA->second;
 			jd.bodyB = itrB->second;
 			jd.collideConnected = joint->collideConnected;
@@ -307,9 +312,9 @@ b2Joint* ResolveToB2::createJoint(const Joint& data, b2World* world,
 			RopeJoint* joint = static_cast<RopeJoint*>(const_cast<Joint*>(&data));
 
 			std::map<Body*, b2Body*>::const_iterator 
-				itrA = bodyMap.find(joint->bodyA),
-				itrB = bodyMap.find(joint->bodyB);
-			assert(itrA != bodyMap.end() && itrB != bodyMap.end());
+				itrA = mapBody.find(joint->bodyA),
+				itrB = mapBody.find(joint->bodyB);
+			assert(itrA != mapBody.end() && itrB != mapBody.end());
 			jd.bodyA = itrA->second;
 			jd.bodyB = itrB->second;
 			jd.collideConnected = joint->collideConnected;
@@ -327,9 +332,9 @@ b2Joint* ResolveToB2::createJoint(const Joint& data, b2World* world,
 			MotorJoint* joint = static_cast<MotorJoint*>(const_cast<Joint*>(&data));
 
 			std::map<Body*, b2Body*>::const_iterator 
-				itrA = bodyMap.find(joint->bodyA),
-				itrB = bodyMap.find(joint->bodyB);
-			assert(itrA != bodyMap.end() && itrB != bodyMap.end());
+				itrA = mapBody.find(joint->bodyA),
+				itrB = mapBody.find(joint->bodyB);
+			assert(itrA != mapBody.end() && itrB != mapBody.end());
 			jd.Initialize(itrA->second, itrB->second);
 			jd.collideConnected = joint->collideConnected;
 			jd.maxForce = joint->maxForce;
@@ -341,6 +346,44 @@ b2Joint* ResolveToB2::createJoint(const Joint& data, b2World* world,
 		break;
 	default:
 		assert(0);
+	}
+
+	return bJoint;
+}
+
+b2Joint* ResolveToB2::createJoint(const Joint& data, b2World* world,
+								  const std::map<Body*, b2Body*>& mapBody,
+								  const std::map<Joint*, b2Joint*>& mapJoint)
+{
+	b2Joint* bJoint = NULL;
+
+	switch(data.type)
+	{
+	case Joint::e_gearJoint:
+		{
+			b2GearJointDef jd;
+
+			GearJoint* joint = static_cast<GearJoint*>(const_cast<Joint*>(&data));
+
+			std::map<Body*, b2Body*>::const_iterator 
+				itrA = mapBody.find(joint->bodyA),
+				itrB = mapBody.find(joint->bodyB);
+			assert(itrA != mapBody.end() && itrB != mapBody.end());
+			jd.bodyA = itrA->second;
+			jd.bodyB = itrB->second;
+
+			std::map<Joint*, b2Joint*>::const_iterator 
+				itr1 = mapJoint.find(joint->joint1),
+				itr2 = mapJoint.find(joint->joint2);
+			assert(itr1 != mapJoint.end() && itr2 != mapJoint.end());
+			jd.joint1 = itr1->second;
+			jd.joint2 = itr2->second;
+
+			jd.ratio = joint->ratio;
+
+			bJoint = world->CreateJoint(&jd);
+		}
+		break;
 	}
 
 	return bJoint;

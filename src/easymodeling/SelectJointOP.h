@@ -57,6 +57,13 @@ namespace emodeling
 		Joint* m_selected;
 		Joint* m_mouseOn;
 
+		d2d::Vector m_firstPos;
+
+	public:
+		d2d::SelectionSet<Joint> jointSelection;
+
+//		std::vector<Joint*> selectedJoints;
+
 	}; // SelectJointOP
 }
 
