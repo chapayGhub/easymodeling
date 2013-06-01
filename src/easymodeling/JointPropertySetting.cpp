@@ -45,6 +45,7 @@ void JointPropertySetting::updatePanel(d2d::PropertySettingPanel* panel)
 	{
 		build = true;
 		pg->Clear();
+		pg->Append(new wxStringProperty(wxT("Type"), wxPG_LABEL, m_type));
 		pg->Append(new wxStringProperty(wxT("Name"), wxPG_LABEL, m_joint->m_name));
 		pg->Append(new wxBoolProperty(wxT("collideConnected"), wxPG_LABEL, m_joint->collideConnected));
 	}

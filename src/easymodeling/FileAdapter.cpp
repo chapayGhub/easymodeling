@@ -38,6 +38,8 @@ void FileApapter::resolve(const wxString& filepath)
 	reader.parse(fin, value);
 	fin.close();
 
+	FileIO::j2World(value["world"]);
+
 	int i = 0;
 	Json::Value bodyValue = value["body"][i++];
 	while (!bodyValue.isNull()) {

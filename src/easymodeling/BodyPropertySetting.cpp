@@ -54,6 +54,8 @@ void BodyPropertySetting::updatePanel(d2d::PropertySettingPanel* panel)
 	{
 		pg->Clear();
 
+//		pg->Append(new wxStringProperty(wxT("Type"), wxPG_LABEL, m_type));
+
 		pg->Append(new wxStringProperty(wxT("Name"), wxPG_LABEL, m_body->name));
 
  		wxPGChoices eech;

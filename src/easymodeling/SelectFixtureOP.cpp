@@ -21,6 +21,7 @@
 #include "Body.h"
 #include "Fixture.h"
 #include "FixturePropertySetting.h"
+#include "WorldPropertySetting.h"
 #include "DrawUtils.h"
 
 using namespace emodeling;
@@ -44,29 +45,35 @@ bool SelectFixtureOP::onMouseLeftDown(int x, int y)
 {
 	d2d::Vector pos = m_editPanel->transPosScreenToProject(x, y);
 	d2d::ISprite* sprite = m_stagePanel->querySpriteByPos(pos);
-	if (!sprite) return false;
 
-	m_selected = NULL;
-	Body* body = static_cast<Body*>(sprite->getUserData());
-	for (size_t i = 0, n = body->fixtures.size(); i < n; ++i)
+	d2d::IPropertySetting* setting = NULL;
+	if (sprite)
 	{
-		if (body->fixtures[i]->isContain(pos))
+		m_selected = NULL;
+		Body* body = static_cast<Body*>(sprite->getUserData());
+		for (size_t i = 0, n = body->fixtures.size(); i < n; ++i)
 		{
-			m_selected = body->fixtures[i];
-			break;
+			if (body->fixtures[i]->isContain(pos))
+			{
+				m_selected = body->fixtures[i];
+				break;
+			}
+		}
+		if (m_selected)
+		{
+			setting = new FixturePropertySetting(m_editPanel, m_selected);
+		}
+		else
+		{
+			d2d::DrawRectangleOP::onMouseLeftDown(x, y);
+			m_firstPos = pos;
+			m_editPanel->Refresh();
 		}
 	}
-	if (m_selected)
-	{
-		d2d::IPropertySetting* setting = new FixturePropertySetting(m_editPanel, m_selected);
-		m_propertyPanel->setPropertySetting(setting);
-	}
-	else
-	{
-		d2d::DrawRectangleOP::onMouseLeftDown(x, y);
-		m_firstPos = pos;
-		m_editPanel->Refresh();
-	}
+
+	if (!setting)
+		setting = new WorldPropertySetting(m_editPanel);
+	m_propertyPanel->setPropertySetting(setting);
 
 	return false;
 }
@@ -96,14 +103,9 @@ bool SelectFixtureOP::onMouseLeftUp(int x, int y)
 		}
 
 		if (m_selected)
-		{
-			d2d::IPropertySetting* setting = new FixturePropertySetting(m_editPanel, m_selected);
-			m_propertyPanel->setPropertySetting(setting);
-		}
+			m_propertyPanel->setPropertySetting(new FixturePropertySetting(m_editPanel, m_selected));
 		else
-		{
-			m_propertyPanel->setPropertySetting(NULL);
-		}
+			m_propertyPanel->setPropertySetting(new WorldPropertySetting(m_editPanel));
 
 		m_firstPos.setInvalid();
 	}

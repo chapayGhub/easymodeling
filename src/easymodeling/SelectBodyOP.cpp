@@ -18,6 +18,7 @@
 
 #include "SelectBodyOP.h"
 #include "BodyPropertySetting.h"
+#include "WorldPropertySetting.h"
 #include "DrawUtils.h"
 #include "StagePanel.h"
 #include "BEDialog.h"
@@ -100,7 +101,10 @@ bool SelectBodyOP::clear()
 
 d2d::IPropertySetting* SelectBodyOP::createPropertySetting(d2d::ISprite* sprite) const
 {
-	return new BodyPropertySetting(m_editPanel, sprite);
+	if (sprite)
+		return new BodyPropertySetting(m_editPanel, sprite);
+	else
+		return new WorldPropertySetting(m_editPanel);
 }
 
 //////////////////////////////////////////////////////////////////////////

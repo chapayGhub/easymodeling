@@ -16,39 +16,25 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef EMODELING_CONTEXT_H
-#define EMODELING_CONTEXT_H
+#ifndef EMODELING_WORLD_PROPERTY_SETTING_H
+#define EMODELING_WORLD_PROPERTY_SETTING_H
 
 #include <drag2d.h>
 
-#include "World.h"
-
 namespace emodeling
 {
-	class StagePanel;
-	class ToolbarPanel;
-	class World;
-
-	class Context
+	class WorldPropertySetting : public d2d::IPropertySetting
 	{
 	public:
-		d2d::PropertySettingPanel* property;
-		d2d::LibraryPanel* library;
-		StagePanel* stage;
-		ToolbarPanel* toolbar;
+		WorldPropertySetting(d2d::EditPanel* editPanel);
 
-		World world;
+		virtual void updatePanel(d2d::PropertySettingPanel* panel);
 
-	public:
-		static Context* Instance();
+		virtual void onPropertyGridChange(const wxString& name, const wxAny& value);
+		virtual void updatePropertyGrid(d2d::PropertySettingPanel* panel);
+		virtual void enablePropertyGrid(d2d::PropertySettingPanel* panel, bool bEnable);
 
-	private:
-		Context();
-
-	private:
-		static Context* m_instance;
-
-	}; // Context
+	}; // WorldPropertySetting
 }
 
-#endif // EMODELING_CONTEXT_H
+#endif // EMODELING_WORLD_PROPERTY_SETTING_H

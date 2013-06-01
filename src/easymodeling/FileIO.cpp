@@ -39,6 +39,8 @@ void FileIO::load(std::ifstream& fin)
 
 	std::vector<Body*> bodies;
 
+	j2World(value["world"]);
+
 	int i = 0;
 	Json::Value bodyValue = value["body"][i++];
 	while (!bodyValue.isNull()) {
@@ -71,6 +73,8 @@ void FileIO::store(std::ofstream& fout)
 
 	Json::Value value;
 
+	value["world"] = b2j(Context::Instance()->world);
+
 	std::map<Body*, int> bodyIndexMap;
 	for (size_t i = 0, n = bodies.size(); i < n; ++i)
 	{
@@ -85,6 +89,24 @@ void FileIO::store(std::ofstream& fout)
 
 	Json::StyledStreamWriter writer;
 	writer.write(fout, value);
+}
+
+Json::Value FileIO::b2j(const World& world)
+{
+	Json::Value value;
+
+	value["gravity"]["x"] = world.gravity.x;
+	value["gravity"]["y"] = world.gravity.y;
+
+	value["allowSleep"] = world.allowSleep;
+	value["warmStarting"] = world.warmStarting;
+	value["continuousPhysics"] = world.continuousPhysics;
+	value["subStepping"] = world.subStepping;
+
+	value["velocityIterations"] = world.velocityIterations;
+	value["positionIterations"] = world.positionIterations;
+
+	return value;
 }
 
 Json::Value FileIO::b2j(Body* body)
@@ -144,7 +166,7 @@ Json::Value FileIO::b2j(Fixture* fixture)
 	value["categoryBits"] = fixture->categoryBits;
 	value["maskBits"] = fixture->maskBits;
 	value["groupIndex"] = fixture->groupIndex;
-	d2d::EShapeFileAdapter::store(fixture->shape);
+	value["shape"] = d2d::EShapeFileAdapter::store(fixture->shape);
 
 	return value;
 }
@@ -262,6 +284,22 @@ Json::Value FileIO::b2j(Joint* joint, const std::map<Body*, int>& bodyIndexMap)
 	return value;
 }
 
+void FileIO::j2World(Json::Value worldValue)
+{
+	World& world = Context::Instance()->world;
+
+	world.gravity.x = worldValue["gravity"]["x"].asDouble();
+	world.gravity.y = worldValue["gravity"]["y"].asDouble();
+
+	world.allowSleep = worldValue["allowSleep"].asBool();
+	world.warmStarting = worldValue["warmStarting"].asBool();
+	world.continuousPhysics = worldValue["continuousPhysics"].asBool();
+	world.subStepping = worldValue["subStepping"].asBool();
+
+	world.velocityIterations = worldValue["velocityIterations"].asInt();
+	world.positionIterations = worldValue["positionIterations"].asInt();
+}
+
 //Body* FileIO::j2bBody(Json::Value bodyValue, StagePanel* stage)
 //{
 //	std::string filepath = bodyValue["filepath"].asString();
@@ -345,7 +383,7 @@ Fixture* FileIO::j2bFixture(Json::Value fixtureValue)
 	fixture->categoryBits = fixtureValue["categoryBits"].asInt();
 	fixture->maskBits = fixtureValue["maskBits"].asInt();
 	fixture->groupIndex = fixtureValue["groupIndex"].asInt();
-	fixture->shape = d2d::EShapeFileAdapter::loadShape(fixtureValue);
+	fixture->shape = d2d::EShapeFileAdapter::loadShape(fixtureValue["shape"]);
 
 	return fixture;
 }

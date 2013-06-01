@@ -16,39 +16,40 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef EMODELING_CONTEXT_H
-#define EMODELING_CONTEXT_H
+#ifndef EMODELING_WORLD_H
+#define EMODELING_WORLD_H
 
 #include <drag2d.h>
 
-#include "World.h"
-
 namespace emodeling
 {
-	class StagePanel;
-	class ToolbarPanel;
-	class World;
-
-	class Context
+	class World
 	{
 	public:
-		d2d::PropertySettingPanel* property;
-		d2d::LibraryPanel* library;
-		StagePanel* stage;
-		ToolbarPanel* toolbar;
+		d2d::Vector gravity;
+		bool allowSleep;
 
-		World world;
+		bool warmStarting;
+		bool continuousPhysics;
+		bool subStepping;
+
+		int velocityIterations;
+		int positionIterations;
 
 	public:
-		static Context* Instance();
+		World() {
+			gravity.set(0, -10);
+			allowSleep = true;
 
-	private:
-		Context();
+			warmStarting = true;
+			continuousPhysics = true;
+			subStepping = false;
 
-	private:
-		static Context* m_instance;
+			velocityIterations = 8;
+			positionIterations = 3;
+		}
 
-	}; // Context
+	}; // World
 }
 
-#endif // EMODELING_CONTEXT_H
+#endif // EMODELING_WORLD_H

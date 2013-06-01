@@ -25,6 +25,7 @@
 #include "WheelJoint.h"
 #include "StagePanel.h"
 #include "JointPropertySetting.h"
+#include "WorldPropertySetting.h"
 
 using namespace emodeling;
 
@@ -69,7 +70,7 @@ bool SelectJointOP::onMouseLeftDown(int x, int y)
 	}
 	else
 	{
-		m_propertyPanel->setPropertySetting(NULL);
+		m_propertyPanel->setPropertySetting(new WorldPropertySetting(m_editPanel));
 		SelectBodyOP::onMouseLeftDown(x, y);
 	}
 
@@ -83,7 +84,7 @@ bool SelectJointOP::onMouseLeftUp(int x, int y)
 	if (m_selected)
 		m_propertyPanel->setPropertySetting(new JointPropertySetting(m_editPanel, m_selected));
 	else
-		m_propertyPanel->setPropertySetting(NULL);
+		m_propertyPanel->setPropertySetting(new WorldPropertySetting(m_editPanel));
 
 	return false;
 }

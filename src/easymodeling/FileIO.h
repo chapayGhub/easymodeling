@@ -24,6 +24,7 @@
 
 namespace emodeling
 {
+	class World;
 	class Body;
 	class Fixture;
 	class Joint;
@@ -35,11 +36,13 @@ namespace emodeling
 		static void store(std::ofstream& fout);
 
 	private:
+		static Json::Value b2j(const World& world);
 		static Json::Value b2j(Body* body);
 		static Json::Value b2j(Fixture* fixture);
 		static Json::Value b2j(Joint* joint, 
 			const std::map<Body*, int>& bodyIndexMap);
 
+		static void j2World(Json::Value worldValue);
 //		static Body* j2bBody(Json::Value bodyValue, StagePanel* stage);
 		static Body* j2bBody(Json::Value bodyValue);
 		static Fixture* j2bFixture(Json::Value fixtureValue);

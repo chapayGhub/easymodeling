@@ -37,6 +37,15 @@ PreviewPanel::PreviewPanel(wxWindow* parent)
 	std::map<Body*, b2Body*> transBody;
 	Context::Instance()->stage->traverseBodies(LoadBodyVisitor(m_world, transBody));
 	Context::Instance()->stage->traverseJoints(LoadJointVisitor(m_world, transBody));
+
+	const World& world = Context::Instance()->world;
+	m_world->SetGravity(b2Vec2(world.gravity.x, world.gravity.y));
+	m_world->SetAllowSleeping(world.allowSleep);
+	m_world->SetWarmStarting(world.warmStarting);
+	m_world->SetContinuousPhysics(world.continuousPhysics);
+	m_world->SetSubStepping(world.subStepping);
+	m_velocityIterations = world.velocityIterations;
+	m_positionIterations = world.positionIterations;
 }
 
 void PreviewPanel::createGround()

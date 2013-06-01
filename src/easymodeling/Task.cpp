@@ -23,6 +23,7 @@
 #include "PreviewDialog.h"
 #include "FileIO.h"
 #include "Context.h"
+#include "WorldPropertySetting.h"
 
 using namespace emodeling;
 
@@ -95,6 +96,8 @@ void Task::initWindows(wxSplitterWindow* leftHorizontalSplitter,
 	stage = context->stage = new StagePanel(leftVerticalSplitter);
 
 	toolbar = context->toolbar = new ToolbarPanel(rightVerticalSplitter);
+
+	context->property->setPropertySetting(new WorldPropertySetting(context->stage));
 }
 
 void Task::initLayout()
