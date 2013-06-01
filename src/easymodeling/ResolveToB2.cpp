@@ -42,6 +42,11 @@ b2Body* ResolveToB2::createBody(const Body& data, b2World* world,
 		bd.type = b2_dynamicBody;
 		break;
 	}
+	bd.linearDamping = data.linearDamping;
+	bd.angularDamping = data.angularDamping;
+	bd.allowSleep = data.allowSleep;
+	bd.bullet = data.bullet;
+	bd.active = data.active;
 	bd.gravityScale = data.gravityScale;
 	b2Body* body = world->CreateBody(&bd);
 	bodyMap.insert(std::make_pair(const_cast<Body*>(&data), body));

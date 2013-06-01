@@ -23,6 +23,11 @@ using namespace emodeling;
 
 Body::Body()
 	: type(e_static)
+	, linearDamping(0.0f)
+	, angularDamping(0.0f)
+	, allowSleep(true)
+	, bullet(false)
+	, active(true)
 	, gravityScale(1.0f)
 	, sprite(NULL)
 {

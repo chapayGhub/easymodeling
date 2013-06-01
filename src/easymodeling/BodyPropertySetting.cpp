@@ -35,7 +35,19 @@ void BodyPropertySetting::updatePanel(d2d::PropertySettingPanel* panel)
 	if (getPGType(pg) == m_type)
 	{
 		pg->GetProperty(wxT("Name"))->SetValue(m_body->name);
-		pg->GetProperty(wxT("Type"))->SetValue((int) m_body->type);
+
+		pg->GetProperty(wxT("Type"))->SetValue((int)m_body->type);
+
+		pg->GetProperty(wxT("LinearDamping"))->SetValue(m_body->linearDamping);
+
+		pg->GetProperty(wxT("AngularDamping"))->SetValue(m_body->angularDamping);
+
+		pg->GetProperty(wxT("AllowSleep"))->SetValue(m_body->allowSleep);
+
+		pg->GetProperty(wxT("Bullet"))->SetValue(m_body->bullet);
+
+		pg->GetProperty(wxT("Active"))->SetValue(m_body->active);
+
 		pg->GetProperty(wxT("GravityScale"))->SetValue(m_body->gravityScale);
 	}
 	else
@@ -52,6 +64,16 @@ void BodyPropertySetting::updatePanel(d2d::PropertySettingPanel* panel)
 		typeChoice->SetChoiceSelection((int)m_body->type);
  		pg->Append(typeChoice);
 
+		pg->Append(new wxFloatProperty(wxT("LinearDamping"), wxPG_LABEL, m_body->linearDamping));
+
+		pg->Append(new wxFloatProperty(wxT("AngularDamping"), wxPG_LABEL, m_body->angularDamping));
+
+		pg->Append(new wxBoolProperty(wxT("AllowSleep"), wxPG_LABEL, m_body->allowSleep));
+
+		pg->Append(new wxBoolProperty(wxT("Bullet"), wxPG_LABEL, m_body->bullet));
+
+		pg->Append(new wxBoolProperty(wxT("Active"), wxPG_LABEL, m_body->active));
+
 		pg->Append(new wxFloatProperty(wxT("GravityScale"), wxPG_LABEL, m_body->gravityScale));
 	}
 }
@@ -65,6 +87,16 @@ void BodyPropertySetting::onPropertyGridChange(const wxString& name, const wxAny
 		m_body->name = wxANY_AS(value, wxString);
 	else if (name == wxT("Type"))
 		m_body->type = Body::Type(wxANY_AS(value, int));
+	else if (name == wxT("LinearDamping"))
+		m_body->linearDamping = wxANY_AS(value, float);
+	else if (name == wxT("AngularDamping"))
+		m_body->angularDamping = wxANY_AS(value, float);
+	else if (name == wxT("AllowSleep"))
+		m_body->allowSleep = wxANY_AS(value, bool);
+	else if (name == wxT("Bullet"))
+		m_body->bullet = wxANY_AS(value, bool);
+	else if (name == wxT("Active"))
+		m_body->active = wxANY_AS(value, bool);
 	else if (name == wxT("GravityScale"))
 		m_body->gravityScale = wxANY_AS(value, float);
 

@@ -92,7 +92,9 @@ Json::Value FileIO::b2j(Body* body)
 	Json::Value value;
 
 	value["name"] = body->name.ToStdString();
+
 	value["filepath"] = body->sprite->getSymbol().getFilepath().ToStdString();
+
 	value["type"] = body->type;
 	switch (body->type)
 	{
@@ -106,10 +108,22 @@ Json::Value FileIO::b2j(Body* body)
 		value["type"].setComment("//kinematic", Json::commentAfterOnSameLine);
 		break;
 	}
+
+	value["linearDamping"] = body->linearDamping;
+
+	value["angularDamping"] = body->angularDamping;
+
+	value["allowSleep"] = body->allowSleep;
+
+	value["bullet"] = body->bullet;
+
+	value["active"] = body->active;
+
 	value["gravityScale"] = body->gravityScale;
 
 	value["position"]["x"] = body->sprite->getPosition().x;
 	value["position"]["y"] = body->sprite->getPosition().y;
+
 	value["angle"] = body->sprite->getAngle();
 
 	for (size_t i = 0, n = body->fixtures.size(); i < n; ++i)
@@ -295,6 +309,11 @@ Body* FileIO::j2bBody(Json::Value bodyValue)
 	Body* body = new Body;
 	body->name = bodyValue["name"].asString();
 	body->type = Body::Type(bodyValue["type"].asInt());
+	body->linearDamping = bodyValue["linearDamping"].asDouble();
+	body->angularDamping = bodyValue["angularDamping"].asDouble();
+	body->allowSleep = bodyValue["allowSleep"].asBool();
+	body->bullet = bodyValue["bullet"].asBool();
+	body->active = bodyValue["active"].asBool();
 	body->gravityScale = bodyValue["gravityScale"].asDouble();
 	body->sprite = sprite;
 

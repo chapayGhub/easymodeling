@@ -51,6 +51,16 @@ namespace emodeling
 
 		Type type;
 
+		float linearDamping;
+
+		float angularDamping;
+
+		bool allowSleep;
+
+		bool bullet;
+
+		bool active;
+
 		float gravityScale;
 
 		d2d::ISprite* sprite;
