@@ -96,9 +96,9 @@ d2d::ISprite* StagePanel::querySpriteByPos(const d2d::Vector& pos) const
 	return result;
 }
 
-void StagePanel::querySpritesByAABB(const d2d::Rect& aabb, std::vector<d2d::ISprite*>& result) const
+void StagePanel::querySpritesByRect(const d2d::Rect& rect, std::vector<d2d::ISprite*>& result) const
 {
-	traverseSprites(RectQueryVisitor(aabb, result), d2d::e_editable);
+	traverseSprites(RectQueryVisitor(rect, result), d2d::e_editable);
 }
 
 Joint* StagePanel::queryJointByPos(const d2d::Vector& pos) const
@@ -227,8 +227,8 @@ visit(d2d::ICloneable* object, bool& bFetchNext)
 //////////////////////////////////////////////////////////////////////////
 
 StagePanel::RectQueryVisitor::
-RectQueryVisitor(const d2d::Rect& aabb, std::vector<d2d::ISprite*>& result)
-	: m_aabb(aabb), m_result(result)
+RectQueryVisitor(const d2d::Rect& rect, std::vector<d2d::ISprite*>& result)
+	: m_rect(rect), m_result(result)
 {
 }
 
@@ -237,7 +237,7 @@ visit(d2d::ICloneable* object, bool& bFetchNext)
 {
 	d2d::ISprite* sprite = static_cast<d2d::ISprite*>(object);
 	Body* data = static_cast<Body*>(sprite->getUserData());
-	if (data->isIntersect(m_aabb))
+	if (data->isIntersect(m_rect))
 		m_result.push_back(sprite);
 	bFetchNext = true;
 }

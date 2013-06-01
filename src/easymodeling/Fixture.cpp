@@ -65,25 +65,25 @@ bool Fixture::isContain(const d2d::Vector& pos) const
 		return false;
 }
 
-bool Fixture::isIntersect(const d2d::Rect& aabb) const
+bool Fixture::isIntersect(const d2d::Rect& rect) const
 {
 	if (d2d::CircleShape* circle = dynamic_cast<d2d::CircleShape*>(shape))
 	{
 		return d2d::Math::isCircleIntersectRect(circle->center + body->sprite->getPosition(), 
-			circle->radius, aabb);
+			circle->radius, rect);
 	}
-	else if (d2d::RectShape* rect = dynamic_cast<d2d::RectShape*>(shape))
+	else if (d2d::RectShape* r = dynamic_cast<d2d::RectShape*>(shape))
 	{
 		std::vector<d2d::Vector> boundary(4);
-		boundary[0].set(rect->m_rect.xMin, rect->m_rect.yMin);
-		boundary[1].set(rect->m_rect.xMax, rect->m_rect.yMin);
-		boundary[2].set(rect->m_rect.xMax, rect->m_rect.yMax);
-		boundary[3].set(rect->m_rect.xMin, rect->m_rect.yMax);
-		return isBoundaryIntersect(boundary, aabb);
+		boundary[0].set(r->m_rect.xMin, r->m_rect.yMin);
+		boundary[1].set(r->m_rect.xMax, r->m_rect.yMin);
+		boundary[2].set(r->m_rect.xMax, r->m_rect.yMax);
+		boundary[3].set(r->m_rect.xMin, r->m_rect.yMax);
+		return isBoundaryIntersect(boundary, rect);
 	}
 	else if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(shape))
 	{
-		return isBoundaryIntersect(chain->getVertices(), aabb);
+		return isBoundaryIntersect(chain->getVertices(), rect);
 	}
 	else
 		return false;
@@ -121,10 +121,10 @@ bool Fixture::isBoundaryContain(const std::vector<d2d::Vector>& boundary,
 }
 
 bool Fixture::isBoundaryIntersect(const std::vector<d2d::Vector>& boundary, 
-								  const d2d::Rect& aabb) const
+								  const d2d::Rect& rect) const
 {
 	std::vector<d2d::Vector> fixed(boundary);
 	for (size_t i = 0, n = fixed.size(); i < n ; ++i)
 		fixed[i] = d2d::Math::rotateVector(fixed[i], body->sprite->getAngle()) + body->sprite->getPosition();
-	return d2d::Math::isPolylineIntersectRect(fixed, true, aabb);
+	return d2d::Math::isPolylineIntersectRect(fixed, true, rect);
 }

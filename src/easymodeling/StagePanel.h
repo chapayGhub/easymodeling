@@ -37,7 +37,7 @@ namespace emodeling
 		virtual void clear();
 
 		virtual d2d::ISprite* querySpriteByPos(const d2d::Vector& pos) const;
-		virtual void querySpritesByAABB(const d2d::Rect& aabb, std::vector<d2d::ISprite*>& result) const;		
+		virtual void querySpritesByRect(const d2d::Rect& rect, std::vector<d2d::ISprite*>& result) const;		
 
 		Joint* queryJointByPos(const d2d::Vector& pos) const;
 
@@ -69,11 +69,11 @@ namespace emodeling
 		class RectQueryVisitor : public d2d::IVisitor
 		{
 		public:
-			RectQueryVisitor(const d2d::Rect& aabb, std::vector<d2d::ISprite*>& result);
+			RectQueryVisitor(const d2d::Rect& rect, std::vector<d2d::ISprite*>& result);
 			virtual void visit(d2d::ICloneable* object, bool& bFetchNext);
 
 		private:
-			const d2d::Rect& m_aabb;
+			const d2d::Rect& m_rect;
 			std::vector<d2d::ISprite*>& m_result;
 
 		}; // RectQueryVisitor

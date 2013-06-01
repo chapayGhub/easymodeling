@@ -44,10 +44,10 @@ bool Body::isContain(const d2d::Vector& pos) const
 	return false;
 }
 
-bool Body::isIntersect(const d2d::Rect& aabb) const
+bool Body::isIntersect(const d2d::Rect& rect) const
 {
 	for (size_t i = 0, n = fixtures.size(); i < n; ++i)
-		if (fixtures[i]->isIntersect(aabb))
+		if (fixtures[i]->isIntersect(rect))
 			return true;
 	return false;
 }

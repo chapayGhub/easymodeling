@@ -77,9 +77,9 @@ bool SelectFixtureOP::onMouseLeftUp(int x, int y)
 
 	if (m_firstPos.isValid())
 	{
-		d2d::Rect aabb(m_firstPos, m_editPanel->transPosScreenToProject(x, y));
+		d2d::Rect rect(m_firstPos, m_editPanel->transPosScreenToProject(x, y));
 		std::vector<d2d::ISprite*> sprites;
-		m_stagePanel->querySpritesByAABB(aabb, sprites);
+		m_stagePanel->querySpritesByRect(rect, sprites);
 
 		m_selected = NULL;
 		for (size_t i = 0, n = sprites.size(); i < n; ++i)
@@ -87,7 +87,7 @@ bool SelectFixtureOP::onMouseLeftUp(int x, int y)
 			Body* body = static_cast<Body*>(sprites[i]->getUserData());
 			for (size_t j = 0, m = body->fixtures.size(); j < m; ++j)
 			{
-				if (body->fixtures[j]->isIntersect(aabb))
+				if (body->fixtures[j]->isIntersect(rect))
 				{
 					m_selected = body->fixtures[i];
 					break;
