@@ -24,6 +24,7 @@
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
 #include "WheelJoint.h"
+#include "FrictionJoint.h"
 #include "Context.h"
 
 using namespace emodeling;
@@ -279,6 +280,21 @@ Json::Value FileIO::b2j(Joint* joint, const std::map<Body*, int>& bodyIndexMap)
 			value["dampingRatio"] = wJoint->dampingRatio;
 		}
 		break;
+	case Joint::e_frictionJoint:
+		{
+			value["type"] = "friction";
+
+			FrictionJoint* fJoint = static_cast<FrictionJoint*>(joint);
+
+			value["anchorA"]["x"] = fJoint->localAnchorA.x;
+			value["anchorA"]["y"] = fJoint->localAnchorA.y;
+			value["anchorB"]["x"] = fJoint->localAnchorB.x;
+			value["anchorB"]["y"] = fJoint->localAnchorB.y;
+
+			value["maxForce"] = fJoint->maxForce;
+			value["maxTorque"] = fJoint->maxTorque;
+		}
+		break;
 	}
 
 	return value;
@@ -482,6 +498,18 @@ Joint* FileIO::j2bJoint(Json::Value jointValue,
 		wJoint->dampingRatio = jointValue["dampingRatio"].asDouble();
 
 		joint = wJoint;
+	}
+	else if (type == "friction")
+	{
+		FrictionJoint* fJoint = new FrictionJoint(bodies[bodyIndexA], bodies[bodyIndexB]);
+
+		fJoint->localAnchorA.x = jointValue["anchorA"]["x"].asDouble();
+		fJoint->localAnchorA.y = jointValue["anchorA"]["y"].asDouble();
+		fJoint->localAnchorB.x = jointValue["anchorB"]["x"].asDouble();
+		fJoint->localAnchorB.y = jointValue["anchorB"]["y"].asDouble();
+
+		fJoint->maxForce = jointValue["maxForce"].asDouble();
+		fJoint->maxTorque = jointValue["maxTorque"].asDouble();
 	}
 
 	joint->m_name = jointValue["name"].asString();

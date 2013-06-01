@@ -23,6 +23,7 @@
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
 #include "WheelJoint.h"
+#include "FrictionJoint.h"
 #include "StagePanel.h"
 #include "JointPropertySetting.h"
 #include "WorldPropertySetting.h"
@@ -150,6 +151,17 @@ bool SelectJointOP::onMouseDrag(int x, int y)
 		case Joint::e_wheelJoint:
 			{
 				WheelJoint* joint = static_cast<WheelJoint*>(m_selected);
+				const float disA = d2d::Math::getDistance(pos, joint->getWorldAnchorA()),
+					disB = d2d::Math::getDistance(pos, joint->getWorldAnchorB());
+				if (disA < disB)
+					joint->setLocalAnchorA(pos);
+				else
+					joint->setLocalAnchorB(pos);
+			}
+			break;
+		case Joint::e_frictionJoint:
+			{
+				FrictionJoint* joint = static_cast<FrictionJoint*>(m_selected);
 				const float disA = d2d::Math::getDistance(pos, joint->getWorldAnchorA()),
 					disB = d2d::Math::getDistance(pos, joint->getWorldAnchorB());
 				if (disA < disB)

@@ -216,6 +216,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\easymodeling\FrictionJoint.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\easymodeling\FrictionJoint.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\easymodeling\Joint.cpp"
 					>
 				</File>

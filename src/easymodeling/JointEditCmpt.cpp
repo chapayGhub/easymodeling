@@ -22,6 +22,7 @@
 #include "RevoluteJoint.h"
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
+#include "FrictionJoint.h"
 #include "WheelJoint.h"
 #include "Body.h"
 
@@ -47,13 +48,16 @@ wxSizer* JointEditCmpt::initLayout()
 		wxStaticBox* bounding = new wxStaticBox(this, wxID_ANY, wxT("Type"));
 		wxBoxSizer* sizer = new wxStaticBoxSizer(bounding, wxVERTICAL);
 		{
-			wxString choices[4];
+			const int size = 5;
+
+			wxString choices[size];
 			choices[0] = wxT("Revolute");
 			choices[1] = wxT("Prismatic");
 			choices[2] = wxT("Distance");
 			choices[3] = wxT("Wheel");
+			choices[4] = wxT("Friction");
 
-			m_typeChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 4, choices);
+			m_typeChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, size, choices);
 			m_typeChoice->SetSelection(0);
 			sizer->Add(m_typeChoice);
 		}
@@ -101,6 +105,8 @@ void JointEditCmpt::onCreateJoint(wxCommandEvent& event)
 				editPanel->insertJoint(new WheelJoint(body0, body1));
 		}
 	}
+	else if (type == wxT("Friction"))
+		editPanel->insertJoint(new FrictionJoint(body0, body1));
 
 	m_editPanel->Refresh();
 }

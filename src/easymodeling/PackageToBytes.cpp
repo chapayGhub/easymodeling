@@ -23,6 +23,7 @@
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
 #include "WheelJoint.h"
+#include "FrictionJoint.h"
 
 using namespace emodeling;
 
@@ -190,6 +191,25 @@ void PaskageToBytes::packJoint(const Joint& data, std::ofstream& fout,
 
 			fout.write(reinterpret_cast<const char*>(&joint->frequencyHz), sizeof(float));
 			fout.write(reinterpret_cast<const char*>(&joint->dampingRatio), sizeof(float));
+		}
+		break;
+	case Joint::e_frictionJoint:
+		{
+			FrictionJoint* joint = static_cast<FrictionJoint*>(const_cast<Joint*>(&data));
+
+			int bodyA = queryBodyIndex(joint->bodyA, bodies);
+			int bodyB = queryBodyIndex(joint->bodyB, bodies);
+			assert(bodyA != -1 && bodyB != -1);
+			fout.write(reinterpret_cast<const char*>(&bodyA), sizeof(int));
+			fout.write(reinterpret_cast<const char*>(&bodyB), sizeof(int));
+
+			fout.write(reinterpret_cast<const char*>(&joint->localAnchorA.x), sizeof(float));
+			fout.write(reinterpret_cast<const char*>(&joint->localAnchorA.y), sizeof(float));
+			fout.write(reinterpret_cast<const char*>(&joint->localAnchorB.x), sizeof(float));
+			fout.write(reinterpret_cast<const char*>(&joint->localAnchorB.y), sizeof(float));
+
+			fout.write(reinterpret_cast<const char*>(&joint->maxForce), sizeof(float));
+			fout.write(reinterpret_cast<const char*>(&joint->maxTorque), sizeof(float));
 		}
 		break;
 	}

@@ -23,6 +23,7 @@
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
 #include "WheelJoint.h"
+#include "FrictionJoint.h"
 
 using namespace emodeling;
 
@@ -222,6 +223,27 @@ b2Joint* ResolveToB2::createJoint(const Joint& data, b2World* world,
 			jd.motorSpeed = joint->motorSpeed;
 			jd.frequencyHz = joint->frequencyHz;
 			jd.dampingRatio = joint->dampingRatio;
+
+			bJoint = world->CreateJoint(&jd);
+		}
+		break;
+	case Joint::e_frictionJoint:
+		{
+			b2FrictionJointDef jd;
+
+			FrictionJoint* joint = static_cast<FrictionJoint*>(const_cast<Joint*>(&data));
+
+			std::map<Body*, b2Body*>::const_iterator 
+				itrA = bodyMap.find(joint->bodyA),
+				itrB = bodyMap.find(joint->bodyB);
+			assert(itrA != bodyMap.end() && itrB != bodyMap.end());
+			jd.bodyA = itrA->second;
+			jd.bodyB = itrB->second;
+			jd.collideConnected = joint->collideConnected;
+			jd.localAnchorA.Set(joint->localAnchorA.x / d2d::BOX2D_SCALE_FACTOR, joint->localAnchorA.y / d2d::BOX2D_SCALE_FACTOR);
+			jd.localAnchorB.Set(joint->localAnchorB.x / d2d::BOX2D_SCALE_FACTOR, joint->localAnchorB.y / d2d::BOX2D_SCALE_FACTOR);
+			jd.maxForce = joint->maxForce;
+			jd.maxTorque = joint->maxTorque;
 
 			bJoint = world->CreateJoint(&jd);
 		}
