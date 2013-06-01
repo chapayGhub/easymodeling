@@ -24,6 +24,7 @@
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
 #include "WheelJoint.h"
+#include "WeldJoint.h"
 #include "FrictionJoint.h"
 #include "Context.h"
 
@@ -280,6 +281,22 @@ Json::Value FileIO::b2j(Joint* joint, const std::map<Body*, int>& bodyIndexMap)
 			value["dampingRatio"] = wJoint->dampingRatio;
 		}
 		break;
+	case Joint::e_weldJoint:
+		{
+			value["type"] = "weld";
+
+			WeldJoint* wJoint = static_cast<WeldJoint*>(joint);
+
+			value["anchorA"]["x"] = wJoint->localAnchorA.x;
+			value["anchorA"]["y"] = wJoint->localAnchorA.y;
+			value["anchorB"]["x"] = wJoint->localAnchorB.x;
+			value["anchorB"]["y"] = wJoint->localAnchorB.y;
+
+			value["referenceAngle"] = wJoint->dampingRatio;
+			value["frequencyHz"] = wJoint->frequencyHz;
+			value["dampingRatio"] = wJoint->dampingRatio;
+		}
+		break;
 	case Joint::e_frictionJoint:
 		{
 			value["type"] = "friction";
@@ -499,6 +516,21 @@ Joint* FileIO::j2bJoint(Json::Value jointValue,
 
 		joint = wJoint;
 	}
+	else if (type == "weld")
+	{
+		WeldJoint* wJoint = new WeldJoint(bodies[bodyIndexA], bodies[bodyIndexB]);
+
+		wJoint->localAnchorA.x = jointValue["anchorA"]["x"].asDouble();
+		wJoint->localAnchorA.y = jointValue["anchorA"]["y"].asDouble();
+		wJoint->localAnchorB.x = jointValue["anchorB"]["x"].asDouble();
+		wJoint->localAnchorB.y = jointValue["anchorB"]["y"].asDouble();
+
+		wJoint->referenceAngle = jointValue["referenceAngle"].asDouble();
+		wJoint->frequencyHz = jointValue["frequencyHz"].asDouble();
+		wJoint->dampingRatio = jointValue["dampingRatio"].asDouble();
+
+		joint = wJoint;
+	}
 	else if (type == "friction")
 	{
 		FrictionJoint* fJoint = new FrictionJoint(bodies[bodyIndexA], bodies[bodyIndexB]);
@@ -510,6 +542,8 @@ Joint* FileIO::j2bJoint(Json::Value jointValue,
 
 		fJoint->maxForce = jointValue["maxForce"].asDouble();
 		fJoint->maxTorque = jointValue["maxTorque"].asDouble();
+
+		joint = fJoint;
 	}
 
 	joint->m_name = jointValue["name"].asString();

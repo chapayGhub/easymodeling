@@ -22,8 +22,9 @@
 #include "RevoluteJoint.h"
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
-#include "FrictionJoint.h"
 #include "WheelJoint.h"
+#include "WeldJoint.h"
+#include "FrictionJoint.h"
 #include "Body.h"
 
 using namespace emodeling;
@@ -48,16 +49,17 @@ wxSizer* JointEditCmpt::initLayout()
 		wxStaticBox* bounding = new wxStaticBox(this, wxID_ANY, wxT("Type"));
 		wxBoxSizer* sizer = new wxStaticBoxSizer(bounding, wxVERTICAL);
 		{
-			const int size = 5;
+			const int SIZE = 6;
 
-			wxString choices[size];
+			wxString choices[SIZE];
 			choices[0] = wxT("Revolute");
 			choices[1] = wxT("Prismatic");
 			choices[2] = wxT("Distance");
 			choices[3] = wxT("Wheel");
-			choices[4] = wxT("Friction");
+			choices[4] = wxT("Weld");
+			choices[5] = wxT("Friction");
 
-			m_typeChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, size, choices);
+			m_typeChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, SIZE, choices);
 			m_typeChoice->SetSelection(0);
 			sizer->Add(m_typeChoice);
 		}
@@ -105,6 +107,8 @@ void JointEditCmpt::onCreateJoint(wxCommandEvent& event)
 				editPanel->insertJoint(new WheelJoint(body0, body1));
 		}
 	}
+	else if (type == wxT("Weld"))
+		editPanel->insertJoint(new WeldJoint(body0, body1));
 	else if (type == wxT("Friction"))
 		editPanel->insertJoint(new FrictionJoint(body0, body1));
 

@@ -21,6 +21,7 @@
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
 #include "WheelJoint.h"
+#include "WeldJoint.h"
 #include "FrictionJoint.h"
 
 using namespace emodeling;
@@ -77,6 +78,12 @@ void JointPropertySetting::updatePanel(d2d::PropertySettingPanel* panel)
 		else
 			updatePropertyPanel(static_cast<WheelJoint*>(m_joint), pg);
 		break;
+	case Joint::e_weldJoint:
+		if (build) 
+			createPropertyPanel(static_cast<WeldJoint*>(m_joint), pg);
+		else
+			updatePropertyPanel(static_cast<WeldJoint*>(m_joint), pg);
+		break;
 	case Joint::e_frictionJoint:
 		if (build) 
 			createPropertyPanel(static_cast<FrictionJoint*>(m_joint), pg);
@@ -108,6 +115,9 @@ void JointPropertySetting::onPropertyGridChange(const wxString& name, const wxAn
 		break;
 	case Joint::e_wheelJoint:
 		onPropertyGridChange(static_cast<WheelJoint*>(m_joint), name, value);
+		break;
+	case Joint::e_weldJoint:
+		onPropertyGridChange(static_cast<WeldJoint*>(m_joint), name, value);
 		break;
 	case Joint::e_frictionJoint:
 		onPropertyGridChange(static_cast<FrictionJoint*>(m_joint), name, value);
@@ -451,6 +461,66 @@ void JointPropertySetting::onPropertyGridChange(WheelJoint* joint, const wxStrin
 		joint->maxMotorTorque = wxANY_AS(value, float);
 	else if (name == wxT("motorSpeed"))
 		joint->motorSpeed = wxANY_AS(value, float);
+	else if (name == wxT("frequencyHz"))
+		joint->frequencyHz = wxANY_AS(value, float);
+	else if (name == wxT("dampingRatio"))
+		joint->dampingRatio = wxANY_AS(value, float);
+}
+
+void JointPropertySetting::createPropertyPanel(WeldJoint* joint, wxPropertyGrid* pg)
+{
+	wxPGProperty* localAnchorAProp = pg->Append(new wxStringProperty(wxT("localAnchorA"),
+		wxPG_LABEL, wxT("<composed>")));
+	pg->AppendIn(localAnchorAProp, new wxFloatProperty(wxT("x"), wxPG_LABEL, joint->localAnchorA.x));
+	pg->SetPropertyAttribute(wxT("localAnchorA.x"), "Precision", 2);
+	pg->AppendIn(localAnchorAProp, new wxFloatProperty(wxT("y"), wxPG_LABEL, joint->localAnchorA.y));
+	pg->SetPropertyAttribute(wxT("localAnchorA.y"), "Precision", 2);
+
+	wxPGProperty* localAnchorBProp = pg->Append(new wxStringProperty(wxT("localAnchorB"),
+		wxPG_LABEL, wxT("<composed>")));
+	pg->AppendIn(localAnchorBProp, new wxFloatProperty(wxT("x"), wxPG_LABEL, joint->localAnchorB.x));
+	pg->SetPropertyAttribute(wxT("localAnchorB.x"), "Precision", 2);
+	pg->AppendIn(localAnchorBProp, new wxFloatProperty(wxT("y"), wxPG_LABEL, joint->localAnchorB.y));
+	pg->SetPropertyAttribute(wxT("localAnchorB.y"), "Precision", 2);
+
+	pg->Append(new wxFloatProperty(wxT("referenceAngle"), wxPG_LABEL, joint->referenceAngle));
+	pg->SetPropertyAttribute(wxT("referenceAngle"), "Precision", 2);
+
+	pg->Append(new wxFloatProperty(wxT("frequencyHz"), wxPG_LABEL, joint->frequencyHz));
+	pg->SetPropertyAttribute(wxT("frequencyHz"), "Precision", 2);
+
+	pg->Append(new wxFloatProperty(wxT("dampingRatio"), wxPG_LABEL, joint->dampingRatio));
+	pg->SetPropertyAttribute(wxT("dampingRatio"), "Precision", 2);
+}
+
+void JointPropertySetting::updatePropertyPanel(WeldJoint* joint, wxPropertyGrid* pg)
+{
+	pg->GetProperty(wxT("localAnchorA.x"))->SetValue(joint->localAnchorA.x);
+	pg->GetProperty(wxT("localAnchorA.y"))->SetValue(joint->localAnchorA.y);
+
+	pg->GetProperty(wxT("localAnchorB.x"))->SetValue(joint->localAnchorB.x);
+	pg->GetProperty(wxT("localAnchorB.y"))->SetValue(joint->localAnchorB.y);
+
+	pg->GetProperty(wxT("referenceAngle"))->SetValue(joint->referenceAngle);
+
+	pg->GetProperty(wxT("frequencyHz"))->SetValue(joint->frequencyHz);
+
+	pg->GetProperty(wxT("dampingRatio"))->SetValue(joint->dampingRatio);
+}
+
+void JointPropertySetting::onPropertyGridChange(WeldJoint* joint, const wxString& name, 
+												const wxAny& value)
+{
+	if (name == wxT("localAnchorA.x"))
+		joint->localAnchorA.x = wxANY_AS(value, float);
+	else if (name == wxT("localAnchorA.y"))
+		joint->localAnchorA.y = wxANY_AS(value, float);
+	else if (name == wxT("localAnchorB.x"))
+		joint->localAnchorB.x = wxANY_AS(value, float);
+	else if (name == wxT("localAnchorB.y"))
+		joint->localAnchorB.y = wxANY_AS(value, float);
+	else if (name == wxT("referenceAngle"))
+		joint->referenceAngle = wxANY_AS(value, float);
 	else if (name == wxT("frequencyHz"))
 		joint->frequencyHz = wxANY_AS(value, float);
 	else if (name == wxT("dampingRatio"))
