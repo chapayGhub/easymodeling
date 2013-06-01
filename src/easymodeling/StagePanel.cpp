@@ -21,7 +21,6 @@
 #include "BodyData.h"
 #include "JointData.h"
 #include "FixtureData.h"
-#include "Shape.h"
 #include "Context.h"
 
 using namespace emodeling;

@@ -20,7 +20,6 @@
 #include "BECanvas.h"
 #include "BodyData.h"
 #include "FixtureData.h"
-#include "Shape.h"
 
 using namespace emodeling;
 

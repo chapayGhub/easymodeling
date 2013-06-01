@@ -17,7 +17,6 @@
 */
 
 #include "FixtureData.h"
-#include "Shape.h"
 #include "BodyData.h"
 
 using namespace emodeling;
