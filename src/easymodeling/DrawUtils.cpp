@@ -17,47 +17,47 @@
 */
 
 #include "DrawUtils.h"
-#include "BodyData.h"
-#include "FixtureData.h"
+#include "Body.h"
+#include "Fixture.h"
 
 using namespace emodeling;
 
-void DrawUtils::drawBody(BodyData* body, DrawType dType)
+void DrawUtils::drawBody(Body* body, DrawType dType)
 {
 	d2d::Colorf cFace, cEdge;
-	getBodyColor(body->m_type, dType, cFace, cEdge);
+	getBodyColor(body->type, dType, cFace, cEdge);
 
-	d2d::SpriteDraw::begin(body->m_sprite);
+	d2d::SpriteDraw::begin(body->sprite);
 	body->draw(cFace, cEdge);
-	d2d::SpriteDraw::end(body->m_sprite);
+	d2d::SpriteDraw::end(body->sprite);
 }
 
-void DrawUtils::drawFixture(FixtureData* fixture, DrawType dType,
+void DrawUtils::drawFixture(Fixture* fixture, DrawType dType,
 							bool onlyFixture)
 {
 	d2d::Colorf cFace, cEdge;
 	if (onlyFixture)
 		getFixtureColor(dType, cFace, cEdge);
 	else
-		getBodyColor(fixture->body->m_type, dType, cFace, cEdge);
+		getBodyColor(fixture->body->type, dType, cFace, cEdge);
 
-	d2d::SpriteDraw::begin(fixture->body->m_sprite);
+	d2d::SpriteDraw::begin(fixture->body->sprite);
 	fixture->draw(cFace, cEdge);
-	d2d::SpriteDraw::end(fixture->body->m_sprite);
+	d2d::SpriteDraw::end(fixture->body->sprite);
 }
 
-void DrawUtils::getBodyColor(BodyData::Type type, DrawType dType,
+void DrawUtils::getBodyColor(Body::Type type, DrawType dType,
 							 d2d::Colorf& cFace, d2d::Colorf& cEdge)
 {
 	switch (type)
 	{
-	case BodyData::e_static:
+	case Body::e_static:
 		cFace.set(0.5f, 0.9f, 0.5f, 0.2f);
 		break;
-	case BodyData::e_kinematic:
+	case Body::e_kinematic:
 		cFace.set(0.5f, 0.5f, 0.9f, 0.2f);
 		break;
-	case BodyData::e_dynamic:
+	case Body::e_dynamic:
 		cFace.set(0.5f, 0.5f, 0.3f, 0.2f);
 		break;
 	}

@@ -18,8 +18,8 @@
 
 #include "BEStage.h"
 #include "BECanvas.h"
-#include "BodyData.h"
-#include "FixtureData.h"
+#include "Body.h"
+#include "Fixture.h"
 
 using namespace emodeling;
 
@@ -74,13 +74,13 @@ void BEStage::removeShape(d2d::IShape* shape)
 
 	if (m_sprite && m_sprite->getUserData())
 	{
-		BodyData* bd = static_cast<BodyData*>(m_sprite->getUserData());
-		for (size_t i = 0, n = bd->m_fixtures.size(); i < n; ++i)
+		Body* bd = static_cast<Body*>(m_sprite->getUserData());
+		for (size_t i = 0, n = bd->fixtures.size(); i < n; ++i)
 		{
-			if (bd->m_fixtures[i]->shape == shape)
+			if (bd->fixtures[i]->shape == shape)
 			{
-				delete bd->m_fixtures[i];
-				bd->m_fixtures.erase(bd->m_fixtures.begin() + i);
+				delete bd->fixtures[i];
+				bd->fixtures.erase(bd->fixtures.begin() + i);
 				break;
 			}
 		}
@@ -93,12 +93,12 @@ void BEStage::insertShape(d2d::IShape* shape)
 
 	if (m_sprite && m_sprite->getUserData())
 	{
-		BodyData* bd = static_cast<BodyData*>(m_sprite->getUserData());
-		FixtureData* fixture = new FixtureData;
+		Body* bd = static_cast<Body*>(m_sprite->getUserData());
+		Fixture* fixture = new Fixture;
 		fixture->body = bd;
 		shape->retain();
 		fixture->shape = shape;
-		bd->m_fixtures.push_back(fixture);
+		bd->fixtures.push_back(fixture);
 	}
 }
 
@@ -123,11 +123,11 @@ void BEStage::loadShapes()
 	}
 	else if (m_sprite->getUserData())
 	{
-		BodyData* bd = static_cast<BodyData*>(m_sprite->getUserData());
-		m_shapes.reserve(bd->m_fixtures.size());
-		for (size_t i = 0, n = bd->m_fixtures.size(); i < n; ++i)
+		Body* bd = static_cast<Body*>(m_sprite->getUserData());
+		m_shapes.reserve(bd->fixtures.size());
+		for (size_t i = 0, n = bd->fixtures.size(); i < n; ++i)
 		{
-			d2d::IShape* shape = bd->m_fixtures[i]->shape;
+			d2d::IShape* shape = bd->fixtures[i]->shape;
 			shape->retain();
 			m_shapes.push_back(shape);
 		}

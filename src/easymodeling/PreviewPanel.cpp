@@ -19,7 +19,7 @@
 #include "PreviewPanel.h"
 #include "PreviewCanvas.h"
 #include "StagePanel.h"
-#include "BodyData.h"
+#include "Body.h"
 #include "JointData.h"
 #include "ResolveToB2.h"
 #include "Context.h"
@@ -34,7 +34,7 @@ PreviewPanel::PreviewPanel(wxWindow* parent)
 	m_canvas = new PreviewCanvas(this);
 	m_editOP = new d2d::DragPhysicsOP(this, m_world, m_ground);
 
-	std::map<BodyData*, b2Body*> transBody;
+	std::map<Body*, b2Body*> transBody;
 	Context::Instance()->stage->traverseBodies(LoadBodyVisitor(m_world, transBody));
 	Context::Instance()->stage->traverseJoints(LoadJointVisitor(m_world, transBody));
 }
@@ -67,7 +67,7 @@ void PreviewPanel::createGround()
 //////////////////////////////////////////////////////////////////////////
 
 PreviewPanel::LoadBodyVisitor::
-LoadBodyVisitor(b2World* world, std::map<BodyData*, b2Body*>& transBody) 
+LoadBodyVisitor(b2World* world, std::map<Body*, b2Body*>& transBody) 
 	: m_world(world)
 	, m_transBody(transBody)
 {}
@@ -75,7 +75,7 @@ LoadBodyVisitor(b2World* world, std::map<BodyData*, b2Body*>& transBody)
 void PreviewPanel::LoadBodyVisitor::
 visit(d2d::ICloneable* object, bool& bFetchNext)
 {
-	BodyData* data = static_cast<BodyData*>(object);
+	Body* data = static_cast<Body*>(object);
 
 	b2Body* body = ResolveToB2::createBody(*data, m_world, m_transBody);
 
@@ -87,7 +87,7 @@ visit(d2d::ICloneable* object, bool& bFetchNext)
 //////////////////////////////////////////////////////////////////////////
 
 PreviewPanel::LoadJointVisitor::
-LoadJointVisitor(b2World* world, const std::map<BodyData*, b2Body*>& transBody) 
+LoadJointVisitor(b2World* world, const std::map<Body*, b2Body*>& transBody) 
 	: m_world(world) 
 	, m_transBody(transBody)
 {}

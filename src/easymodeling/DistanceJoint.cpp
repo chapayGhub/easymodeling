@@ -17,11 +17,11 @@
 */
 
 #include "DistanceJoint.h"
-#include "BodyData.h"
+#include "Body.h"
 
 using namespace emodeling;
 
-DistanceJoint::DistanceJoint(BodyData* b0, BodyData* b1)
+DistanceJoint::DistanceJoint(Body* b0, Body* b1)
 	: JointData(b0, b1, e_distanceJoint)
 	, length(1.0f)
 	, frequencyHz(0.0f)
@@ -42,8 +42,8 @@ void DistanceJoint::draw(DrawType type) const
 
 	if (type == e_selected || type == e_mouseOn)
 	{
-		d2d::PrimitiveDraw::drawDashLine(anchorA, bodyA->m_sprite->getPosition(), d2d::Colorf(0.4f, 0.8f, 0.4f), 2);
-		d2d::PrimitiveDraw::drawDashLine(anchorB, bodyB->m_sprite->getPosition(), d2d::Colorf(0.4f, 0.4f, 0.8f), 2);
+		d2d::PrimitiveDraw::drawDashLine(anchorA, bodyA->sprite->getPosition(), d2d::Colorf(0.4f, 0.8f, 0.4f), 2);
+		d2d::PrimitiveDraw::drawDashLine(anchorB, bodyB->sprite->getPosition(), d2d::Colorf(0.4f, 0.4f, 0.8f), 2);
 
 		drawBodyFlag();
 	}
@@ -56,22 +56,22 @@ void DistanceJoint::draw(DrawType type) const
 
 d2d::Vector DistanceJoint::getWorldAnchorA() const
 {
-	return transLocalToWorld(localAnchorA, bodyA->m_sprite);
+	return transLocalToWorld(localAnchorA, bodyA->sprite);
 }
 
 d2d::Vector DistanceJoint::getWorldAnchorB() const
 {
-	return transLocalToWorld(localAnchorB, bodyB->m_sprite);
+	return transLocalToWorld(localAnchorB, bodyB->sprite);
 }
 
 void DistanceJoint::setLocalAnchorA(const d2d::Vector& world)
 {
-	localAnchorA = transWorldToLocal(world, bodyA->m_sprite);
+	localAnchorA = transWorldToLocal(world, bodyA->sprite);
 }
 
 void DistanceJoint::setLocalAnchorB(const d2d::Vector& world)
 {
-	localAnchorB = transWorldToLocal(world, bodyB->m_sprite);
+	localAnchorB = transWorldToLocal(world, bodyB->sprite);
 }
 
 void DistanceJoint::drawAnchor(const d2d::Vector& pos, DrawType type) const

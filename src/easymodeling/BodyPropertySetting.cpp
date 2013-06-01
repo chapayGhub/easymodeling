@@ -17,14 +17,14 @@
 */
 
 #include "BodyPropertySetting.h"
-#include "BodyData.h"
+#include "Body.h"
 
 using namespace emodeling;
 
 BodyPropertySetting::BodyPropertySetting(d2d::EditPanel* editPanel, d2d::ISprite* sprite)
 	: d2d::IPropertySetting(editPanel, wxT("Body"))
 {
-	m_body = static_cast<BodyData*>(sprite->getUserData());
+	m_body = static_cast<Body*>(sprite->getUserData());
 	assert(m_body);
 }
 
@@ -34,25 +34,25 @@ void BodyPropertySetting::updatePanel(d2d::PropertySettingPanel* panel)
 
 	if (getPGType(pg) == m_type)
 	{
-		pg->GetProperty(wxT("Name"))->SetValue(m_body->m_name);
-		pg->GetProperty(wxT("Type"))->SetValue((int) m_body->m_type);
-		pg->GetProperty(wxT("GravityScale"))->SetValue(m_body->m_gravityScale);
+		pg->GetProperty(wxT("Name"))->SetValue(m_body->name);
+		pg->GetProperty(wxT("Type"))->SetValue((int) m_body->type);
+		pg->GetProperty(wxT("GravityScale"))->SetValue(m_body->gravityScale);
 	}
 	else
 	{
 		pg->Clear();
 
-		pg->Append(new wxStringProperty(wxT("Name"), wxPG_LABEL, m_body->m_name));
+		pg->Append(new wxStringProperty(wxT("Name"), wxPG_LABEL, m_body->name));
 
  		wxPGChoices eech;
  		eech.Add(wxT("static"));
  		eech.Add(wxT("kinematic"));
  		eech.Add(wxT("dynamic"));
 		wxEnumProperty* typeChoice = new wxEnumProperty(wxT("Type"), wxPG_LABEL, eech);
-		typeChoice->SetChoiceSelection((int)m_body->m_type);
+		typeChoice->SetChoiceSelection((int)m_body->type);
  		pg->Append(typeChoice);
 
-		pg->Append(new wxFloatProperty(wxT("GravityScale"), wxPG_LABEL, m_body->m_gravityScale));
+		pg->Append(new wxFloatProperty(wxT("GravityScale"), wxPG_LABEL, m_body->gravityScale));
 	}
 }
 
@@ -62,11 +62,11 @@ void BodyPropertySetting::onPropertyGridChange(const wxString& name, const wxAny
 		return;
 
 	if (name == wxT("Name"))
-		m_body->m_name = wxANY_AS(value, wxString);
+		m_body->name = wxANY_AS(value, wxString);
 	else if (name == wxT("Type"))
-		m_body->m_type = BodyData::Type(wxANY_AS(value, int));
+		m_body->type = Body::Type(wxANY_AS(value, int));
 	else if (name == wxT("GravityScale"))
-		m_body->m_gravityScale = wxANY_AS(value, float);
+		m_body->gravityScale = wxANY_AS(value, float);
 
 	m_editPanel->Refresh();
 }

@@ -23,20 +23,20 @@
 
 namespace emodeling
 {
-	class BodyData;
+	class Body;
 	class JointData;
 
 	class PaskageToBytes
 	{
 	public:
-		static void packBody(const BodyData& data, std::ofstream& fout);
+		static void packBody(const Body& data, std::ofstream& fout);
 
 		static void packJoint(const JointData& data, std::ofstream& fout,
-			const std::vector<BodyData*>& bodies);
+			const std::vector<Body*>& bodies);
 
 	private:
-		static int queryBodyIndex(const BodyData* body, 
-			const std::vector<BodyData*>& bodies);
+		static int queryBodyIndex(const Body* body, 
+			const std::vector<Body*>& bodies);
 
 	}; // PaskageToBytes
 }

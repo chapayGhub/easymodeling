@@ -17,11 +17,11 @@
 */
 
 #include "FixturePropertySetting.h"
-#include "FixtureData.h"
+#include "Fixture.h"
 
 using namespace emodeling;
 
-FixturePropertySetting::FixturePropertySetting(d2d::EditPanel* editPanel, FixtureData* fixture)
+FixturePropertySetting::FixturePropertySetting(d2d::EditPanel* editPanel, Fixture* fixture)
 	: d2d::IPropertySetting(editPanel, wxT("Body"))
 	, m_fixture(fixture)
 {

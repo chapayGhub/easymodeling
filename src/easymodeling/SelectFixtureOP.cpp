@@ -18,8 +18,8 @@
 
 #include "SelectFixtureOP.h"
 #include "StagePanel.h"
-#include "BodyData.h"
-#include "FixtureData.h"
+#include "Body.h"
+#include "Fixture.h"
 #include "FixturePropertySetting.h"
 #include "DrawUtils.h"
 
@@ -47,12 +47,12 @@ bool SelectFixtureOP::onMouseLeftDown(int x, int y)
 	if (!sprite) return false;
 
 	m_selected = NULL;
-	BodyData* body = static_cast<BodyData*>(sprite->getUserData());
-	for (size_t i = 0, n = body->m_fixtures.size(); i < n; ++i)
+	Body* body = static_cast<Body*>(sprite->getUserData());
+	for (size_t i = 0, n = body->fixtures.size(); i < n; ++i)
 	{
-		if (body->m_fixtures[i]->isContain(pos))
+		if (body->fixtures[i]->isContain(pos))
 		{
-			m_selected = body->m_fixtures[i];
+			m_selected = body->fixtures[i];
 			break;
 		}
 	}
@@ -84,12 +84,12 @@ bool SelectFixtureOP::onMouseLeftUp(int x, int y)
 		m_selected = NULL;
 		for (size_t i = 0, n = sprites.size(); i < n; ++i)
 		{
-			BodyData* body = static_cast<BodyData*>(sprites[i]->getUserData());
-			for (size_t j = 0, m = body->m_fixtures.size(); j < m; ++j)
+			Body* body = static_cast<Body*>(sprites[i]->getUserData());
+			for (size_t j = 0, m = body->fixtures.size(); j < m; ++j)
 			{
-				if (body->m_fixtures[j]->isIntersect(aabb))
+				if (body->fixtures[j]->isIntersect(aabb))
 				{
-					m_selected = body->m_fixtures[i];
+					m_selected = body->fixtures[i];
 					break;
 				}
 			}
@@ -121,14 +121,14 @@ bool SelectFixtureOP::onMouseMove(int x, int y)
 	d2d::ISprite* sprite = static_cast<StagePanel*>(m_editPanel)->querySpriteByPos(pos);
 	if (sprite)
 	{
-		BodyData* body = static_cast<BodyData*>(sprite->getUserData());
+		Body* body = static_cast<Body*>(sprite->getUserData());
 		if (body)
 		{
-			for (size_t i = 0, n = body->m_fixtures.size(); i < n; ++i)
+			for (size_t i = 0, n = body->fixtures.size(); i < n; ++i)
 			{
-				if (body->m_fixtures[i]->isContain(pos))
+				if (body->fixtures[i]->isContain(pos))
 				{
-					m_mouseOn = body->m_fixtures[i];
+					m_mouseOn = body->fixtures[i];
 					break;
 				}
 			}

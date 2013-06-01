@@ -18,7 +18,7 @@
 
 #include "FileAdapter.h"
 #include "FileIO.h"
-#include "BodyData.h"
+#include "Body.h"
 #include "JointData.h"
 
 using namespace emodeling;
@@ -41,8 +41,8 @@ void FileApapter::resolve(const wxString& filepath)
 	int i = 0;
 	Json::Value bodyValue = value["body"][i++];
 	while (!bodyValue.isNull()) {
-		BodyData* body = FileIO::j2bBody(bodyValue);
-		m_nameBodyMap.insert(std::make_pair(body->m_name, body));
+		Body* body = FileIO::j2bBody(bodyValue);
+		m_nameBodyMap.insert(std::make_pair(body->name, body));
 		m_bodies.push_back(body);
 
 		bodyValue = value["body"][i++];
@@ -58,7 +58,7 @@ void FileApapter::resolve(const wxString& filepath)
 	}
 }
 
-BodyData* FileApapter::queryBody(size_t index) const
+Body* FileApapter::queryBody(size_t index) const
 {
 	if (index >= 0 && index < m_bodies.size())
 		return m_bodies[index];
@@ -66,9 +66,9 @@ BodyData* FileApapter::queryBody(size_t index) const
 		return NULL;
 }
 
-BodyData* FileApapter::queryBody(const wxString& name) const
+Body* FileApapter::queryBody(const wxString& name) const
 {
-	std::map<wxString, BodyData*>::const_iterator itr
+	std::map<wxString, Body*>::const_iterator itr
 		= m_nameBodyMap.find(name);
 	if (itr != m_nameBodyMap.end())
 		return itr->second;
@@ -88,7 +88,7 @@ JointData* FileApapter::queryJoint(const wxString& name) const
 
 void FileApapter::clear()
 {
-	std::map<wxString, BodyData*>::iterator itr = m_nameBodyMap.begin();
+	std::map<wxString, Body*>::iterator itr = m_nameBodyMap.begin();
 	for ( ; itr != m_nameBodyMap.end(); ++itr)
 		delete itr->second;
 	m_nameBodyMap.clear();

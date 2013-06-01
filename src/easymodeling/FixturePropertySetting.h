@@ -23,12 +23,12 @@
 
 namespace emodeling
 {
-	class FixtureData;
+	class Fixture;
 
 	class FixturePropertySetting : public d2d::IPropertySetting
 	{
 	public:
-		FixturePropertySetting(d2d::EditPanel* editPanel, FixtureData* fixture);
+		FixturePropertySetting(d2d::EditPanel* editPanel, Fixture* fixture);
 
 		virtual void updatePanel(d2d::PropertySettingPanel* panel);
 
@@ -37,7 +37,7 @@ namespace emodeling
 		virtual void enablePropertyGrid(d2d::PropertySettingPanel* panel, bool bEnable);
 
 	private:
-		FixtureData* m_fixture;
+		Fixture* m_fixture;
 
 	}; // FixturePropertySetting
 }

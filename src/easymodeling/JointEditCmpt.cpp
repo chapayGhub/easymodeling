@@ -23,7 +23,7 @@
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
 #include "WheelJoint.h"
-#include "BodyData.h"
+#include "Body.h"
 
 using namespace emodeling;
 
@@ -44,7 +44,7 @@ wxSizer* JointEditCmpt::initLayout()
 {
 	wxBoxSizer* topSizer = new wxBoxSizer(wxVERTICAL);
 	{
-		wxStaticBox* bounding = new wxStaticBox(this, wxID_ANY, wxT("类型"));
+		wxStaticBox* bounding = new wxStaticBox(this, wxID_ANY, wxT("Type"));
 		wxBoxSizer* sizer = new wxStaticBoxSizer(bounding, wxVERTICAL);
 		{
 			wxString choices[4];
@@ -79,8 +79,8 @@ void JointEditCmpt::onCreateJoint(wxCommandEvent& event)
 	selection->traverse(d2d::FetchAllVisitor<d2d::ISprite>(sprites));
 	assert(sprites.size() == 2);
 
-	BodyData *body0 = static_cast<BodyData*>(sprites[0]->getUserData()),
-		*body1 = static_cast<BodyData*>(sprites[1]->getUserData());
+	Body *body0 = static_cast<Body*>(sprites[0]->getUserData()),
+		*body1 = static_cast<Body*>(sprites[1]->getUserData());
 
 	JointData* joint = NULL;
 	wxString type = m_typeChoice->GetString(m_typeChoice->GetSelection());
@@ -92,7 +92,7 @@ void JointEditCmpt::onCreateJoint(wxCommandEvent& event)
 		editPanel->insertJoint(new DistanceJoint(body0, body1));
 	else if (type == wxT("Wheel"))
 	{
-		SelectWheelDialog dlg(this, wxT("选择轮子"), body0->m_name, body1->m_name);
+		SelectWheelDialog dlg(this, wxT("Choose Wheel"), body0->name, body1->name);
 		if (dlg.ShowModal() == wxID_OK)
 		{
 			if (dlg.getChoice() == 0)

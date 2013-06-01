@@ -17,11 +17,11 @@
 */
 
 #include "RevoluteJoint.h"
-#include "BodyData.h"
+#include "Body.h"
 
 using namespace emodeling;
 
-RevoluteJoint::RevoluteJoint(BodyData* b0, BodyData* b1)
+RevoluteJoint::RevoluteJoint(Body* b0, Body* b1)
 	: JointData(b0, b1, e_revoluteJoint)
 	, referenceAngle(0.0f)
 	, enableLimit(false)
@@ -31,7 +31,7 @@ RevoluteJoint::RevoluteJoint(BodyData* b0, BodyData* b1)
 	, maxMotorTorque(0.0f)
 	, motorSpeed(0.0f)
 {
-	d2d::Vector center = (b0->m_sprite->getPosition() + b1->m_sprite->getPosition()) * 0.5f;
+	d2d::Vector center = (b0->sprite->getPosition() + b1->sprite->getPosition()) * 0.5f;
 	setLocalAnchorA(center);
 	setLocalAnchorB(center);
 }
@@ -50,8 +50,8 @@ void RevoluteJoint::draw(DrawType type) const
 	if (type == e_selected || type == e_mouseOn)
 	{
 		d2d::PrimitiveDraw::drawDashLine(anchorA, anchorB, d2d::Colorf(1, 0, 0), 2);
-		d2d::PrimitiveDraw::drawDashLine(anchorA, bodyA->m_sprite->getPosition(), d2d::Colorf(0.4f, 0.8f, 0.4f), 2);
-		d2d::PrimitiveDraw::drawDashLine(anchorB, bodyB->m_sprite->getPosition(), d2d::Colorf(0.4f, 0.4f, 0.8f), 2);
+		d2d::PrimitiveDraw::drawDashLine(anchorA, bodyA->sprite->getPosition(), d2d::Colorf(0.4f, 0.8f, 0.4f), 2);
+		d2d::PrimitiveDraw::drawDashLine(anchorB, bodyB->sprite->getPosition(), d2d::Colorf(0.4f, 0.4f, 0.8f), 2);
 
 		drawBodyFlag();
 	}
@@ -62,22 +62,22 @@ void RevoluteJoint::draw(DrawType type) const
 
 d2d::Vector RevoluteJoint::getWorldAnchorA() const
 {
-	return transLocalToWorld(localAnchorA, bodyA->m_sprite);
+	return transLocalToWorld(localAnchorA, bodyA->sprite);
 }
 
 d2d::Vector RevoluteJoint::getWorldAnchorB() const
 {
-	return transLocalToWorld(localAnchorB, bodyB->m_sprite);
+	return transLocalToWorld(localAnchorB, bodyB->sprite);
 }
 
 void RevoluteJoint::setLocalAnchorA(const d2d::Vector& world)
 {
-	localAnchorA = transWorldToLocal(world, bodyA->m_sprite);
+	localAnchorA = transWorldToLocal(world, bodyA->sprite);
 }
 
 void RevoluteJoint::setLocalAnchorB(const d2d::Vector& world)
 {
-	localAnchorB = transWorldToLocal(world, bodyB->m_sprite);
+	localAnchorB = transWorldToLocal(world, bodyB->sprite);
 }
 
 void RevoluteJoint::drawAnchor(const d2d::Vector& pos, DrawType type) const

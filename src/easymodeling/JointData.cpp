@@ -17,7 +17,7 @@
 */
 
 #include "JointData.h"
-#include "BodyData.h"
+#include "Body.h"
 
 using namespace emodeling;
 
@@ -25,7 +25,7 @@ const float JointData::JOINT_RADIUS_OUT = 1.0f;
 const float JointData::JOINT_RADIUS_IN = 0.2f;
 const float JointData::JOINT_RADIUS_SELECT = JOINT_RADIUS_OUT * 3;
 
-JointData::JointData(BodyData* b0, BodyData* b1, Type type)
+JointData::JointData(Body* b0, Body* b1, Type type)
 	: bodyA(b0)
 	, bodyB(b1)
 	, type(type)
@@ -37,8 +37,8 @@ JointData::JointData(BodyData* b0, BodyData* b1, Type type)
 
 void JointData::drawBodyFlag() const
 {
-	drawBodyFlag(bodyA->m_sprite->getPosition());
-	drawBodyFlag(bodyB->m_sprite->getPosition());
+	drawBodyFlag(bodyA->sprite->getPosition());
+	drawBodyFlag(bodyB->sprite->getPosition());
 }
 
 d2d::Vector JointData::transWorldToLocal(const d2d::Vector& world, 

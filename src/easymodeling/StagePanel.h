@@ -23,7 +23,7 @@
 
 namespace emodeling
 {
-	class BodyData;
+	class Body;
 	class JointData;
 
 	class StagePanel : public d2d::EditPanel, public d2d::SpritesPanelImpl
@@ -50,9 +50,9 @@ namespace emodeling
 		void traverseJoints(d2d::IVisitor& visitor) const;
 
 	private:
-		void loadCircleBody(const wxString& filepath, BodyData& body) const;
-		void loadPolygonBody(const wxString& filepath, BodyData& body) const;
-		void loadShapesBody(const wxString& filepath, BodyData& body) const;
+		void loadCircleBody(const wxString& filepath, Body& body) const;
+		void loadPolygonBody(const wxString& filepath, Body& body) const;
+		void loadShapesBody(const wxString& filepath, Body& body) const;
 
 	private:
 		class PointQueryVisitor : public d2d::IVisitor
@@ -80,7 +80,7 @@ namespace emodeling
 		}; // RectQueryVisitor
 
 	private:
-		std::vector<BodyData*> m_bodies;
+		std::vector<Body*> m_bodies;
 		std::vector<JointData*> m_joints;
 
 	}; // StagePanel

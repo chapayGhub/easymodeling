@@ -17,8 +17,8 @@
 */
 
 #include "PackageToBytes.h"
-#include "BodyData.h"
-#include "FixtureData.h"
+#include "Body.h"
+#include "Fixture.h"
 #include "RevoluteJoint.h"
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
@@ -26,20 +26,20 @@
 
 using namespace emodeling;
 
-void PaskageToBytes::packBody(const BodyData& data, std::ofstream& fout)
+void PaskageToBytes::packBody(const Body& data, std::ofstream& fout)
 {
-	fout.write(reinterpret_cast<const char*>(&data.m_type), sizeof(int));
+	fout.write(reinterpret_cast<const char*>(&data.type), sizeof(int));
 
-	fout.write(reinterpret_cast<const char*>(&data.m_sprite->getPosition().x), sizeof(float));
-	fout.write(reinterpret_cast<const char*>(&data.m_sprite->getPosition().y), sizeof(float));
-	float angle = data.m_sprite->getAngle();
+	fout.write(reinterpret_cast<const char*>(&data.sprite->getPosition().x), sizeof(float));
+	fout.write(reinterpret_cast<const char*>(&data.sprite->getPosition().y), sizeof(float));
+	float angle = data.sprite->getAngle();
 	fout.write(reinterpret_cast<const char*>(&angle), sizeof(float));
 
-	size_t size = data.m_fixtures.size();
+	size_t size = data.fixtures.size();
 	fout.write(reinterpret_cast<const char*>(&size), sizeof(size_t));
 	for (size_t i = 0; i < size; ++i)
 	{
-		FixtureData* fData = data.m_fixtures[i];
+		Fixture* fData = data.fixtures[i];
 
 		fout.write(reinterpret_cast<const char*>(&fData->density), sizeof(float));
 		fout.write(reinterpret_cast<const char*>(&fData->friction), sizeof(float));
@@ -66,7 +66,7 @@ void PaskageToBytes::packBody(const BodyData& data, std::ofstream& fout)
 }
 
 void PaskageToBytes::packJoint(const JointData& data, std::ofstream& fout,
-							   const std::vector<BodyData*>& bodies)
+							   const std::vector<Body*>& bodies)
 {
 	fout.write(reinterpret_cast<const char*>(&data.type), sizeof(int));
 
@@ -188,7 +188,7 @@ void PaskageToBytes::packJoint(const JointData& data, std::ofstream& fout,
 	}
 }
 
-int PaskageToBytes::queryBodyIndex(const BodyData* body, const std::vector<BodyData*>& bodies)
+int PaskageToBytes::queryBodyIndex(const Body* body, const std::vector<Body*>& bodies)
 {
 	int ret = -1;
 	for (size_t i = 0, n = bodies.size(); i < n; ++i)

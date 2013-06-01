@@ -23,7 +23,7 @@
 
 namespace emodeling
 {
-	class BodyData;
+	class Body;
 
 	class JointData : public d2d::ICloneable
 	{
@@ -50,7 +50,7 @@ namespace emodeling
 		};
 
 	public:
-		JointData(BodyData* b0, BodyData* b1, Type type);
+		JointData(Body* b0, Body* b1, Type type);
 		virtual ~JointData() {}
 		
 		virtual JointData* clone() { return NULL; }
@@ -80,8 +80,8 @@ namespace emodeling
 
 		Type type;
 
-		BodyData* bodyA;
-		BodyData* bodyB;
+		Body* bodyA;
+		Body* bodyB;
 
 		bool collideConnected;
 

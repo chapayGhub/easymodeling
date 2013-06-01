@@ -18,8 +18,8 @@
 
 #include "FileIO.h"
 #include "StagePanel.h"
-#include "BodyData.h"
-#include "FixtureData.h"
+#include "Body.h"
+#include "Fixture.h"
 #include "RevoluteJoint.h"
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
@@ -37,13 +37,13 @@ void FileIO::load(std::ifstream& fin)
 
 	Context* context = Context::Instance();
 
-	std::vector<BodyData*> bodies;
+	std::vector<Body*> bodies;
 
 	int i = 0;
 	Json::Value bodyValue = value["body"][i++];
 	while (!bodyValue.isNull()) {
-		BodyData* body = j2bBody(bodyValue);
-		context->stage->insertSprite(body->m_sprite);
+		Body* body = j2bBody(bodyValue);
+		context->stage->insertSprite(body->sprite);
 		bodies.push_back(body);
 
 		bodyValue = value["body"][i++];
@@ -63,15 +63,15 @@ void FileIO::load(std::ifstream& fin)
 
 void FileIO::store(std::ofstream& fout)
 {
-	std::vector<BodyData*> bodies;
-	Context::Instance()->stage->traverseBodies(d2d::FetchAllVisitor<BodyData>(bodies));
+	std::vector<Body*> bodies;
+	Context::Instance()->stage->traverseBodies(d2d::FetchAllVisitor<Body>(bodies));
 
 	std::vector<JointData*> joints;
 	Context::Instance()->stage->traverseJoints(d2d::FetchAllVisitor<JointData>(joints));
 
 	Json::Value value;
 
-	std::map<BodyData*, int> bodyIndexMap;
+	std::map<Body*, int> bodyIndexMap;
 	for (size_t i = 0, n = bodies.size(); i < n; ++i)
 	{
 		bodyIndexMap[bodies[i]] = i;
@@ -87,38 +87,38 @@ void FileIO::store(std::ofstream& fout)
 	writer.write(fout, value);
 }
 
-Json::Value FileIO::b2j(BodyData* body)
+Json::Value FileIO::b2j(Body* body)
 {
 	Json::Value value;
 
-	value["name"] = body->m_name.ToStdString();
-	value["filepath"] = body->m_sprite->getSymbol().getFilepath().ToStdString();
-	value["type"] = body->m_type;
-	switch (body->m_type)
+	value["name"] = body->name.ToStdString();
+	value["filepath"] = body->sprite->getSymbol().getFilepath().ToStdString();
+	value["type"] = body->type;
+	switch (body->type)
 	{
-	case BodyData::e_static:
+	case Body::e_static:
 		value["type"].setComment("//static", Json::commentAfterOnSameLine);
 		break;
-	case BodyData::e_dynamic:
+	case Body::e_dynamic:
 		value["type"].setComment("//dynamic", Json::commentAfterOnSameLine);
 		break;
-	case BodyData::e_kinematic:
+	case Body::e_kinematic:
 		value["type"].setComment("//kinematic", Json::commentAfterOnSameLine);
 		break;
 	}
-	value["gravityScale"] = body->m_gravityScale;
+	value["gravityScale"] = body->gravityScale;
 
-	value["position"]["x"] = body->m_sprite->getPosition().x;
-	value["position"]["y"] = body->m_sprite->getPosition().y;
-	value["angle"] = body->m_sprite->getAngle();
+	value["position"]["x"] = body->sprite->getPosition().x;
+	value["position"]["y"] = body->sprite->getPosition().y;
+	value["angle"] = body->sprite->getAngle();
 
-	for (size_t i = 0, n = body->m_fixtures.size(); i < n; ++i)
-		value["fixture"][i] = b2j(body->m_fixtures[i]);
+	for (size_t i = 0, n = body->fixtures.size(); i < n; ++i)
+		value["fixture"][i] = b2j(body->fixtures[i]);
 
 	return value;
 }
 
-Json::Value FileIO::b2j(FixtureData* fixture)
+Json::Value FileIO::b2j(Fixture* fixture)
 {
 	Json::Value value;
 
@@ -151,17 +151,17 @@ Json::Value FileIO::b2j(FixtureData* fixture)
 	return value;
 }
 
-Json::Value FileIO::b2j(JointData* joint, const std::map<BodyData*, int>& bodyIndexMap)
+Json::Value FileIO::b2j(JointData* joint, const std::map<Body*, int>& bodyIndexMap)
 {
 	Json::Value value;
 
 	value["name"] = joint->m_name.ToStdString();
 	
-	std::map<BodyData*, int>::const_iterator itrA = bodyIndexMap.find(joint->bodyA);
+	std::map<Body*, int>::const_iterator itrA = bodyIndexMap.find(joint->bodyA);
 	assert(itrA != bodyIndexMap.end());
 	value["bodyA"] = itrA->second;
 
-	std::map<BodyData*, int>::const_iterator itrB = bodyIndexMap.find(joint->bodyB);
+	std::map<Body*, int>::const_iterator itrB = bodyIndexMap.find(joint->bodyB);
 	assert(itrB != bodyIndexMap.end());
 	value["bodyB"] = itrB->second;
 
@@ -264,7 +264,7 @@ Json::Value FileIO::b2j(JointData* joint, const std::map<BodyData*, int>& bodyIn
 	return value;
 }
 
-//BodyData* FileIO::j2bBody(Json::Value bodyValue, StagePanel* stage)
+//Body* FileIO::j2bBody(Json::Value bodyValue, StagePanel* stage)
 //{
 //	std::string filepath = bodyValue["filepath"].asString();
 //	d2d::ISymbol* symbol = d2d::SymbolMgr::Instance()->getSymbol(filepath);
@@ -279,23 +279,23 @@ Json::Value FileIO::b2j(JointData* joint, const std::map<BodyData*, int>& bodyIn
 //
 //	//////////////////////////////////////////////////////////////////////////
 //
-//	BodyData* body = new BodyData;
-//	body->m_name = bodyValue["name"].asString();
+//	Body* body = new Body;
+//	body->name = bodyValue["name"].asString();
 //
 //	//////////////////////////////////////////////////////////////////////////
 //
 //	stage->insertSprite(sprite);
 //
-//	BodyData* body = static_cast<BodyData*>(sprite->getUserData());
-//	body->m_name = bodyValue["name"].asString();
-//	body->m_type = BodyData::Type(bodyValue["type"].asInt());
+//	Body* body = static_cast<Body*>(sprite->getUserData());
+//	body->name = bodyValue["name"].asString();
+//	body->type = Body::Type(bodyValue["type"].asInt());
 //
 //	// fixtures already init in StagePanel::insertSprite()
 //
 //	return body;
 //}
 
-BodyData* FileIO::j2bBody(Json::Value bodyValue)
+Body* FileIO::j2bBody(Json::Value bodyValue)
 {
 	std::string filepath = bodyValue["filepath"].asString();
 	d2d::ISymbol* symbol = d2d::SymbolMgr::Instance()->getSymbol(filepath);
@@ -308,20 +308,20 @@ BodyData* FileIO::j2bBody(Json::Value bodyValue)
 
 	sprite->setTransform(pos, angle);
 
-	BodyData* body = new BodyData;
-	body->m_name = bodyValue["name"].asString();
-	body->m_type = BodyData::Type(bodyValue["type"].asInt());
-	body->m_gravityScale = bodyValue["gravityScale"].asDouble();
-	body->m_sprite = sprite;
+	Body* body = new Body;
+	body->name = bodyValue["name"].asString();
+	body->type = Body::Type(bodyValue["type"].asInt());
+	body->gravityScale = bodyValue["gravityScale"].asDouble();
+	body->sprite = sprite;
 
 	sprite->setUserData(body);
 
 	int i = 0;
 	Json::Value fixtureValue = bodyValue["fixture"][i++];
 	while (!fixtureValue.isNull()) {
-		FixtureData* fixture = j2bFixture(fixtureValue);
+		Fixture* fixture = j2bFixture(fixtureValue);
 		fixture->body = body;
-		body->m_fixtures.push_back(fixture);
+		body->fixtures.push_back(fixture);
 
 		fixtureValue = bodyValue["fixture"][i++];
 	}
@@ -329,9 +329,9 @@ BodyData* FileIO::j2bBody(Json::Value bodyValue)
 	return body;
 }
 
-FixtureData* FileIO::j2bFixture(Json::Value fixtureValue)
+Fixture* FileIO::j2bFixture(Json::Value fixtureValue)
 {
-	FixtureData* fixture = new FixtureData;
+	Fixture* fixture = new Fixture;
 
 	fixture->name = fixtureValue["name"].asString();
 
@@ -372,7 +372,7 @@ FixtureData* FileIO::j2bFixture(Json::Value fixtureValue)
 }
 
 JointData* FileIO::j2bJoint(Json::Value jointValue,
-							 const std::vector<BodyData*>& bodies)
+							 const std::vector<Body*>& bodies)
 {
 	JointData* joint = NULL;
 

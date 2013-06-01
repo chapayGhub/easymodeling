@@ -26,7 +26,7 @@ namespace emodeling
 	class RevoluteJoint : public JointData
 	{
 	public:
-		RevoluteJoint(BodyData* b0, BodyData* b1);
+		RevoluteJoint(Body* b0, Body* b1);
 
 		virtual bool isContain(const d2d::Vector& pos) const;
 

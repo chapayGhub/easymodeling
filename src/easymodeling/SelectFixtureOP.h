@@ -24,7 +24,7 @@
 namespace emodeling
 {
 	class StagePanel;
-	class FixtureData;
+	class Fixture;
 
 	class SelectFixtureOP : public d2d::DrawRectangleOP
 	{
@@ -46,8 +46,8 @@ namespace emodeling
 
 		d2d::Vector m_firstPos;
 
-		FixtureData* m_selected;
-		FixtureData* m_mouseOn;
+		Fixture* m_selected;
+		Fixture* m_mouseOn;
 
 	}; // SelectFixtureOP
 }

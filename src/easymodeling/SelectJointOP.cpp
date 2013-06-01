@@ -17,7 +17,7 @@
 */
 
 #include "SelectJointOP.h"
-#include "BodyData.h"
+#include "Body.h"
 #include "DrawUtils.h"
 #include "RevoluteJoint.h"
 #include "PrismaticJoint.h"
@@ -200,7 +200,7 @@ visit(d2d::ICloneable* object, bool& bFetchNext)
 {
 	std::vector<d2d::Vector> bound;
 	d2d::ISprite* sprite = static_cast<d2d::ISprite*>(object);
-	BodyData* body = static_cast<BodyData*>(sprite->getUserData());
+	Body* body = static_cast<Body*>(sprite->getUserData());
 	DrawUtils::drawBody(body, DrawUtils::e_selected);
 	bFetchNext = true;
 }

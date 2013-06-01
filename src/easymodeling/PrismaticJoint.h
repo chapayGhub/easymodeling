@@ -26,7 +26,7 @@ namespace emodeling
 	class PrismaticJoint : public JointData
 	{
 	public:
-		PrismaticJoint(BodyData* b0, BodyData* b1);
+		PrismaticJoint(Body* b0, Body* b1);
 
 		virtual bool isContain(const d2d::Vector& pos) const;
 

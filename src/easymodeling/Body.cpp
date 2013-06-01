@@ -16,44 +16,44 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "BodyData.h"
-#include "FixtureData.h"
+#include "Body.h"
+#include "Fixture.h"
 
 using namespace emodeling;
 
-BodyData::BodyData()
-	: m_type(e_static)
-	, m_gravityScale(1.0f)
-	, m_sprite(NULL)
+Body::Body()
+	: type(e_static)
+	, gravityScale(1.0f)
+	, sprite(NULL)
 {
 	static int count = 0;
-	m_name = wxT("body") + wxString::FromDouble(count++);
+	name = wxT("body") + wxString::FromDouble(count++);
 }
 
-BodyData::~BodyData()
+Body::~Body()
 {
-	for_each(m_fixtures.begin(), m_fixtures.end(), DeletePointerFunctor<FixtureData>());
-	m_fixtures.clear();
+	for_each(fixtures.begin(), fixtures.end(), DeletePointerFunctor<Fixture>());
+	fixtures.clear();
 }
 
-bool BodyData::isContain(const d2d::Vector& pos) const
+bool Body::isContain(const d2d::Vector& pos) const
 {
-	for (size_t i = 0, n = m_fixtures.size(); i < n; ++i)
-		if (m_fixtures[i]->isContain(pos))
+	for (size_t i = 0, n = fixtures.size(); i < n; ++i)
+		if (fixtures[i]->isContain(pos))
 			return true;
 	return false;
 }
 
-bool BodyData::isIntersect(const d2d::Rect& aabb) const
+bool Body::isIntersect(const d2d::Rect& aabb) const
 {
-	for (size_t i = 0, n = m_fixtures.size(); i < n; ++i)
-		if (m_fixtures[i]->isIntersect(aabb))
+	for (size_t i = 0, n = fixtures.size(); i < n; ++i)
+		if (fixtures[i]->isIntersect(aabb))
 			return true;
 	return false;
 }
 
-void BodyData::draw(const d2d::Colorf& cFace, const d2d::Colorf& cEdge) const
+void Body::draw(const d2d::Colorf& cFace, const d2d::Colorf& cEdge) const
 {
-	for (size_t i = 0, n = m_fixtures.size(); i < n; ++i)
-		m_fixtures[i]->draw(cFace, cEdge);
+	for (size_t i = 0, n = fixtures.size(); i < n; ++i)
+		fixtures[i]->draw(cFace, cEdge);
 }

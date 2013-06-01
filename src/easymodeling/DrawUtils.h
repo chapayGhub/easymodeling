@@ -21,11 +21,11 @@
 
 #include <drag2d.h>
 
-#include "BodyData.h"
+#include "Body.h"
 
 namespace emodeling
 {
-	class FixtureData;
+	class Fixture;
 
 	class DrawUtils
 	{
@@ -38,12 +38,12 @@ namespace emodeling
 		};
 
 	public:
-		static void drawBody(BodyData* body, DrawType dType);
-		static void drawFixture(FixtureData* fixture, DrawType dType,
+		static void drawBody(Body* body, DrawType dType);
+		static void drawFixture(Fixture* fixture, DrawType dType,
 			bool onlyFixture);
 
 	private:
-		static void getBodyColor(BodyData::Type type, DrawType dType,
+		static void getBodyColor(Body::Type type, DrawType dType,
 			d2d::Colorf& cFace, d2d::Colorf& cEdge);
 		static void getFixtureColor(DrawType type, d2d::Colorf& cFace, 
 			d2d::Colorf& cEdge);

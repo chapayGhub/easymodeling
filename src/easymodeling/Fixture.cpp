@@ -16,12 +16,12 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "FixtureData.h"
-#include "BodyData.h"
+#include "Fixture.h"
+#include "Body.h"
 
 using namespace emodeling;
 
-FixtureData::FixtureData()
+Fixture::Fixture()
 	: body(NULL)
 	, shape(NULL)
 	, density(1.0f)
@@ -36,34 +36,34 @@ FixtureData::FixtureData()
 	name = wxT("fixture") + wxString::FromDouble(count++);
 }
 
-FixtureData::~FixtureData()
+Fixture::~Fixture()
 {
 	shape->release();
 }
 
-bool FixtureData::isContain(const d2d::Vector& pos) const
+bool Fixture::isContain(const d2d::Vector& pos) const
 {
 	if (d2d::CircleShape* circle = dynamic_cast<d2d::CircleShape*>(shape))
 	{
-		return d2d::Math::getDistance(circle->center + body->m_sprite->getPosition(), pos) < circle->radius;
+		return d2d::Math::getDistance(circle->center + body->sprite->getPosition(), pos) < circle->radius;
 	}
 	else if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(shape))
 	{
 		const std::vector<d2d::Vector>& src = chain->getVertices();
 		std::vector<d2d::Vector> dst(src);
 		for (size_t i = 0, n = dst.size(); i < n ; ++i)
-			dst[i] = d2d::Math::rotateVector(dst[i], body->m_sprite->getAngle()) + body->m_sprite->getPosition();
+			dst[i] = d2d::Math::rotateVector(dst[i], body->sprite->getAngle()) + body->sprite->getPosition();
 		return d2d::Math::isPointInArea(pos, dst);
 	}
 	else
 		return false;
 }
 
-bool FixtureData::isIntersect(const d2d::Rect& aabb) const
+bool Fixture::isIntersect(const d2d::Rect& aabb) const
 {
 	if (d2d::CircleShape* circle = dynamic_cast<d2d::CircleShape*>(shape))
 	{
-		return d2d::Math::isCircleIntersectRect(circle->center + body->m_sprite->getPosition(), 
+		return d2d::Math::isCircleIntersectRect(circle->center + body->sprite->getPosition(), 
 			circle->radius, aabb);
 	}
 	else if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(shape))
@@ -71,14 +71,14 @@ bool FixtureData::isIntersect(const d2d::Rect& aabb) const
 		const std::vector<d2d::Vector>& src = chain->getVertices();
 		std::vector<d2d::Vector> dst(src);
 		for (size_t i = 0, n = dst.size(); i < n ; ++i)
-			dst[i] = d2d::Math::rotateVector(dst[i], body->m_sprite->getAngle()) + body->m_sprite->getPosition();
+			dst[i] = d2d::Math::rotateVector(dst[i], body->sprite->getAngle()) + body->sprite->getPosition();
 		return d2d::Math::isPolylineIntersectRect(dst, true, aabb);
 	}
 	else
 		return false;
 }
 
-void FixtureData::draw(const d2d::Colorf& cFace, const d2d::Colorf& cEdge) const
+void Fixture::draw(const d2d::Colorf& cFace, const d2d::Colorf& cEdge) const
 {
 	if (d2d::CircleShape* circle = dynamic_cast<d2d::CircleShape*>(shape))
 	{

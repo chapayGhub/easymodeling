@@ -18,9 +18,9 @@
 
 #include "StagePanel.h"
 #include "StageCanvas.h"
-#include "BodyData.h"
+#include "Body.h"
 #include "JointData.h"
-#include "FixtureData.h"
+#include "Fixture.h"
 #include "Context.h"
 
 using namespace emodeling;
@@ -41,7 +41,7 @@ void StagePanel::removeSprite(d2d::ISprite* sprite)
 {
 	for (size_t i = 0, n = m_bodies.size(); i < n; ++i)
 	{
-		if (m_bodies[i]->m_sprite == sprite)
+		if (m_bodies[i]->sprite == sprite)
 		{
 			delete m_bodies[i];
 			m_bodies.erase(m_bodies.begin() + i);
@@ -58,7 +58,7 @@ void StagePanel::insertSprite(d2d::ISprite* sprite)
 	
 	if (sprite->getUserData())
 	{
-		BodyData* data = static_cast<BodyData*>(sprite->getUserData());
+		Body* data = static_cast<Body*>(sprite->getUserData());
 		m_bodies.push_back(data);
 	}
 	else
@@ -67,7 +67,7 @@ void StagePanel::insertSprite(d2d::ISprite* sprite)
 		wxString polygonPath = path + "_" + d2d::FileNameParser::getFileTag(d2d::FileNameParser::e_polyline) + ".txt";
 		wxString circlePath = path + "_" + d2d::FileNameParser::getFileTag(d2d::FileNameParser::e_circle) + ".txt";
 		wxString shapePath = path + "_" + d2d::FileNameParser::getFileTag(d2d::FileNameParser::e_shape) + ".json";
-		BodyData* data = new BodyData; 
+		Body* data = new Body; 
 		if (d2d::FilenameTools::isExist(polygonPath))
 			loadPolygonBody(polygonPath, *data);
 		else if (d2d::FilenameTools::isExist(circlePath))
@@ -77,7 +77,7 @@ void StagePanel::insertSprite(d2d::ISprite* sprite)
 		else
 			assert(0);
 
-		data->m_sprite = sprite;
+		data->sprite = sprite;
 		sprite->setUserData(data);
 
 		m_bodies.push_back(data);
@@ -89,7 +89,7 @@ void StagePanel::clear()
 	d2d::EditPanel::clear();
 	d2d::SpritesPanelImpl::clear();
 
-	for_each(m_bodies.begin(), m_bodies.end(), DeletePointerFunctor<BodyData>());
+	for_each(m_bodies.begin(), m_bodies.end(), DeletePointerFunctor<Body>());
 	m_bodies.clear();
 	for_each(m_joints.begin(), m_joints.end(), DeletePointerFunctor<JointData>());
 	m_joints.clear();
@@ -130,7 +130,7 @@ void StagePanel::removeJoint(JointData* joint)
 
 void StagePanel::traverseBodies(d2d::IVisitor& visitor) const
 {
-	std::vector<BodyData*>::const_iterator itr = m_bodies.begin();
+	std::vector<Body*>::const_iterator itr = m_bodies.begin();
 	for ( ; itr != m_bodies.end(); ++itr)
 	{
 		bool hasNext;
@@ -150,18 +150,18 @@ void StagePanel::traverseJoints(d2d::IVisitor& visitor) const
 	}
 }
 
-void StagePanel::loadCircleBody(const wxString& filepath, BodyData& body) const
+void StagePanel::loadCircleBody(const wxString& filepath, Body& body) const
 {
 	d2d::CircleFileAdapter fa;
 	fa.load(filepath);
 
-	FixtureData* fixture = new FixtureData;
+	Fixture* fixture = new Fixture;
 	fixture->body = &body;
 	fixture->shape = new d2d::CircleShape(d2d::Vector(), fa.m_width * 0.5f);
-	body.m_fixtures.push_back(fixture);
+	body.fixtures.push_back(fixture);
 }
 
-void StagePanel::loadPolygonBody(const wxString& filepath, BodyData& body) const
+void StagePanel::loadPolygonBody(const wxString& filepath, Body& body) const
 {
 	std::vector<d2d::ChainShape*> chains;
 	d2d::PolylineFileAdapter fileAdapter(chains);
@@ -169,16 +169,16 @@ void StagePanel::loadPolygonBody(const wxString& filepath, BodyData& body) const
 
 	for (size_t i = 0, n = chains.size(); i < n; ++i)
 	{
-		FixtureData* fixture = new FixtureData;
+		Fixture* fixture = new Fixture;
 		fixture->body = &body;
 		fixture->shape = new d2d::ChainShape(chains[i]->getVertices(), true);
-		body.m_fixtures.push_back(fixture);
+		body.fixtures.push_back(fixture);
 	}
 
 	for_each(chains.begin(), chains.end(), DeletePointerFunctor<d2d::ChainShape>());
 }
 
-void StagePanel::loadShapesBody(const wxString& filepath, BodyData& body) const
+void StagePanel::loadShapesBody(const wxString& filepath, Body& body) const
 {
 	std::vector<d2d::IShape*> shapes;
 	d2d::EShapeFileAdapter adapter(shapes);
@@ -186,7 +186,7 @@ void StagePanel::loadShapesBody(const wxString& filepath, BodyData& body) const
 
 	for (size_t i = 0, n = shapes.size();  i< n; ++i)
 	{
-		FixtureData* fixture = new FixtureData;
+		Fixture* fixture = new Fixture;
 		fixture->body = &body;
 		if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(shapes[i]))
 		{
@@ -206,7 +206,7 @@ void StagePanel::loadShapesBody(const wxString& filepath, BodyData& body) const
 		{
 			fixture->shape = new d2d::CircleShape(d2d::Vector(), circle->radius);
 		}
-		body.m_fixtures.push_back(fixture);
+		body.fixtures.push_back(fixture);
 
 		shapes[i]->release();
 	}
@@ -228,7 +228,7 @@ void StagePanel::PointQueryVisitor::
 visit(d2d::ICloneable* object, bool& bFetchNext)
 {
 	d2d::ISprite* sprite = static_cast<d2d::ISprite*>(object);
-	BodyData* data = static_cast<BodyData*>(sprite->getUserData());
+	Body* data = static_cast<Body*>(sprite->getUserData());
 	if (data->isContain(m_pos))
 	{
 		*m_pResult = sprite;
@@ -254,7 +254,7 @@ void StagePanel::RectQueryVisitor::
 visit(d2d::ICloneable* object, bool& bFetchNext)
 {
 	d2d::ISprite* sprite = static_cast<d2d::ISprite*>(object);
-	BodyData* data = static_cast<BodyData*>(sprite->getUserData());
+	Body* data = static_cast<Body*>(sprite->getUserData());
 	if (data->isIntersect(m_aabb))
 		m_result.push_back(sprite);
 	bFetchNext = true;

@@ -26,7 +26,7 @@ namespace emodeling
 	class DistanceJoint : public JointData
 	{
 	public:
-		DistanceJoint(BodyData* b0, BodyData* b1);
+		DistanceJoint(Body* b0, Body* b1);
 
 		virtual bool isContain(const d2d::Vector& pos) const;
 

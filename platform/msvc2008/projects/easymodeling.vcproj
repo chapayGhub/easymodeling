@@ -185,19 +185,19 @@
 			Name="dataset"
 			>
 			<File
-				RelativePath="..\..\..\src\easymodeling\BodyData.cpp"
+				RelativePath="..\..\..\src\easymodeling\Body.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\easymodeling\BodyData.h"
+				RelativePath="..\..\..\src\easymodeling\Body.h"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\easymodeling\FixtureData.cpp"
+				RelativePath="..\..\..\src\easymodeling\Fixture.cpp"
 				>
 			</File>
 			<File
-				RelativePath="..\..\..\src\easymodeling\FixtureData.h"
+				RelativePath="..\..\..\src\easymodeling\Fixture.h"
 				>
 			</File>
 			<Filter

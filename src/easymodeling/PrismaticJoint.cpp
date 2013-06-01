@@ -17,11 +17,11 @@
 */
 
 #include "PrismaticJoint.h"
-#include "BodyData.h"
+#include "Body.h"
 
 using namespace emodeling;
 
-PrismaticJoint::PrismaticJoint(BodyData* b0, BodyData* b1)
+PrismaticJoint::PrismaticJoint(Body* b0, Body* b1)
 	: JointData(b0, b1, e_prismaticJoint)
 	, localAxisA(1, 0)
 	, referenceAngle(0.0f)
@@ -32,7 +32,7 @@ PrismaticJoint::PrismaticJoint(BodyData* b0, BodyData* b1)
 	, maxMotorForce(0.0f)
 	, motorSpeed(0.0f)
 {
-	d2d::Vector center = (b0->m_sprite->getPosition() + b1->m_sprite->getPosition()) * 0.5f;
+	d2d::Vector center = (b0->sprite->getPosition() + b1->sprite->getPosition()) * 0.5f;
 	setLocalAnchorA(center);
 	setLocalAnchorB(center);
 }
@@ -51,8 +51,8 @@ void PrismaticJoint::draw(DrawType type) const
 	if (type == e_selected || type == e_mouseOn)
 	{
 		d2d::PrimitiveDraw::drawDashLine(anchorA, anchorB, d2d::Colorf(1, 0, 0), 2);
-		d2d::PrimitiveDraw::drawDashLine(anchorA, bodyA->m_sprite->getPosition(), d2d::Colorf(0.4f, 0.8f, 0.4f), 2);
-		d2d::PrimitiveDraw::drawDashLine(anchorB, bodyB->m_sprite->getPosition(), d2d::Colorf(0.4f, 0.4f, 0.8f), 2);
+		d2d::PrimitiveDraw::drawDashLine(anchorA, bodyA->sprite->getPosition(), d2d::Colorf(0.4f, 0.8f, 0.4f), 2);
+		d2d::PrimitiveDraw::drawDashLine(anchorB, bodyB->sprite->getPosition(), d2d::Colorf(0.4f, 0.4f, 0.8f), 2);
 
 		drawBodyFlag();
 	}
@@ -63,22 +63,22 @@ void PrismaticJoint::draw(DrawType type) const
 
 d2d::Vector PrismaticJoint::getWorldAnchorA() const
 {
-	return transLocalToWorld(localAnchorA, bodyA->m_sprite);
+	return transLocalToWorld(localAnchorA, bodyA->sprite);
 }
 
 d2d::Vector PrismaticJoint::getWorldAnchorB() const
 {
-	return transLocalToWorld(localAnchorB, bodyB->m_sprite);
+	return transLocalToWorld(localAnchorB, bodyB->sprite);
 }
 
 void PrismaticJoint::setLocalAnchorA(const d2d::Vector& world)
 {
-	localAnchorA = transWorldToLocal(world, bodyA->m_sprite);
+	localAnchorA = transWorldToLocal(world, bodyA->sprite);
 }
 
 void PrismaticJoint::setLocalAnchorB(const d2d::Vector& world)
 {
-	localAnchorB = transWorldToLocal(world, bodyB->m_sprite);
+	localAnchorB = transWorldToLocal(world, bodyB->sprite);
 }
 
 void PrismaticJoint::drawAnchor(const d2d::Vector& pos, DrawType type) const

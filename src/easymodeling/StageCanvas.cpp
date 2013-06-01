@@ -54,7 +54,7 @@ void StageCanvas::drawSprites()
 	for (size_t i = 0, n = sprites.size(); i < n; ++i)
 	{
 		d2d::SpriteDraw::drawSprite(sprites[i]);
-		DrawUtils::drawBody(static_cast<BodyData*>(sprites[i]->getUserData()), DrawUtils::e_default);
+		DrawUtils::drawBody(static_cast<Body*>(sprites[i]->getUserData()), DrawUtils::e_default);
 	}
 }
 

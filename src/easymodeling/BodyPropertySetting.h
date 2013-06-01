@@ -23,7 +23,7 @@
 
 namespace emodeling
 {
-	class BodyData;
+	class Body;
 
 	class BodyPropertySetting : public d2d::IPropertySetting
 	{
@@ -37,7 +37,7 @@ namespace emodeling
 		virtual void enablePropertyGrid(d2d::PropertySettingPanel* panel, bool bEnable);
 
 	private:
-		BodyData* m_body;
+		Body* m_body;
 
 	}; // BodyPropertySetting
 }

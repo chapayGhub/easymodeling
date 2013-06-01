@@ -26,7 +26,7 @@ namespace emodeling
 	class WheelJoint : public JointData
 	{
 	public:
-		WheelJoint(BodyData* b0, BodyData* b1);
+		WheelJoint(Body* b0, Body* b1);
 
 		virtual bool isContain(const d2d::Vector& pos) const;
 

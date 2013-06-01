@@ -16,30 +16,20 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef EMODELING_BODY_DATA_H
-#define EMODELING_BODY_DATA_H
+#ifndef EMODELING_FIXTURE_H
+#define EMODELING_FIXTURE_H
 
 #include <drag2d.h>
 
 namespace emodeling
 {
-	class FixtureData;
+	class Body;
 
-	class BodyData : public d2d::ICloneable
+	class Fixture
 	{
 	public:
-		enum Type
-		{
-			e_static = 0,
-			e_kinematic,
-			e_dynamic
-		};
-
-	public:
-		BodyData();
-		~BodyData();
-
-		virtual BodyData* clone() { return NULL; }
+		Fixture();
+		~Fixture();
 
 		bool isContain(const d2d::Vector& pos) const;
 		bool isIntersect(const d2d::Rect& aabb) const;
@@ -47,17 +37,24 @@ namespace emodeling
 		void draw(const d2d::Colorf& cFace, const d2d::Colorf& cEdge) const;
 
 	public:
-		wxString m_name;
+		wxString name;
 
-		Type m_type;
+		Body* body;
 
-		float m_gravityScale;
+		d2d::IShape* shape;
 
-		d2d::ISprite* m_sprite;
+		float density;
 
-		std::vector<FixtureData*> m_fixtures;
+		float friction;
+		float restitution;
 
-	}; // BodyData
+		bool isSensor;
+
+		unsigned short categoryBits;
+		unsigned short maskBits;
+		short groupIndex;
+
+	}; // Fixture
 }
 
-#endif // EMODELING_BODY_DATA_H
+#endif // EMODELING_FIXTURE_H

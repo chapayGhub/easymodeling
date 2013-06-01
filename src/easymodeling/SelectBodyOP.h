@@ -23,7 +23,7 @@
 
 namespace emodeling
 {
-	class BodyData;
+	class Body;
 
 	class SelectBodyOP : public d2d::SelectSpritesOP
 	{
@@ -52,7 +52,7 @@ namespace emodeling
 		}; // DrawSelectedVisitor
 
 	private:
-		BodyData* m_mouseOn;
+		Body* m_mouseOn;
 
 	}; // SelectBodyOP
 }

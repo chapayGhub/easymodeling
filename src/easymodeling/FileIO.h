@@ -24,8 +24,8 @@
 
 namespace emodeling
 {
-	class BodyData;
-	class FixtureData;
+	class Body;
+	class Fixture;
 	class JointData;
 
 	class FileIO
@@ -35,16 +35,16 @@ namespace emodeling
 		static void store(std::ofstream& fout);
 
 	private:
-		static Json::Value b2j(BodyData* body);
-		static Json::Value b2j(FixtureData* fixture);
+		static Json::Value b2j(Body* body);
+		static Json::Value b2j(Fixture* fixture);
 		static Json::Value b2j(JointData* joint, 
-			const std::map<BodyData*, int>& bodyIndexMap);
+			const std::map<Body*, int>& bodyIndexMap);
 
-//		static BodyData* j2bBody(Json::Value bodyValue, StagePanel* stage);
-		static BodyData* j2bBody(Json::Value bodyValue);
-		static FixtureData* j2bFixture(Json::Value fixtureValue);
+//		static Body* j2bBody(Json::Value bodyValue, StagePanel* stage);
+		static Body* j2bBody(Json::Value bodyValue);
+		static Fixture* j2bFixture(Json::Value fixtureValue);
 		static JointData* j2bJoint(Json::Value jointValue, 
-			const std::vector<BodyData*>& bodies);
+			const std::vector<Body*>& bodies);
 
 		friend class FileApapter;
 

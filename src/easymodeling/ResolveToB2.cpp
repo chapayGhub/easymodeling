@@ -17,8 +17,8 @@
 */
 
 #include "ResolveToB2.h"
-#include "BodyData.h"
-#include "FixtureData.h"
+#include "Body.h"
+#include "Fixture.h"
 #include "RevoluteJoint.h"
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
@@ -26,34 +26,34 @@
 
 using namespace emodeling;
 
-b2Body* ResolveToB2::createBody(const BodyData& data, b2World* world,
-								std::map<BodyData*, b2Body*>& bodyMap)
+b2Body* ResolveToB2::createBody(const Body& data, b2World* world,
+								std::map<Body*, b2Body*>& bodyMap)
 {
 	b2BodyDef bd;
-	switch (data.m_type)
+	switch (data.type)
 	{
-	case BodyData::e_static:
+	case Body::e_static:
 		bd.type = b2_staticBody;
 		break;
-	case BodyData::e_kinematic:
+	case Body::e_kinematic:
 		bd.type = b2_kinematicBody;
 		break;
-	case BodyData::e_dynamic:
+	case Body::e_dynamic:
 		bd.type = b2_dynamicBody;
 		break;
 	}
-	bd.gravityScale = data.m_gravityScale;
+	bd.gravityScale = data.gravityScale;
 	b2Body* body = world->CreateBody(&bd);
-	bodyMap.insert(std::make_pair(const_cast<BodyData*>(&data), body));
+	bodyMap.insert(std::make_pair(const_cast<Body*>(&data), body));
 
 	b2Vec2 pos;
-	pos.x = data.m_sprite->getPosition().x / d2d::BOX2D_SCALE_FACTOR;
-	pos.y = data.m_sprite->getPosition().y / d2d::BOX2D_SCALE_FACTOR;
-	body->SetTransform(pos, data.m_sprite->getAngle());
+	pos.x = data.sprite->getPosition().x / d2d::BOX2D_SCALE_FACTOR;
+	pos.y = data.sprite->getPosition().y / d2d::BOX2D_SCALE_FACTOR;
+	body->SetTransform(pos, data.sprite->getAngle());
 
-	for (size_t i = 0, n = data.m_fixtures.size(); i < n; ++i)
+	for (size_t i = 0, n = data.fixtures.size(); i < n; ++i)
 	{
-		FixtureData* fData = data.m_fixtures[i];
+		Fixture* fData = data.fixtures[i];
 
 		b2FixtureDef fd;
 		fd.density = fData->density;
@@ -97,7 +97,7 @@ b2Body* ResolveToB2::createBody(const BodyData& data, b2World* world,
 }
 
 b2Joint* ResolveToB2::createJoint(const JointData& data, b2World* world,
-								  const std::map<BodyData*, b2Body*>& bodyMap)
+								  const std::map<Body*, b2Body*>& bodyMap)
 {
 	b2Joint* bJoint = NULL;
 
@@ -109,7 +109,7 @@ b2Joint* ResolveToB2::createJoint(const JointData& data, b2World* world,
 
 			RevoluteJoint* joint = static_cast<RevoluteJoint*>(const_cast<JointData*>(&data));
 
-			std::map<BodyData*, b2Body*>::const_iterator 
+			std::map<Body*, b2Body*>::const_iterator 
 				itrA = bodyMap.find(joint->bodyA),
 				itrB = bodyMap.find(joint->bodyB);
 			assert(itrA != bodyMap.end() && itrB != bodyMap.end());
@@ -136,7 +136,7 @@ b2Joint* ResolveToB2::createJoint(const JointData& data, b2World* world,
 
 			PrismaticJoint* joint = static_cast<PrismaticJoint*>(const_cast<JointData*>(&data));
 
-			std::map<BodyData*, b2Body*>::const_iterator 
+			std::map<Body*, b2Body*>::const_iterator 
 				itrA = bodyMap.find(joint->bodyA),
 				itrB = bodyMap.find(joint->bodyB);
 			assert(itrA != bodyMap.end() && itrB != bodyMap.end());
@@ -166,7 +166,7 @@ b2Joint* ResolveToB2::createJoint(const JointData& data, b2World* world,
 
 			DistanceJoint* joint = static_cast<DistanceJoint*>(const_cast<JointData*>(&data));
 
-			std::map<BodyData*, b2Body*>::const_iterator 
+			std::map<Body*, b2Body*>::const_iterator 
 				itrA = bodyMap.find(joint->bodyA),
 				itrB = bodyMap.find(joint->bodyB);
 			assert(itrA != bodyMap.end() && itrB != bodyMap.end());
@@ -188,7 +188,7 @@ b2Joint* ResolveToB2::createJoint(const JointData& data, b2World* world,
 
 			WheelJoint* joint = static_cast<WheelJoint*>(const_cast<JointData*>(&data));
 
-			std::map<BodyData*, b2Body*>::const_iterator 
+			std::map<Body*, b2Body*>::const_iterator 
 				itrA = bodyMap.find(joint->bodyA),
 				itrB = bodyMap.find(joint->bodyB);
 			assert(itrA != bodyMap.end() && itrB != bodyMap.end());
