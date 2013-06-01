@@ -31,6 +31,7 @@ namespace emodeling
 	class WeldJoint;
 	class FrictionJoint;
 	class RopeJoint;
+	class MotorJoint;
 
 	class JointPropertySetting : public d2d::IPropertySetting
 	{
@@ -77,6 +78,11 @@ namespace emodeling
 		void createPropertyPanel(RopeJoint* joint, wxPropertyGrid* pg);
 		void updatePropertyPanel(RopeJoint* joint, wxPropertyGrid* pg);
 		void onPropertyGridChange(RopeJoint* joint,
+			const wxString& name, const wxAny& value);
+
+		void createPropertyPanel(MotorJoint* joint, wxPropertyGrid* pg);
+		void updatePropertyPanel(MotorJoint* joint, wxPropertyGrid* pg);
+		void onPropertyGridChange(MotorJoint* joint,
 			const wxString& name, const wxAny& value);
 
 	private:

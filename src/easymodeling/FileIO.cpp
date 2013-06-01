@@ -27,6 +27,7 @@
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
 #include "RopeJoint.h"
+#include "MotorJoint.h"
 #include "Context.h"
 
 using namespace emodeling;
@@ -327,6 +328,17 @@ Json::Value FileIO::b2j(Joint* joint, const std::map<Body*, int>& bodyIndexMap)
 			value["maxLength"] = rJoint->maxLength;
 		}
 		break;
+	case Joint::e_motorJoint:
+		{
+			value["type"] = "motor";
+
+			MotorJoint* mJoint = static_cast<MotorJoint*>(joint);
+
+			value["maxForce"] = mJoint->maxForce;
+			value["maxTorque"] = mJoint->maxTorque;
+			value["correctionFactor"] = mJoint->correctionFactor;
+		}
+		break;
 	}
 
 	return value;
@@ -572,6 +584,16 @@ Joint* FileIO::j2bJoint(Json::Value jointValue,
 		rJoint->maxLength = jointValue["maxLength"].asDouble();
 
 		joint = rJoint;
+	}
+	else if (type == "motor")
+	{
+		MotorJoint* mJoint = new MotorJoint(bodies[bodyIndexA], bodies[bodyIndexB]);
+
+		mJoint->maxForce = jointValue["maxForce"].asDouble();
+		mJoint->maxTorque = jointValue["maxTorque"].asDouble();
+		mJoint->correctionFactor = jointValue["correctionFactor"].asDouble();
+
+		joint = mJoint;
 	}
 
 	joint->m_name = jointValue["name"].asString();

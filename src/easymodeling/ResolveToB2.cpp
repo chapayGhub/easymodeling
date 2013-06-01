@@ -26,6 +26,7 @@
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
 #include "RopeJoint.h"
+#include "MotorJoint.h"
 
 using namespace emodeling;
 
@@ -288,6 +289,25 @@ b2Joint* ResolveToB2::createJoint(const Joint& data, b2World* world,
 			jd.localAnchorA.Set(joint->localAnchorA.x / d2d::BOX2D_SCALE_FACTOR, joint->localAnchorA.y / d2d::BOX2D_SCALE_FACTOR);
 			jd.localAnchorB.Set(joint->localAnchorB.x / d2d::BOX2D_SCALE_FACTOR, joint->localAnchorB.y / d2d::BOX2D_SCALE_FACTOR);
 			jd.maxLength = joint->maxLength;
+
+			bJoint = world->CreateJoint(&jd);
+		}
+		break;
+	case Joint::e_motorJoint:
+		{
+			b2MotorJointDef jd;
+
+			MotorJoint* joint = static_cast<MotorJoint*>(const_cast<Joint*>(&data));
+
+			std::map<Body*, b2Body*>::const_iterator 
+				itrA = bodyMap.find(joint->bodyA),
+				itrB = bodyMap.find(joint->bodyB);
+			assert(itrA != bodyMap.end() && itrB != bodyMap.end());
+			jd.Initialize(itrA->second, itrB->second);
+			jd.collideConnected = joint->collideConnected;
+			jd.maxForce = joint->maxForce;
+			jd.maxTorque = joint->maxTorque;
+			jd.correctionFactor = joint->correctionFactor;
 
 			bJoint = world->CreateJoint(&jd);
 		}

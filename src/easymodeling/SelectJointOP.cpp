@@ -26,6 +26,7 @@
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
 #include "RopeJoint.h"
+#include "MotorJoint.h"
 #include "StagePanel.h"
 #include "JointPropertySetting.h"
 #include "WorldPropertySetting.h"
@@ -192,6 +193,11 @@ bool SelectJointOP::onMouseDrag(int x, int y)
 					joint->setLocalAnchorA(pos);
 				else
 					joint->setLocalAnchorB(pos);
+			}
+			break;
+		case Joint::e_motorJoint:
+			{
+				// 
 			}
 			break;
 		}

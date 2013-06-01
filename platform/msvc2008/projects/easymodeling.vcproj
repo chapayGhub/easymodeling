@@ -232,6 +232,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\easymodeling\MotorJoint.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\easymodeling\MotorJoint.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\easymodeling\PrismaticJoint.cpp"
 					>
 				</File>

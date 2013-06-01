@@ -26,6 +26,7 @@
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
 #include "RopeJoint.h"
+#include "MotorJoint.h"
 #include "Body.h"
 
 using namespace emodeling;
@@ -50,7 +51,7 @@ wxSizer* JointEditCmpt::initLayout()
 		wxStaticBox* bounding = new wxStaticBox(this, wxID_ANY, wxT("Type"));
 		wxBoxSizer* sizer = new wxStaticBoxSizer(bounding, wxVERTICAL);
 		{
-			const int SIZE = 7;
+			const int SIZE = 8;
 
 			wxString choices[SIZE];
 			choices[0] = wxT("Revolute");
@@ -60,6 +61,7 @@ wxSizer* JointEditCmpt::initLayout()
 			choices[4] = wxT("Weld");
 			choices[5] = wxT("Friction");
 			choices[6] = wxT("Rope");
+			choices[7] = wxT("Motor");
 
 			m_typeChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, SIZE, choices);
 			m_typeChoice->SetSelection(0);
@@ -115,6 +117,8 @@ void JointEditCmpt::onCreateJoint(wxCommandEvent& event)
 		editPanel->insertJoint(new FrictionJoint(body0, body1));
 	else if (type == wxT("Rope"))
 		editPanel->insertJoint(new RopeJoint(body0, body1));
+	else if (type == wxT("Motor"))
+		editPanel->insertJoint(new MotorJoint(body0, body1));
 
 	m_editPanel->Refresh();
 }

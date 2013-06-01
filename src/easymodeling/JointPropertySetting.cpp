@@ -24,6 +24,7 @@
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
 #include "RopeJoint.h"
+#include "MotorJoint.h"
 
 using namespace emodeling;
 
@@ -97,6 +98,12 @@ void JointPropertySetting::updatePanel(d2d::PropertySettingPanel* panel)
 		else
 			updatePropertyPanel(static_cast<RopeJoint*>(m_joint), pg);
 		break;
+	case Joint::e_motorJoint:
+		if (build) 
+			createPropertyPanel(static_cast<MotorJoint*>(m_joint), pg);
+		else
+			updatePropertyPanel(static_cast<MotorJoint*>(m_joint), pg);
+		break;
 	}
 }
 
@@ -131,6 +138,9 @@ void JointPropertySetting::onPropertyGridChange(const wxString& name, const wxAn
 		break;
 	case Joint::e_ropeJoint:
 		onPropertyGridChange(static_cast<RopeJoint*>(m_joint), name, value);
+		break;
+	case Joint::e_motorJoint:
+		onPropertyGridChange(static_cast<MotorJoint*>(m_joint), name, value);
 		break;
 	}
 
@@ -634,4 +644,34 @@ void JointPropertySetting::onPropertyGridChange(RopeJoint* joint, const wxString
 		joint->localAnchorB.y = wxANY_AS(value, float);
 	else if (name == wxT("maxLength"))
 		joint->maxLength = wxANY_AS(value, float);
+}
+
+void JointPropertySetting::createPropertyPanel(MotorJoint* joint, wxPropertyGrid* pg)
+{
+	pg->Append(new wxFloatProperty(wxT("maxForce"), wxPG_LABEL, joint->maxForce));
+	pg->SetPropertyAttribute(wxT("maxForce"), "Precision", 2);
+
+	pg->Append(new wxFloatProperty(wxT("maxTorque"), wxPG_LABEL, joint->maxTorque));
+	pg->SetPropertyAttribute(wxT("maxTorque"), "Precision", 2);
+
+	pg->Append(new wxFloatProperty(wxT("correctionFactor"), wxPG_LABEL, joint->correctionFactor));
+	pg->SetPropertyAttribute(wxT("correctionFactor"), "Precision", 2);
+}
+
+void JointPropertySetting::updatePropertyPanel(MotorJoint* joint, wxPropertyGrid* pg)
+{
+	pg->GetProperty(wxT("maxForce"))->SetValue(joint->maxForce);
+	pg->GetProperty(wxT("maxTorque"))->SetValue(joint->maxTorque);
+	pg->GetProperty(wxT("correctionFactor"))->SetValue(joint->correctionFactor);
+}
+
+void JointPropertySetting::onPropertyGridChange(MotorJoint* joint, const wxString& name, 
+												const wxAny& value)
+{
+	if (name == wxT("maxForce"))
+		joint->maxForce = wxANY_AS(value, float);
+	else if (name == wxT("maxTorque"))
+		joint->maxTorque = wxANY_AS(value, float);
+	else if (name == wxT("correctionFactor"))
+		joint->correctionFactor = wxANY_AS(value, float);
 }

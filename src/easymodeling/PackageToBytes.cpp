@@ -26,6 +26,7 @@
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
 #include "RopeJoint.h"
+#include "MotorJoint.h"
 
 using namespace emodeling;
 
@@ -250,6 +251,21 @@ void PaskageToBytes::packJoint(const Joint& data, std::ofstream& fout,
 			fout.write(reinterpret_cast<const char*>(&joint->localAnchorB.y), sizeof(float));
 
 			fout.write(reinterpret_cast<const char*>(&joint->maxLength), sizeof(float));
+		}
+		break;
+	case Joint::e_motorJoint:
+		{
+			MotorJoint* joint = static_cast<MotorJoint*>(const_cast<Joint*>(&data));
+
+			int bodyA = queryBodyIndex(joint->bodyA, bodies);
+			int bodyB = queryBodyIndex(joint->bodyB, bodies);
+			assert(bodyA != -1 && bodyB != -1);
+			fout.write(reinterpret_cast<const char*>(&bodyA), sizeof(int));
+			fout.write(reinterpret_cast<const char*>(&bodyB), sizeof(int));
+
+			fout.write(reinterpret_cast<const char*>(&joint->maxForce), sizeof(float));
+			fout.write(reinterpret_cast<const char*>(&joint->maxTorque), sizeof(float));
+			fout.write(reinterpret_cast<const char*>(&joint->correctionFactor), sizeof(float));
 		}
 		break;
 	}
