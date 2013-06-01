@@ -65,16 +65,16 @@ void PaskageToBytes::packBody(const Body& data, std::ofstream& fout)
 	}
 }
 
-void PaskageToBytes::packJoint(const JointData& data, std::ofstream& fout,
+void PaskageToBytes::packJoint(const Joint& data, std::ofstream& fout,
 							   const std::vector<Body*>& bodies)
 {
 	fout.write(reinterpret_cast<const char*>(&data.type), sizeof(int));
 
 	switch (data.type)
 	{
-	case JointData::e_revoluteJoint:
+	case Joint::e_revoluteJoint:
 		{
-			RevoluteJoint* joint = static_cast<RevoluteJoint*>(const_cast<JointData*>(&data));
+			RevoluteJoint* joint = static_cast<RevoluteJoint*>(const_cast<Joint*>(&data));
 
 			int bodyA = queryBodyIndex(joint->bodyA, bodies);
 			int bodyB = queryBodyIndex(joint->bodyB, bodies);
@@ -101,9 +101,9 @@ void PaskageToBytes::packJoint(const JointData& data, std::ofstream& fout,
 			fout.write(reinterpret_cast<const char*>(&joint->motorSpeed), sizeof(float));
 		}
 		break;
-	case JointData::e_prismaticJoint:
+	case Joint::e_prismaticJoint:
 		{
-			PrismaticJoint* joint = static_cast<PrismaticJoint*>(const_cast<JointData*>(&data));
+			PrismaticJoint* joint = static_cast<PrismaticJoint*>(const_cast<Joint*>(&data));
 
 			int bodyA = queryBodyIndex(joint->bodyA, bodies);
 			int bodyB = queryBodyIndex(joint->bodyB, bodies);
@@ -133,9 +133,9 @@ void PaskageToBytes::packJoint(const JointData& data, std::ofstream& fout,
 			fout.write(reinterpret_cast<const char*>(&joint->motorSpeed), sizeof(float));
 		}
 		break;
-	case JointData::e_distanceJoint:
+	case Joint::e_distanceJoint:
 		{
-			DistanceJoint* joint = static_cast<DistanceJoint*>(const_cast<JointData*>(&data));
+			DistanceJoint* joint = static_cast<DistanceJoint*>(const_cast<Joint*>(&data));
 
 			int bodyA = queryBodyIndex(joint->bodyA, bodies);
 			int bodyB = queryBodyIndex(joint->bodyB, bodies);
@@ -157,9 +157,9 @@ void PaskageToBytes::packJoint(const JointData& data, std::ofstream& fout,
 			fout.write(reinterpret_cast<const char*>(&joint->dampingRatio), sizeof(float));
 		}
 		break;
-	case JointData::e_wheelJoint:
+	case Joint::e_wheelJoint:
 		{
-			WheelJoint* joint = static_cast<WheelJoint*>(const_cast<JointData*>(&data));
+			WheelJoint* joint = static_cast<WheelJoint*>(const_cast<Joint*>(&data));
 
 			int bodyA = queryBodyIndex(joint->bodyA, bodies);
 			int bodyB = queryBodyIndex(joint->bodyB, bodies);

@@ -19,11 +19,11 @@
 #ifndef EMODELING_REVOLUTE_JOINT_H
 #define EMODELING_REVOLUTE_JOINT_H
 
-#include "JointData.h"
+#include "Joint.h"
 
 namespace emodeling
 {
-	class RevoluteJoint : public JointData
+	class RevoluteJoint : public Joint
 	{
 	public:
 		RevoluteJoint(Body* b0, Body* b1);

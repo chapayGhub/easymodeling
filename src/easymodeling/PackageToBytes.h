@@ -24,14 +24,14 @@
 namespace emodeling
 {
 	class Body;
-	class JointData;
+	class Joint;
 
 	class PaskageToBytes
 	{
 	public:
 		static void packBody(const Body& data, std::ofstream& fout);
 
-		static void packJoint(const JointData& data, std::ofstream& fout,
+		static void packJoint(const Joint& data, std::ofstream& fout,
 			const std::vector<Body*>& bodies);
 
 	private:

@@ -22,7 +22,7 @@
 using namespace emodeling;
 
 RevoluteJoint::RevoluteJoint(Body* b0, Body* b1)
-	: JointData(b0, b1, e_revoluteJoint)
+	: Joint(b0, b1, e_revoluteJoint)
 	, referenceAngle(0.0f)
 	, enableLimit(false)
 	, lowerAngle(0.0f)

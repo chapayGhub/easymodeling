@@ -19,11 +19,11 @@
 #ifndef EMODELING_PRISMATIC_JOINT_H
 #define EMODELING_PRISMATIC_JOINT_H
 
-#include "JointData.h"
+#include "Joint.h"
 
 namespace emodeling
 {
-	class PrismaticJoint : public JointData
+	class PrismaticJoint : public Joint
 	{
 	public:
 		PrismaticJoint(Body* b0, Body* b1);

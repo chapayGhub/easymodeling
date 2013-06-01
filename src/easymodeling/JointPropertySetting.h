@@ -23,7 +23,7 @@
 
 namespace emodeling
 {
-	class JointData;
+	class Joint;
 	class RevoluteJoint;
 	class PrismaticJoint;
 	class DistanceJoint;
@@ -32,7 +32,7 @@ namespace emodeling
 	class JointPropertySetting : public d2d::IPropertySetting
 	{
 	public:
-		JointPropertySetting(d2d::EditPanel* editPanel, JointData* joint);
+		JointPropertySetting(d2d::EditPanel* editPanel, Joint* joint);
 
 		virtual void updatePanel(d2d::PropertySettingPanel* panel);
 
@@ -62,7 +62,7 @@ namespace emodeling
 			const wxString& name, const wxAny& value);
 
 	private:
-		JointData* m_joint;
+		Joint* m_joint;
 
 	}; // JointPropertySetting
 }

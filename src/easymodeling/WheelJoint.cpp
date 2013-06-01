@@ -22,7 +22,7 @@
 using namespace emodeling;
 
 WheelJoint::WheelJoint(Body* b0, Body* b1)
-	: JointData(b0, b1, e_wheelJoint)
+	: Joint(b0, b1, e_wheelJoint)
 	, localAxisA(1, 0)
 	, enableMotor(false)
 	, maxMotorTorque(0.0f)

@@ -19,11 +19,11 @@
 #ifndef EMODELING_DISTANCE_JOINT_H
 #define EMODELING_DISTANCE_JOINT_H
 
-#include "JointData.h"
+#include "Joint.h"
 
 namespace emodeling
 {
-	class DistanceJoint : public JointData
+	class DistanceJoint : public Joint
 	{
 	public:
 		DistanceJoint(Body* b0, Body* b1);

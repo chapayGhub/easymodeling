@@ -20,7 +20,7 @@
 #include "PreviewCanvas.h"
 #include "StagePanel.h"
 #include "Body.h"
-#include "JointData.h"
+#include "Joint.h"
 #include "ResolveToB2.h"
 #include "Context.h"
 
@@ -95,7 +95,7 @@ LoadJointVisitor(b2World* world, const std::map<Body*, b2Body*>& transBody)
 void PreviewPanel::LoadJointVisitor::
 visit(d2d::ICloneable* object, bool& bFetchNext)
 {
-	JointData* data = static_cast<JointData*>(object);
+	Joint* data = static_cast<Joint*>(object);
 
 	ResolveToB2::createJoint(*data, m_world, m_transBody);
 

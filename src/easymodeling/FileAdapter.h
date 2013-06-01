@@ -25,7 +25,7 @@
 namespace emodeling
 {
 	class Body;
-	class JointData;
+	class Joint;
 
 	class FileApapter
 	{
@@ -37,7 +37,7 @@ namespace emodeling
 		Body* queryBody(size_t index) const;
 
 		Body* queryBody(const wxString& name) const;
-		JointData* queryJoint(const wxString& name) const;
+		Joint* queryJoint(const wxString& name) const;
 
 	private:
 		void clear();
@@ -46,7 +46,7 @@ namespace emodeling
 		std::vector<Body*> m_bodies;
 
 		std::map<wxString, Body*> m_nameBodyMap;
-		std::map<wxString, JointData*> m_nameJointMap;
+		std::map<wxString, Joint*> m_nameJointMap;
 
 	}; // FileApapter
 }

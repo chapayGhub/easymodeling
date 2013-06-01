@@ -19,11 +19,11 @@
 #ifndef EMODELING_WHEEL_JOINT_H
 #define EMODELING_WHEEL_JOINT_H
 
-#include "JointData.h"
+#include "Joint.h"
 
 namespace emodeling
 {
-	class WheelJoint : public JointData
+	class WheelJoint : public Joint
 	{
 	public:
 		WheelJoint(Body* b0, Body* b1);

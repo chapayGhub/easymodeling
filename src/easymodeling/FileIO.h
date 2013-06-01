@@ -26,7 +26,7 @@ namespace emodeling
 {
 	class Body;
 	class Fixture;
-	class JointData;
+	class Joint;
 
 	class FileIO
 	{
@@ -37,13 +37,13 @@ namespace emodeling
 	private:
 		static Json::Value b2j(Body* body);
 		static Json::Value b2j(Fixture* fixture);
-		static Json::Value b2j(JointData* joint, 
+		static Json::Value b2j(Joint* joint, 
 			const std::map<Body*, int>& bodyIndexMap);
 
 //		static Body* j2bBody(Json::Value bodyValue, StagePanel* stage);
 		static Body* j2bBody(Json::Value bodyValue);
 		static Fixture* j2bFixture(Json::Value fixtureValue);
-		static JointData* j2bJoint(Json::Value jointValue, 
+		static Joint* j2bJoint(Json::Value jointValue, 
 			const std::vector<Body*>& bodies);
 
 		friend class FileApapter;

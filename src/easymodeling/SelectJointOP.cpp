@@ -56,7 +56,7 @@ bool SelectJointOP::onKeyDown(int keyCode)
 bool SelectJointOP::onMouseLeftDown(int x, int y)
 {
 	d2d::Vector pos = m_editPanel->transPosScreenToProject(x, y);
-	JointData* joint = static_cast<StagePanel*>(m_editPanel)->queryJointByPos(pos);
+	Joint* joint = static_cast<StagePanel*>(m_editPanel)->queryJointByPos(pos);
 	if (joint && !m_selected || !joint && m_selected)
 		m_editPanel->Refresh();
 
@@ -94,7 +94,7 @@ bool SelectJointOP::onMouseMove(int x, int y)
 		return true;
 
 	d2d::Vector pos = m_editPanel->transPosScreenToProject(x, y);
-	JointData* joint = static_cast<StagePanel*>(m_editPanel)->queryJointByPos(pos);
+	Joint* joint = static_cast<StagePanel*>(m_editPanel)->queryJointByPos(pos);
 	if (joint && !m_mouseOn || !joint && m_mouseOn)
 		m_editPanel->Refresh();
 
@@ -113,7 +113,7 @@ bool SelectJointOP::onMouseDrag(int x, int y)
 		d2d::Vector pos = m_editPanel->transPosScreenToProject(x, y);
 		switch (m_selected->type)
 		{
-		case JointData::e_revoluteJoint:
+		case Joint::e_revoluteJoint:
 			{
 				RevoluteJoint* joint = static_cast<RevoluteJoint*>(m_selected);
 				const float disA = d2d::Math::getDistance(pos, joint->getWorldAnchorA()),
@@ -124,7 +124,7 @@ bool SelectJointOP::onMouseDrag(int x, int y)
 					joint->setLocalAnchorB(pos);
 			}
 			break;
-		case JointData::e_prismaticJoint:
+		case Joint::e_prismaticJoint:
 			{
 				PrismaticJoint* joint = static_cast<PrismaticJoint*>(m_selected);
 				const float disA = d2d::Math::getDistance(pos, joint->getWorldAnchorA()),
@@ -135,7 +135,7 @@ bool SelectJointOP::onMouseDrag(int x, int y)
 					joint->setLocalAnchorB(pos);
 			}
 			break;
-		case JointData::e_distanceJoint:
+		case Joint::e_distanceJoint:
 			{
 				DistanceJoint* joint = static_cast<DistanceJoint*>(m_selected);
 				const float disA = d2d::Math::getDistance(pos, joint->getWorldAnchorA()),
@@ -146,7 +146,7 @@ bool SelectJointOP::onMouseDrag(int x, int y)
 					joint->setLocalAnchorB(pos);
 			}
 			break;
-		case JointData::e_wheelJoint:
+		case Joint::e_wheelJoint:
 			{
 				WheelJoint* joint = static_cast<WheelJoint*>(m_selected);
 				const float disA = d2d::Math::getDistance(pos, joint->getWorldAnchorA()),
@@ -173,9 +173,9 @@ bool SelectJointOP::onDraw() const
 	m_selection->traverse(DrawSelectedVisitor());
 
 	if (m_mouseOn)
-		m_mouseOn->draw(JointData::e_mouseOn);
+		m_mouseOn->draw(Joint::e_mouseOn);
 	if (m_selected) 
-		m_selected->draw(JointData::e_selected);
+		m_selected->draw(Joint::e_selected);
 
 	return false;
 }

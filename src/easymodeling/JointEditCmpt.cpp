@@ -82,7 +82,7 @@ void JointEditCmpt::onCreateJoint(wxCommandEvent& event)
 	Body *body0 = static_cast<Body*>(sprites[0]->getUserData()),
 		*body1 = static_cast<Body*>(sprites[1]->getUserData());
 
-	JointData* joint = NULL;
+	Joint* joint = NULL;
 	wxString type = m_typeChoice->GetString(m_typeChoice->GetSelection());
 	if (type == wxT("Revolute"))
 		editPanel->insertJoint(new RevoluteJoint(body0, body1));

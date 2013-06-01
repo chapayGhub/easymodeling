@@ -16,16 +16,16 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#include "JointData.h"
+#include "Joint.h"
 #include "Body.h"
 
 using namespace emodeling;
 
-const float JointData::JOINT_RADIUS_OUT = 1.0f;
-const float JointData::JOINT_RADIUS_IN = 0.2f;
-const float JointData::JOINT_RADIUS_SELECT = JOINT_RADIUS_OUT * 3;
+const float Joint::JOINT_RADIUS_OUT = 1.0f;
+const float Joint::JOINT_RADIUS_IN = 0.2f;
+const float Joint::JOINT_RADIUS_SELECT = JOINT_RADIUS_OUT * 3;
 
-JointData::JointData(Body* b0, Body* b1, Type type)
+Joint::Joint(Body* b0, Body* b1, Type type)
 	: bodyA(b0)
 	, bodyB(b1)
 	, type(type)
@@ -35,25 +35,25 @@ JointData::JointData(Body* b0, Body* b1, Type type)
 	m_name = wxT("joint") + wxString::FromDouble(count++);
 }
 
-void JointData::drawBodyFlag() const
+void Joint::drawBodyFlag() const
 {
 	drawBodyFlag(bodyA->sprite->getPosition());
 	drawBodyFlag(bodyB->sprite->getPosition());
 }
 
-d2d::Vector JointData::transWorldToLocal(const d2d::Vector& world, 
+d2d::Vector Joint::transWorldToLocal(const d2d::Vector& world, 
 									const d2d::ISprite* sprite)
 {
 	return d2d::Math::rotateVector(world - sprite->getPosition(), -sprite->getAngle());
 }
 
-d2d::Vector JointData::transLocalToWorld(const d2d::Vector& local, 
+d2d::Vector Joint::transLocalToWorld(const d2d::Vector& local, 
 									const d2d::ISprite* sprite)
 {
 	return d2d::Math::rotateVector(local, sprite->getAngle()) + sprite->getPosition();
 }
 
-void JointData::drawBodyFlag(const d2d::Vector& pos) const
+void Joint::drawBodyFlag(const d2d::Vector& pos) const
 {
 	const float edge = 2.5f;
 

@@ -24,7 +24,7 @@
 namespace emodeling
 {
 	class Body;
-	class JointData;
+	class Joint;
 
 	class StagePanel : public d2d::EditPanel, public d2d::SpritesPanelImpl
 	{
@@ -39,12 +39,12 @@ namespace emodeling
 		virtual d2d::ISprite* querySpriteByPos(const d2d::Vector& pos) const;
 		virtual void querySpritesByAABB(const d2d::Rect& aabb, std::vector<d2d::ISprite*>& result) const;		
 
-		JointData* queryJointByPos(const d2d::Vector& pos) const;
+		Joint* queryJointByPos(const d2d::Vector& pos) const;
 
-		void insertJoint(JointData* joint) {
+		void insertJoint(Joint* joint) {
 			m_joints.push_back(joint);
 		}
-		void removeJoint(JointData* joint);
+		void removeJoint(Joint* joint);
 
 		void traverseBodies(d2d::IVisitor& visitor) const;
 		void traverseJoints(d2d::IVisitor& visitor) const;
@@ -80,7 +80,7 @@ namespace emodeling
 
 	private:
 		std::vector<Body*> m_bodies;
-		std::vector<JointData*> m_joints;
+		std::vector<Joint*> m_joints;
 
 	}; // StagePanel
 }

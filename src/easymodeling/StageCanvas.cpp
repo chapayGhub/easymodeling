@@ -19,7 +19,7 @@
 #include "StageCanvas.h"
 #include "StagePanel.h"
 #include "DrawUtils.h"
-#include "JointData.h"
+#include "Joint.h"
 
 using namespace emodeling;
 
@@ -110,7 +110,7 @@ void StageCanvas::drawLines() const
 
 void StageCanvas::DrawJointVisitor::visit(d2d::ICloneable* object, bool& bFetchNext)
 {
-	JointData* joint = static_cast<JointData*>(object);
-	joint->draw(JointData::e_default);
+	Joint* joint = static_cast<Joint*>(object);
+	joint->draw(Joint::e_default);
 	bFetchNext = true;
 }

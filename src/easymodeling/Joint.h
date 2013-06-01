@@ -16,8 +16,8 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef EMODELING_JOINT_DATA_H
-#define EMODELING_JOINT_DATA_H
+#ifndef EMODELING_JOINT_H
+#define EMODELING_JOINT_H
 
 #include <drag2d.h>
 
@@ -25,7 +25,7 @@ namespace emodeling
 {
 	class Body;
 
-	class JointData : public d2d::ICloneable
+	class Joint : public d2d::ICloneable
 	{
 	public:
 		enum Type
@@ -50,10 +50,10 @@ namespace emodeling
 		};
 
 	public:
-		JointData(Body* b0, Body* b1, Type type);
-		virtual ~JointData() {}
+		Joint(Body* b0, Body* b1, Type type);
+		virtual ~Joint() {}
 		
-		virtual JointData* clone() { return NULL; }
+		virtual Joint* clone() { return NULL; }
 
 		virtual bool isContain(const d2d::Vector& pos) const = 0;
 
@@ -85,7 +85,7 @@ namespace emodeling
 
 		bool collideConnected;
 
-	}; // JointData
+	}; // Joint
 }
 
-#endif // EMODELING_JOINT_DATA_H
+#endif // EMODELING_JOINT_H

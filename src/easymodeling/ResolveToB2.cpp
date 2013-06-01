@@ -96,18 +96,18 @@ b2Body* ResolveToB2::createBody(const Body& data, b2World* world,
 	return body;
 }
 
-b2Joint* ResolveToB2::createJoint(const JointData& data, b2World* world,
+b2Joint* ResolveToB2::createJoint(const Joint& data, b2World* world,
 								  const std::map<Body*, b2Body*>& bodyMap)
 {
 	b2Joint* bJoint = NULL;
 
 	switch(data.type)
 	{
-	case JointData::e_revoluteJoint:
+	case Joint::e_revoluteJoint:
 		{
 			b2RevoluteJointDef jd;
 
-			RevoluteJoint* joint = static_cast<RevoluteJoint*>(const_cast<JointData*>(&data));
+			RevoluteJoint* joint = static_cast<RevoluteJoint*>(const_cast<Joint*>(&data));
 
 			std::map<Body*, b2Body*>::const_iterator 
 				itrA = bodyMap.find(joint->bodyA),
@@ -130,11 +130,11 @@ b2Joint* ResolveToB2::createJoint(const JointData& data, b2World* world,
 			bJoint = world->CreateJoint(&jd);
 		}
 		break;
-	case JointData::e_prismaticJoint:
+	case Joint::e_prismaticJoint:
 		{
 			b2PrismaticJointDef jd;
 
-			PrismaticJoint* joint = static_cast<PrismaticJoint*>(const_cast<JointData*>(&data));
+			PrismaticJoint* joint = static_cast<PrismaticJoint*>(const_cast<Joint*>(&data));
 
 			std::map<Body*, b2Body*>::const_iterator 
 				itrA = bodyMap.find(joint->bodyA),
@@ -160,11 +160,11 @@ b2Joint* ResolveToB2::createJoint(const JointData& data, b2World* world,
 			bJoint = world->CreateJoint(&jd);
 		}
 		break;
-	case JointData::e_distanceJoint:
+	case Joint::e_distanceJoint:
 		{
 			b2DistanceJointDef jd;
 
-			DistanceJoint* joint = static_cast<DistanceJoint*>(const_cast<JointData*>(&data));
+			DistanceJoint* joint = static_cast<DistanceJoint*>(const_cast<Joint*>(&data));
 
 			std::map<Body*, b2Body*>::const_iterator 
 				itrA = bodyMap.find(joint->bodyA),
@@ -182,11 +182,11 @@ b2Joint* ResolveToB2::createJoint(const JointData& data, b2World* world,
 			bJoint = world->CreateJoint(&jd);
 		}
 		break;
-	case JointData::e_wheelJoint:
+	case Joint::e_wheelJoint:
 		{
 			b2WheelJointDef jd;
 
-			WheelJoint* joint = static_cast<WheelJoint*>(const_cast<JointData*>(&data));
+			WheelJoint* joint = static_cast<WheelJoint*>(const_cast<Joint*>(&data));
 
 			std::map<Body*, b2Body*>::const_iterator 
 				itrA = bodyMap.find(joint->bodyA),

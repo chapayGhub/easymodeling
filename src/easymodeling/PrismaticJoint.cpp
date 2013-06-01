@@ -22,7 +22,7 @@
 using namespace emodeling;
 
 PrismaticJoint::PrismaticJoint(Body* b0, Body* b1)
-	: JointData(b0, b1, e_prismaticJoint)
+	: Joint(b0, b1, e_prismaticJoint)
 	, localAxisA(1, 0)
 	, referenceAngle(0.0f)
 	, enableLimit(false)

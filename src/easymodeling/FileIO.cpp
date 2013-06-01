@@ -52,7 +52,7 @@ void FileIO::load(std::ifstream& fin)
 	i = 0;
 	Json::Value jointValue = value["joint"][i++];
 	while (!jointValue.isNull()) {
-		JointData* joint = j2bJoint(jointValue, bodies);
+		Joint* joint = j2bJoint(jointValue, bodies);
 		context->stage->insertJoint(joint);
 		jointValue = value["joint"][i++];
 	}
@@ -66,8 +66,8 @@ void FileIO::store(std::ofstream& fout)
 	std::vector<Body*> bodies;
 	Context::Instance()->stage->traverseBodies(d2d::FetchAllVisitor<Body>(bodies));
 
-	std::vector<JointData*> joints;
-	Context::Instance()->stage->traverseJoints(d2d::FetchAllVisitor<JointData>(joints));
+	std::vector<Joint*> joints;
+	Context::Instance()->stage->traverseJoints(d2d::FetchAllVisitor<Joint>(joints));
 
 	Json::Value value;
 
@@ -151,7 +151,7 @@ Json::Value FileIO::b2j(Fixture* fixture)
 	return value;
 }
 
-Json::Value FileIO::b2j(JointData* joint, const std::map<Body*, int>& bodyIndexMap)
+Json::Value FileIO::b2j(Joint* joint, const std::map<Body*, int>& bodyIndexMap)
 {
 	Json::Value value;
 
@@ -169,7 +169,7 @@ Json::Value FileIO::b2j(JointData* joint, const std::map<Body*, int>& bodyIndexM
 
 	switch (joint->type)
 	{
-	case JointData::e_revoluteJoint:
+	case Joint::e_revoluteJoint:
 		{
 			value["type"] = "revolute";
 
@@ -192,7 +192,7 @@ Json::Value FileIO::b2j(JointData* joint, const std::map<Body*, int>& bodyIndexM
 			value["motorSpeed"] = rJoint->motorSpeed;
 		}
 		break;
-	case JointData::e_prismaticJoint:
+	case Joint::e_prismaticJoint:
 		{
 			value["type"] = "prismatic";
 
@@ -218,7 +218,7 @@ Json::Value FileIO::b2j(JointData* joint, const std::map<Body*, int>& bodyIndexM
 			value["motorSpeed"] = rJoint->motorSpeed;
 		}
 		break;
-	case JointData::e_distanceJoint:
+	case Joint::e_distanceJoint:
 		{
 			value["type"] = "distance";
 
@@ -235,7 +235,7 @@ Json::Value FileIO::b2j(JointData* joint, const std::map<Body*, int>& bodyIndexM
 			value["dampingRatio"] = dJoint->dampingRatio;
 		}
 		break;
-	case JointData::e_wheelJoint:
+	case Joint::e_wheelJoint:
 		{
 			value["type"] = "wheel";
 
@@ -371,10 +371,10 @@ Fixture* FileIO::j2bFixture(Json::Value fixtureValue)
 	return fixture;
 }
 
-JointData* FileIO::j2bJoint(Json::Value jointValue,
+Joint* FileIO::j2bJoint(Json::Value jointValue,
 							 const std::vector<Body*>& bodies)
 {
-	JointData* joint = NULL;
+	Joint* joint = NULL;
 
 	int bodyIndexA = jointValue["bodyA"].asInt();
 	int bodyIndexB = jointValue["bodyB"].asInt();

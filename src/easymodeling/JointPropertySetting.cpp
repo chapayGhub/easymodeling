@@ -24,7 +24,7 @@
 
 using namespace emodeling;
 
-JointPropertySetting::JointPropertySetting(d2d::EditPanel* editPanel, JointData* joint)
+JointPropertySetting::JointPropertySetting(d2d::EditPanel* editPanel, Joint* joint)
 	: d2d::IPropertySetting(editPanel, wxT("Joint"))
 {
 	m_joint = joint;
@@ -51,25 +51,25 @@ void JointPropertySetting::updatePanel(d2d::PropertySettingPanel* panel)
 
 	switch (m_joint->type)
 	{
-	case JointData::e_revoluteJoint:
+	case Joint::e_revoluteJoint:
 		if (build) 
 			createPropertyPanel(static_cast<RevoluteJoint*>(m_joint), pg);
 		else
 			updatePropertyPanel(static_cast<RevoluteJoint*>(m_joint), pg);
 		break;
-	case JointData::e_prismaticJoint:
+	case Joint::e_prismaticJoint:
 		if (build) 
 			createPropertyPanel(static_cast<PrismaticJoint*>(m_joint), pg);
 		else
 			updatePropertyPanel(static_cast<PrismaticJoint*>(m_joint), pg);
 		break;
-	case JointData::e_distanceJoint:
+	case Joint::e_distanceJoint:
 		if (build) 
 			createPropertyPanel(static_cast<DistanceJoint*>(m_joint), pg);
 		else
 			updatePropertyPanel(static_cast<DistanceJoint*>(m_joint), pg);
 		break;
-	case JointData::e_wheelJoint:
+	case Joint::e_wheelJoint:
 		if (build) 
 			createPropertyPanel(static_cast<WheelJoint*>(m_joint), pg);
 		else
@@ -89,16 +89,16 @@ void JointPropertySetting::onPropertyGridChange(const wxString& name, const wxAn
 		m_joint->collideConnected = wxANY_AS(value, bool);
 	switch (m_joint->type)
 	{
-	case JointData::e_revoluteJoint:
+	case Joint::e_revoluteJoint:
 		onPropertyGridChange(static_cast<RevoluteJoint*>(m_joint), name, value);
 		break;
-	case JointData::e_prismaticJoint:
+	case Joint::e_prismaticJoint:
 		onPropertyGridChange(static_cast<PrismaticJoint*>(m_joint), name, value);
 		break;
-	case JointData::e_distanceJoint:
+	case Joint::e_distanceJoint:
 		onPropertyGridChange(static_cast<DistanceJoint*>(m_joint), name, value);
 		break;
-	case JointData::e_wheelJoint:
+	case Joint::e_wheelJoint:
 		onPropertyGridChange(static_cast<WheelJoint*>(m_joint), name, value);
 		break;
 	}

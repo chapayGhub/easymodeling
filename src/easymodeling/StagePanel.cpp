@@ -19,7 +19,7 @@
 #include "StagePanel.h"
 #include "StageCanvas.h"
 #include "Body.h"
-#include "JointData.h"
+#include "Joint.h"
 #include "Fixture.h"
 #include "Context.h"
 
@@ -85,7 +85,7 @@ void StagePanel::clear()
 
 	for_each(m_bodies.begin(), m_bodies.end(), DeletePointerFunctor<Body>());
 	m_bodies.clear();
-	for_each(m_joints.begin(), m_joints.end(), DeletePointerFunctor<JointData>());
+	for_each(m_joints.begin(), m_joints.end(), DeletePointerFunctor<Joint>());
 	m_joints.clear();
 }
 
@@ -101,7 +101,7 @@ void StagePanel::querySpritesByAABB(const d2d::Rect& aabb, std::vector<d2d::ISpr
 	traverseSprites(RectQueryVisitor(aabb, result), d2d::e_editable);
 }
 
-JointData* StagePanel::queryJointByPos(const d2d::Vector& pos) const
+Joint* StagePanel::queryJointByPos(const d2d::Vector& pos) const
 {
 	for (size_t i = 0, n = m_joints.size(); i < n; ++i)
 		if (m_joints[i]->isContain(pos))
@@ -109,7 +109,7 @@ JointData* StagePanel::queryJointByPos(const d2d::Vector& pos) const
 	return NULL;
 }
 
-void StagePanel::removeJoint(JointData* joint)
+void StagePanel::removeJoint(Joint* joint)
 {
 	for (size_t i = 0, n = m_joints.size(); i < n; ++i)
 	{
@@ -135,7 +135,7 @@ void StagePanel::traverseBodies(d2d::IVisitor& visitor) const
 
 void StagePanel::traverseJoints(d2d::IVisitor& visitor) const
 {
-	std::vector<JointData*>::const_iterator itr = m_joints.begin();
+	std::vector<Joint*>::const_iterator itr = m_joints.begin();
 	for ( ; itr != m_joints.end(); ++itr)
 	{
 		bool hasNext;

@@ -24,7 +24,7 @@
 namespace emodeling
 {
 	class StagePanel;
-	class JointData;
+	class Joint;
 
 	class SelectJointOP : public SelectBodyOP
 	{
@@ -54,8 +54,8 @@ namespace emodeling
 		}; // DrawSelectedVisitor
 
 	private:
-		JointData* m_selected;
-		JointData* m_mouseOn;
+		Joint* m_selected;
+		Joint* m_mouseOn;
 
 	}; // SelectJointOP
 }
