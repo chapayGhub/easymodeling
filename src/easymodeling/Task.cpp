@@ -113,16 +113,16 @@ void Task::initLayout()
 	{
 		if (library && property)
 		{
-			leftHorizontalSplitter->SetSashGravity(0.8f);
+			leftHorizontalSplitter->SetSashGravity(0.7f);
 			leftHorizontalSplitter->SplitHorizontally(library, property);
 		}
-		leftVerticalSplitter->SetSashGravity(0.1f);
+		leftVerticalSplitter->SetSashGravity(0.15f);
 		leftVerticalSplitter->SplitVertically(leftHorizontalSplitter, stage);
 	}
 
 	if (toolbar)
 	{
-		rightVerticalSplitter->SetSashGravity(0.95f);
+		rightVerticalSplitter->SetSashGravity(0.9f);
 		rightVerticalSplitter->SplitVertically(leftVerticalSplitter, toolbar);
 	}
 
