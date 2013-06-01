@@ -23,6 +23,7 @@
 #include "WheelJoint.h"
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
+#include "RopeJoint.h"
 
 using namespace emodeling;
 
@@ -90,6 +91,12 @@ void JointPropertySetting::updatePanel(d2d::PropertySettingPanel* panel)
 		else
 			updatePropertyPanel(static_cast<FrictionJoint*>(m_joint), pg);
 		break;
+	case Joint::e_ropeJoint:
+		if (build) 
+			createPropertyPanel(static_cast<RopeJoint*>(m_joint), pg);
+		else
+			updatePropertyPanel(static_cast<RopeJoint*>(m_joint), pg);
+		break;
 	}
 }
 
@@ -121,6 +128,9 @@ void JointPropertySetting::onPropertyGridChange(const wxString& name, const wxAn
 		break;
 	case Joint::e_frictionJoint:
 		onPropertyGridChange(static_cast<FrictionJoint*>(m_joint), name, value);
+		break;
+	case Joint::e_ropeJoint:
+		onPropertyGridChange(static_cast<RopeJoint*>(m_joint), name, value);
 		break;
 	}
 
@@ -578,4 +588,50 @@ void JointPropertySetting::onPropertyGridChange(FrictionJoint* joint, const wxSt
 		joint->maxForce = wxANY_AS(value, float);
 	else if (name == wxT("maxTorque"))
 		joint->maxTorque = wxANY_AS(value, float);
+}
+
+void JointPropertySetting::createPropertyPanel(RopeJoint* joint, wxPropertyGrid* pg)
+{
+	wxPGProperty* localAnchorAProp = pg->Append(new wxStringProperty(wxT("localAnchorA"),
+		wxPG_LABEL, wxT("<composed>")));
+	pg->AppendIn(localAnchorAProp, new wxFloatProperty(wxT("x"), wxPG_LABEL, joint->localAnchorA.x));
+	pg->SetPropertyAttribute(wxT("localAnchorA.x"), "Precision", 2);
+	pg->AppendIn(localAnchorAProp, new wxFloatProperty(wxT("y"), wxPG_LABEL, joint->localAnchorA.y));
+	pg->SetPropertyAttribute(wxT("localAnchorA.y"), "Precision", 2);
+
+	wxPGProperty* localAnchorBProp = pg->Append(new wxStringProperty(wxT("localAnchorB"),
+		wxPG_LABEL, wxT("<composed>")));
+	pg->AppendIn(localAnchorBProp, new wxFloatProperty(wxT("x"), wxPG_LABEL, joint->localAnchorB.x));
+	pg->SetPropertyAttribute(wxT("localAnchorB.x"), "Precision", 2);
+	pg->AppendIn(localAnchorBProp, new wxFloatProperty(wxT("y"), wxPG_LABEL, joint->localAnchorB.y));
+	pg->SetPropertyAttribute(wxT("localAnchorB.y"), "Precision", 2);
+
+	pg->Append(new wxFloatProperty(wxT("maxLength"), wxPG_LABEL, joint->maxLength));
+	pg->SetPropertyAttribute(wxT("maxLength"), "Precision", 2);
+}
+
+void JointPropertySetting::updatePropertyPanel(RopeJoint* joint, wxPropertyGrid* pg)
+{
+	pg->GetProperty(wxT("localAnchorA.x"))->SetValue(joint->localAnchorA.x);
+	pg->GetProperty(wxT("localAnchorA.y"))->SetValue(joint->localAnchorA.y);
+
+	pg->GetProperty(wxT("localAnchorB.x"))->SetValue(joint->localAnchorB.x);
+	pg->GetProperty(wxT("localAnchorB.y"))->SetValue(joint->localAnchorB.y);
+
+	pg->GetProperty(wxT("maxLength"))->SetValue(joint->maxLength);
+}
+
+void JointPropertySetting::onPropertyGridChange(RopeJoint* joint, const wxString& name, 
+												const wxAny& value)
+{
+	if (name == wxT("localAnchorA.x"))
+		joint->localAnchorA.x = wxANY_AS(value, float);
+	else if (name == wxT("localAnchorA.y"))
+		joint->localAnchorA.y = wxANY_AS(value, float);
+	else if (name == wxT("localAnchorB.x"))
+		joint->localAnchorB.x = wxANY_AS(value, float);
+	else if (name == wxT("localAnchorB.y"))
+		joint->localAnchorB.y = wxANY_AS(value, float);
+	else if (name == wxT("maxLength"))
+		joint->maxLength = wxANY_AS(value, float);
 }

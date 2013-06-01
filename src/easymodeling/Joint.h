@@ -39,7 +39,8 @@ namespace emodeling
 			e_wheelJoint,
 			e_weldJoint,
 			e_frictionJoint,
-			e_ropeJoint
+			e_ropeJoint,
+			e_motorJoint
 		};
 
 		enum DrawType

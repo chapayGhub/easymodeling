@@ -248,6 +248,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\easymodeling\RopeJoint.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\easymodeling\RopeJoint.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\easymodeling\WeldJoint.cpp"
 					>
 				</File>

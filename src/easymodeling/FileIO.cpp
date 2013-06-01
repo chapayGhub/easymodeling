@@ -26,6 +26,7 @@
 #include "WheelJoint.h"
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
+#include "RopeJoint.h"
 #include "Context.h"
 
 using namespace emodeling;
@@ -312,6 +313,20 @@ Json::Value FileIO::b2j(Joint* joint, const std::map<Body*, int>& bodyIndexMap)
 			value["maxTorque"] = fJoint->maxTorque;
 		}
 		break;
+	case Joint::e_ropeJoint:
+		{
+			value["type"] = "rope";
+
+			RopeJoint* rJoint = static_cast<RopeJoint*>(joint);
+
+			value["anchorA"]["x"] = rJoint->localAnchorA.x;
+			value["anchorA"]["y"] = rJoint->localAnchorA.y;
+			value["anchorB"]["x"] = rJoint->localAnchorB.x;
+			value["anchorB"]["y"] = rJoint->localAnchorB.y;
+
+			value["maxLength"] = rJoint->maxLength;
+		}
+		break;
 	}
 
 	return value;
@@ -544,6 +559,19 @@ Joint* FileIO::j2bJoint(Json::Value jointValue,
 		fJoint->maxTorque = jointValue["maxTorque"].asDouble();
 
 		joint = fJoint;
+	}
+	else if (type == "rope")
+	{
+		RopeJoint* rJoint = new RopeJoint(bodies[bodyIndexA], bodies[bodyIndexB]);
+
+		rJoint->localAnchorA.x = jointValue["anchorA"]["x"].asDouble();
+		rJoint->localAnchorA.y = jointValue["anchorA"]["y"].asDouble();
+		rJoint->localAnchorB.x = jointValue["anchorB"]["x"].asDouble();
+		rJoint->localAnchorB.y = jointValue["anchorB"]["y"].asDouble();
+
+		rJoint->maxLength = jointValue["maxLength"].asDouble();
+
+		joint = rJoint;
 	}
 
 	joint->m_name = jointValue["name"].asString();

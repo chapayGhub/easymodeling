@@ -25,6 +25,7 @@
 #include "WheelJoint.h"
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
+#include "RopeJoint.h"
 #include "StagePanel.h"
 #include "JointPropertySetting.h"
 #include "WorldPropertySetting.h"
@@ -174,6 +175,17 @@ bool SelectJointOP::onMouseDrag(int x, int y)
 		case Joint::e_frictionJoint:
 			{
 				FrictionJoint* joint = static_cast<FrictionJoint*>(m_selected);
+				const float disA = d2d::Math::getDistance(pos, joint->getWorldAnchorA()),
+					disB = d2d::Math::getDistance(pos, joint->getWorldAnchorB());
+				if (disA < disB)
+					joint->setLocalAnchorA(pos);
+				else
+					joint->setLocalAnchorB(pos);
+			}
+			break;
+		case Joint::e_ropeJoint:
+			{
+				RopeJoint* joint = static_cast<RopeJoint*>(m_selected);
 				const float disA = d2d::Math::getDistance(pos, joint->getWorldAnchorA()),
 					disB = d2d::Math::getDistance(pos, joint->getWorldAnchorB());
 				if (disA < disB)
