@@ -27,6 +27,7 @@ namespace emodeling
 	class RevoluteJoint;
 	class PrismaticJoint;
 	class DistanceJoint;
+	class PulleyJoint;
 	class WheelJoint;
 	class WeldJoint;
 	class FrictionJoint;
@@ -58,6 +59,11 @@ namespace emodeling
 		void createPropertyPanel(DistanceJoint* joint, wxPropertyGrid* pg);
 		void updatePropertyPanel(DistanceJoint* joint, wxPropertyGrid* pg);
 		void onPropertyGridChange(DistanceJoint* joint,
+			const wxString& name, const wxAny& value);
+
+		void createPropertyPanel(PulleyJoint* joint, wxPropertyGrid* pg);
+		void updatePropertyPanel(PulleyJoint* joint, wxPropertyGrid* pg);
+		void onPropertyGridChange(PulleyJoint* joint,
 			const wxString& name, const wxAny& value);
 
 		void createPropertyPanel(WheelJoint* joint, wxPropertyGrid* pg);

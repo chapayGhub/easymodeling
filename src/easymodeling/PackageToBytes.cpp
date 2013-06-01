@@ -22,6 +22,7 @@
 #include "RevoluteJoint.h"
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
+#include "PulleyJoint.h"
 #include "WheelJoint.h"
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
@@ -168,6 +169,31 @@ void PaskageToBytes::packJoint(const Joint& data, std::ofstream& fout,
 			fout.write(reinterpret_cast<const char*>(&joint->dampingRatio), sizeof(float));
 		}
 		break;
+	case Joint::e_pulleyJoint:
+		{
+			PulleyJoint* joint = static_cast<PulleyJoint*>(const_cast<Joint*>(&data));
+
+			int bodyA = queryBodyIndex(joint->bodyA, bodies);
+			int bodyB = queryBodyIndex(joint->bodyB, bodies);
+			assert(bodyA != -1 && bodyB != -1);
+			fout.write(reinterpret_cast<const char*>(&bodyA), sizeof(int));
+			fout.write(reinterpret_cast<const char*>(&bodyB), sizeof(int));
+
+			fout.write(reinterpret_cast<const char*>(&joint->collideConnected), sizeof(int));
+
+			fout.write(reinterpret_cast<const char*>(&joint->localAnchorA.x), sizeof(float));
+			fout.write(reinterpret_cast<const char*>(&joint->localAnchorA.y), sizeof(float));
+			fout.write(reinterpret_cast<const char*>(&joint->localAnchorB.x), sizeof(float));
+			fout.write(reinterpret_cast<const char*>(&joint->localAnchorB.y), sizeof(float));
+
+			fout.write(reinterpret_cast<const char*>(&joint->groundAnchorA.x), sizeof(float));
+			fout.write(reinterpret_cast<const char*>(&joint->groundAnchorA.y), sizeof(float));
+			fout.write(reinterpret_cast<const char*>(&joint->groundAnchorB.x), sizeof(float));
+			fout.write(reinterpret_cast<const char*>(&joint->groundAnchorB.y), sizeof(float));
+
+			fout.write(reinterpret_cast<const char*>(&joint->ratio), sizeof(float));
+		}
+		break;
 	case Joint::e_wheelJoint:
 		{
 			WheelJoint* joint = static_cast<WheelJoint*>(const_cast<Joint*>(&data));
@@ -206,6 +232,8 @@ void PaskageToBytes::packJoint(const Joint& data, std::ofstream& fout,
 			fout.write(reinterpret_cast<const char*>(&bodyA), sizeof(int));
 			fout.write(reinterpret_cast<const char*>(&bodyB), sizeof(int));
 
+			fout.write(reinterpret_cast<const char*>(&joint->collideConnected), sizeof(int));
+
 			fout.write(reinterpret_cast<const char*>(&joint->localAnchorA.x), sizeof(float));
 			fout.write(reinterpret_cast<const char*>(&joint->localAnchorA.y), sizeof(float));
 			fout.write(reinterpret_cast<const char*>(&joint->localAnchorB.x), sizeof(float));
@@ -226,6 +254,8 @@ void PaskageToBytes::packJoint(const Joint& data, std::ofstream& fout,
 			fout.write(reinterpret_cast<const char*>(&bodyA), sizeof(int));
 			fout.write(reinterpret_cast<const char*>(&bodyB), sizeof(int));
 
+			fout.write(reinterpret_cast<const char*>(&joint->collideConnected), sizeof(int));
+
 			fout.write(reinterpret_cast<const char*>(&joint->localAnchorA.x), sizeof(float));
 			fout.write(reinterpret_cast<const char*>(&joint->localAnchorA.y), sizeof(float));
 			fout.write(reinterpret_cast<const char*>(&joint->localAnchorB.x), sizeof(float));
@@ -245,6 +275,8 @@ void PaskageToBytes::packJoint(const Joint& data, std::ofstream& fout,
 			fout.write(reinterpret_cast<const char*>(&bodyA), sizeof(int));
 			fout.write(reinterpret_cast<const char*>(&bodyB), sizeof(int));
 
+			fout.write(reinterpret_cast<const char*>(&joint->collideConnected), sizeof(int));
+
 			fout.write(reinterpret_cast<const char*>(&joint->localAnchorA.x), sizeof(float));
 			fout.write(reinterpret_cast<const char*>(&joint->localAnchorA.y), sizeof(float));
 			fout.write(reinterpret_cast<const char*>(&joint->localAnchorB.x), sizeof(float));
@@ -262,6 +294,8 @@ void PaskageToBytes::packJoint(const Joint& data, std::ofstream& fout,
 			assert(bodyA != -1 && bodyB != -1);
 			fout.write(reinterpret_cast<const char*>(&bodyA), sizeof(int));
 			fout.write(reinterpret_cast<const char*>(&bodyB), sizeof(int));
+
+			fout.write(reinterpret_cast<const char*>(&joint->collideConnected), sizeof(int));
 
 			fout.write(reinterpret_cast<const char*>(&joint->maxForce), sizeof(float));
 			fout.write(reinterpret_cast<const char*>(&joint->maxTorque), sizeof(float));

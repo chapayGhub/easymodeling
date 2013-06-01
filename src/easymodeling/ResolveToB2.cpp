@@ -22,6 +22,7 @@
 #include "RevoluteJoint.h"
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
+#include "PulleyJoint.h"
 #include "WheelJoint.h"
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
@@ -200,6 +201,32 @@ b2Joint* ResolveToB2::createJoint(const Joint& data, b2World* world,
 			jd.length = d2d::Math::getDistance(joint->getWorldAnchorA(), joint->getWorldAnchorB()) / d2d::BOX2D_SCALE_FACTOR;
 			jd.frequencyHz = joint->frequencyHz;
 			jd.dampingRatio = joint->dampingRatio;
+
+			bJoint = world->CreateJoint(&jd);
+		}
+		break;
+	case Joint::e_pulleyJoint:
+		{
+			b2PulleyJointDef jd;
+
+			PulleyJoint* joint = static_cast<PulleyJoint*>(const_cast<Joint*>(&data));
+
+			std::map<Body*, b2Body*>::const_iterator 
+				itrA = bodyMap.find(joint->bodyA),
+				itrB = bodyMap.find(joint->bodyB);
+			assert(itrA != bodyMap.end() && itrB != bodyMap.end());
+			b2Body* bodyA = itrA->second;
+			b2Body* bodyB = itrB->second;
+
+			b2Vec2 groundAnchorA(joint->groundAnchorA.x / d2d::BOX2D_SCALE_FACTOR, joint->groundAnchorA.y / d2d::BOX2D_SCALE_FACTOR),
+				groundAnchorB(joint->groundAnchorB.x / d2d::BOX2D_SCALE_FACTOR, joint->groundAnchorB.y / d2d::BOX2D_SCALE_FACTOR);
+			d2d::Vector anchorA_ = joint->getWorldAnchorA(),
+				anchorB_ = joint->getWorldAnchorB();
+			b2Vec2 anchorA(anchorA_.x / d2d::BOX2D_SCALE_FACTOR, anchorA_.y / d2d::BOX2D_SCALE_FACTOR),
+				anchorB(anchorB_.x / d2d::BOX2D_SCALE_FACTOR, anchorB_.y / d2d::BOX2D_SCALE_FACTOR);
+
+			jd.Initialize(bodyA, bodyB, groundAnchorA, groundAnchorB, anchorA, anchorB, joint->ratio);
+			jd.collideConnected = joint->collideConnected;
 
 			bJoint = world->CreateJoint(&jd);
 		}

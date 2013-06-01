@@ -22,6 +22,7 @@
 #include "RevoluteJoint.h"
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
+#include "PulleyJoint.h"
 #include "WheelJoint.h"
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
@@ -51,17 +52,18 @@ wxSizer* JointEditCmpt::initLayout()
 		wxStaticBox* bounding = new wxStaticBox(this, wxID_ANY, wxT("Type"));
 		wxBoxSizer* sizer = new wxStaticBoxSizer(bounding, wxVERTICAL);
 		{
-			const int SIZE = 8;
+			const int SIZE = 9;
 
 			wxString choices[SIZE];
 			choices[0] = wxT("Revolute");
 			choices[1] = wxT("Prismatic");
 			choices[2] = wxT("Distance");
-			choices[3] = wxT("Wheel");
-			choices[4] = wxT("Weld");
-			choices[5] = wxT("Friction");
-			choices[6] = wxT("Rope");
-			choices[7] = wxT("Motor");
+			choices[3] = wxT("Pulley");
+			choices[4] = wxT("Wheel");
+			choices[5] = wxT("Weld");
+			choices[6] = wxT("Friction");
+			choices[7] = wxT("Rope");
+			choices[8] = wxT("Motor");
 
 			m_typeChoice = new wxChoice(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, SIZE, choices);
 			m_typeChoice->SetSelection(0);
@@ -100,6 +102,8 @@ void JointEditCmpt::onCreateJoint(wxCommandEvent& event)
 		editPanel->insertJoint(new PrismaticJoint(body0, body1));
 	else if (type == wxT("Distance"))
 		editPanel->insertJoint(new DistanceJoint(body0, body1));
+	else if (type == wxT("Pulley"))
+		editPanel->insertJoint(new PulleyJoint(body0, body1));
 	else if (type == wxT("Wheel"))
 	{
 		SelectWheelDialog dlg(this, wxT("Choose Wheel"), body0->name, body1->name);

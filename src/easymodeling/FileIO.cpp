@@ -23,6 +23,7 @@
 #include "RevoluteJoint.h"
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
+#include "PulleyJoint.h"
 #include "WheelJoint.h"
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
@@ -257,6 +258,25 @@ Json::Value FileIO::b2j(Joint* joint, const std::map<Body*, int>& bodyIndexMap)
 
 			value["frequencyHz"] = dJoint->frequencyHz;
 			value["dampingRatio"] = dJoint->dampingRatio;
+		}
+		break;
+	case Joint::e_pulleyJoint:
+		{
+			value["type"] = "pulley";
+
+			PulleyJoint* pJoint = static_cast<PulleyJoint*>(joint);
+
+			value["anchorA"]["x"] = pJoint->localAnchorA.x;
+			value["anchorA"]["y"] = pJoint->localAnchorA.y;
+			value["anchorB"]["x"] = pJoint->localAnchorB.x;
+			value["anchorB"]["y"] = pJoint->localAnchorB.y;
+
+			value["groundAnchorA"]["x"] = pJoint->groundAnchorA.x;
+			value["groundAnchorA"]["y"] = pJoint->groundAnchorA.y;
+			value["groundAnchorB"]["x"] = pJoint->groundAnchorB.x;
+			value["groundAnchorB"]["y"] = pJoint->groundAnchorB.y;
+
+			value["ratio"] = pJoint->ratio;
 		}
 		break;
 	case Joint::e_wheelJoint:
@@ -520,6 +540,24 @@ Joint* FileIO::j2bJoint(Json::Value jointValue,
 		dJoint->dampingRatio = jointValue["dampingRatio"].asDouble();
 
 		joint = dJoint;
+	}
+	else if (type == "pulley")
+	{
+		PulleyJoint* pJoint = new PulleyJoint(bodies[bodyIndexA], bodies[bodyIndexB]);
+
+		pJoint->localAnchorA.x = jointValue["anchorA"]["x"].asDouble();
+		pJoint->localAnchorA.y = jointValue["anchorA"]["y"].asDouble();
+		pJoint->localAnchorB.x = jointValue["anchorB"]["x"].asDouble();
+		pJoint->localAnchorB.y = jointValue["anchorB"]["y"].asDouble();
+
+		pJoint->groundAnchorA.x = jointValue["groundAnchorA"]["x"].asDouble();
+		pJoint->groundAnchorA.y = jointValue["groundAnchorA"]["y"].asDouble();
+		pJoint->groundAnchorB.x = jointValue["groundAnchorB"]["x"].asDouble();
+		pJoint->groundAnchorB.y = jointValue["groundAnchorB"]["y"].asDouble();
+
+		pJoint->ratio = jointValue["ratio"].asDouble();
+
+		joint = pJoint;
 	}
 	else if (type == "wheel")
 	{

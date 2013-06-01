@@ -20,6 +20,7 @@
 #include "RevoluteJoint.h"
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
+#include "PulleyJoint.h"
 #include "WheelJoint.h"
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
@@ -74,6 +75,12 @@ void JointPropertySetting::updatePanel(d2d::PropertySettingPanel* panel)
 		else
 			updatePropertyPanel(static_cast<DistanceJoint*>(m_joint), pg);
 		break;
+	case Joint::e_pulleyJoint:
+		if (build) 
+			createPropertyPanel(static_cast<PulleyJoint*>(m_joint), pg);
+		else
+			updatePropertyPanel(static_cast<PulleyJoint*>(m_joint), pg);
+		break;
 	case Joint::e_wheelJoint:
 		if (build) 
 			createPropertyPanel(static_cast<WheelJoint*>(m_joint), pg);
@@ -126,6 +133,9 @@ void JointPropertySetting::onPropertyGridChange(const wxString& name, const wxAn
 		break;
 	case Joint::e_distanceJoint:
 		onPropertyGridChange(static_cast<DistanceJoint*>(m_joint), name, value);
+		break;
+	case Joint::e_pulleyJoint:
+		onPropertyGridChange(static_cast<PulleyJoint*>(m_joint), name, value);
 		break;
 	case Joint::e_wheelJoint:
 		onPropertyGridChange(static_cast<WheelJoint*>(m_joint), name, value);
@@ -400,6 +410,81 @@ void JointPropertySetting::onPropertyGridChange(DistanceJoint* joint, const wxSt
 		joint->frequencyHz = wxANY_AS(value, float);
 	else if (name == wxT("dampingRatio"))
 		joint->dampingRatio = wxANY_AS(value, float);
+}
+
+void JointPropertySetting::createPropertyPanel(PulleyJoint* joint, wxPropertyGrid* pg)
+{
+	wxPGProperty* localAnchorAProp = pg->Append(new wxStringProperty(wxT("localAnchorA"),
+		wxPG_LABEL, wxT("<composed>")));
+	pg->AppendIn(localAnchorAProp, new wxFloatProperty(wxT("x"), wxPG_LABEL, joint->localAnchorA.x));
+	pg->SetPropertyAttribute(wxT("localAnchorA.x"), "Precision", 2);
+	pg->AppendIn(localAnchorAProp, new wxFloatProperty(wxT("y"), wxPG_LABEL, joint->localAnchorA.y));
+	pg->SetPropertyAttribute(wxT("localAnchorA.y"), "Precision", 2);
+
+	wxPGProperty* localAnchorBProp = pg->Append(new wxStringProperty(wxT("localAnchorB"),
+		wxPG_LABEL, wxT("<composed>")));
+	pg->AppendIn(localAnchorBProp, new wxFloatProperty(wxT("x"), wxPG_LABEL, joint->localAnchorB.x));
+	pg->SetPropertyAttribute(wxT("localAnchorB.x"), "Precision", 2);
+	pg->AppendIn(localAnchorBProp, new wxFloatProperty(wxT("y"), wxPG_LABEL, joint->localAnchorB.y));
+	pg->SetPropertyAttribute(wxT("localAnchorB.y"), "Precision", 2);
+
+	wxPGProperty* groundAnchorAProp = pg->Append(new wxStringProperty(wxT("groundAnchorA"),
+		wxPG_LABEL, wxT("<composed>")));
+	pg->AppendIn(groundAnchorAProp, new wxFloatProperty(wxT("x"), wxPG_LABEL, joint->groundAnchorA.x));
+	pg->SetPropertyAttribute(wxT("groundAnchorA.x"), "Precision", 2);
+	pg->AppendIn(groundAnchorAProp, new wxFloatProperty(wxT("y"), wxPG_LABEL, joint->groundAnchorA.y));
+	pg->SetPropertyAttribute(wxT("groundAnchorA.y"), "Precision", 2);
+
+	wxPGProperty* groundAnchorBProp = pg->Append(new wxStringProperty(wxT("groundAnchorB"),
+		wxPG_LABEL, wxT("<composed>")));
+	pg->AppendIn(groundAnchorBProp, new wxFloatProperty(wxT("x"), wxPG_LABEL, joint->groundAnchorB.x));
+	pg->SetPropertyAttribute(wxT("groundAnchorB.x"), "Precision", 2);
+	pg->AppendIn(groundAnchorBProp, new wxFloatProperty(wxT("y"), wxPG_LABEL, joint->groundAnchorB.y));
+	pg->SetPropertyAttribute(wxT("groundAnchorB.y"), "Precision", 2);
+
+	pg->Append(new wxFloatProperty(wxT("ratio"), wxPG_LABEL, joint->ratio));
+	pg->SetPropertyAttribute(wxT("ratio"), "Precision", 2);
+}
+
+void JointPropertySetting::updatePropertyPanel(PulleyJoint* joint, wxPropertyGrid* pg)
+{
+	pg->GetProperty(wxT("localAnchorA.x"))->SetValue(joint->localAnchorA.x);
+	pg->GetProperty(wxT("localAnchorA.y"))->SetValue(joint->localAnchorA.y);
+
+	pg->GetProperty(wxT("localAnchorB.x"))->SetValue(joint->localAnchorB.x);
+	pg->GetProperty(wxT("localAnchorB.y"))->SetValue(joint->localAnchorB.y);
+
+	pg->GetProperty(wxT("groundAnchorA.x"))->SetValue(joint->groundAnchorA.x);
+	pg->GetProperty(wxT("groundAnchorA.y"))->SetValue(joint->groundAnchorA.y);
+
+	pg->GetProperty(wxT("groundAnchorB.x"))->SetValue(joint->groundAnchorB.x);
+	pg->GetProperty(wxT("groundAnchorB.y"))->SetValue(joint->groundAnchorB.y);
+
+	pg->GetProperty(wxT("ratio"))->SetValue(joint->ratio);
+}
+
+void JointPropertySetting::onPropertyGridChange(PulleyJoint* joint, 
+												const wxString& name, 
+												const wxAny& value)
+{
+	if (name == wxT("localAnchorA.x"))
+		joint->localAnchorA.x = wxANY_AS(value, float);
+	else if (name == wxT("localAnchorA.y"))
+		joint->localAnchorA.y = wxANY_AS(value, float);
+	else if (name == wxT("localAnchorB.x"))
+		joint->localAnchorB.x = wxANY_AS(value, float);
+	else if (name == wxT("localAnchorB.y"))
+		joint->localAnchorB.y = wxANY_AS(value, float);
+	else if (name == wxT("groundAnchorA.x"))
+		joint->groundAnchorA.x = wxANY_AS(value, float);
+	else if (name == wxT("groundAnchorA.y"))
+		joint->groundAnchorA.y = wxANY_AS(value, float);
+	else if (name == wxT("groundAnchorB.x"))
+		joint->groundAnchorB.x = wxANY_AS(value, float);
+	else if (name == wxT("groundAnchorB.y"))
+		joint->groundAnchorB.y = wxANY_AS(value, float);
+	else if (name == wxT("ratio"))
+		joint->ratio = wxANY_AS(value, float);
 }
 
 void JointPropertySetting::createPropertyPanel(WheelJoint* joint, wxPropertyGrid* pg)

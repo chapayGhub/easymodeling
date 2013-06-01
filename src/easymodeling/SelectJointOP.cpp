@@ -22,6 +22,7 @@
 #include "RevoluteJoint.h"
 #include "PrismaticJoint.h"
 #include "DistanceJoint.h"
+#include "PulleyJoint.h"
 #include "WheelJoint.h"
 #include "WeldJoint.h"
 #include "FrictionJoint.h"
@@ -149,6 +150,25 @@ bool SelectJointOP::onMouseDrag(int x, int y)
 					joint->setLocalAnchorA(pos);
 				else
 					joint->setLocalAnchorB(pos);
+			}
+			break;
+		case Joint::e_pulleyJoint:
+			{
+				PulleyJoint* joint = static_cast<PulleyJoint*>(m_selected);
+				const float disA = d2d::Math::getDistance(pos, joint->getWorldAnchorA()),
+					disB = d2d::Math::getDistance(pos, joint->getWorldAnchorB());
+				const float disGA = d2d::Math::getDistance(pos, joint->groundAnchorA),
+					disGB = d2d::Math::getDistance(pos, joint->groundAnchorB);
+
+				float dis = std::min(std::min(disA, disB), std::min(disGA, disGB));
+				if (dis == disA)
+					joint->setLocalAnchorA(pos);
+				else if (dis == disB)
+					joint->setLocalAnchorB(pos);
+				else if (dis == disGA)
+					joint->groundAnchorA = pos;
+				else
+					joint->groundAnchorB = pos;					
 			}
 			break;
 		case Joint::e_wheelJoint:
