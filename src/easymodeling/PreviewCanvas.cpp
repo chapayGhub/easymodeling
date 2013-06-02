@@ -30,6 +30,7 @@ PreviewCanvas::PreviewCanvas(PreviewPanel* editPanel)
 	: d2d::GLCanvas(editPanel)
 	, m_timer(this, TIMER_ID)
 {
+	setBgColor(d2d::Colorf(0, 0, 0));
 	m_timer.Start(1000 / FRAME_RATE);
 }
 
@@ -47,6 +48,20 @@ void PreviewCanvas::initGL()
 void PreviewCanvas::onDraw()
 {
 	static_cast<PreviewPanel*>(m_editPanel)->drawPhysics();
+
+	d2d::DragPhysicsOP* op = static_cast<d2d::DragPhysicsOP*>(m_editPanel->getEditOP());
+	if (op->m_mouseJoint)
+	{
+		b2Vec2 target = op->m_mouseJoint->GetAnchorB();
+		d2d::Vector first(target.x * d2d::BOX2D_SCALE_FACTOR, target.y * d2d::BOX2D_SCALE_FACTOR);
+
+		if (op->currPos.isValid())
+		{
+			d2d::PrimitiveDraw::drawLine(first, op->currPos, d2d::Colorf(1, 1, 1), 1);
+			d2d::PrimitiveDraw::drawCircle(op->currPos, 2, true, 2, d2d::Colorf(0, 1, 0));
+		}
+		d2d::PrimitiveDraw::drawCircle(first, 2, true, 2, d2d::Colorf(0, 1, 0));
+	}
 }
 
 void PreviewCanvas::onTimer(wxTimerEvent& event)
