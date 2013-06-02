@@ -37,6 +37,9 @@ namespace emodeling
 	private:
 		void onClearShapes(wxCommandEvent& event);
 
+	private:
+		BEStage* m_stage;
+
 	}; // BEToolbar
 }
 

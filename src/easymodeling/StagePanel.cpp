@@ -37,6 +37,12 @@ StagePanel::~StagePanel()
 	clear();
 }
 
+void StagePanel::clear()
+{
+	d2d::EditPanel::clear();
+	clearSprites();
+}
+
 void StagePanel::removeSprite(d2d::ISprite* sprite)
 {
 	for (size_t i = 0, n = m_bodies.size(); i < n; ++i)
@@ -78,10 +84,9 @@ void StagePanel::insertSprite(d2d::ISprite* sprite)
 	}
 }
 
-void StagePanel::clear()
+void StagePanel::clearSprites()
 {
-	d2d::EditPanel::clear();
-	d2d::SpritesPanelImpl::clear();
+	d2d::SpritesPanelImpl::clearSprites();
 
 	for_each(m_bodies.begin(), m_bodies.end(), DeletePointerFunctor<Body>());
 	m_bodies.clear();

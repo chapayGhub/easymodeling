@@ -37,7 +37,7 @@ namespace emodeling
 			d2d::TraverseType type = d2d::e_allExisting) const;
 		virtual void removeShape(d2d::IShape* shape);
 		virtual void insertShape(d2d::IShape* shape);
-		virtual void clear();
+		virtual void clearShapes();
 
 		const d2d::ISymbol& getSymbol() const { return m_symbol; }
 

@@ -25,6 +25,7 @@ using namespace emodeling;
 BEToolbar::BEToolbar(wxWindow* parent, d2d::PropertySettingPanel* property,
 					 BEStage* stage)
 	: d2d::ToolbarPanel(parent, stage)
+	, m_stage(stage)
 {
 	addChild(new d2d::NodeCaptureCMPT<d2d::EditCircleOP>(this, wxT("circle"), stage, stage, property));
 	addChild(new d2d::NodeCaptureCMPT<d2d::EditRectOP>(this, wxT("rect"), stage, stage, property));
@@ -52,6 +53,6 @@ wxSizer* BEToolbar::initLayout()
 
 void BEToolbar::onClearShapes(wxCommandEvent& event)
 {
-	//static_cast<StagePanel*>(m_editPanel)->clearShapes();
-	//m_editPanel->Refresh();
+	m_stage->clearShapes();
+	m_editPanel->Refresh();
 }

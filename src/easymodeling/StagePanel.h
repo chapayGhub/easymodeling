@@ -32,9 +32,17 @@ namespace emodeling
 		StagePanel(wxWindow* parent);
 		virtual ~StagePanel();
 
+		//
+		// d2d::EditPanel interface
+		//
+		virtual void clear();
+
+		//
+		// d2d::SpritesPanelImpl interface
+		//
 		virtual void removeSprite(d2d::ISprite* sprite);
 		virtual void insertSprite(d2d::ISprite* sprite);
-		virtual void clear();
+		virtual void clearSprites();
 
 		virtual d2d::ISprite* querySpriteByPos(const d2d::Vector& pos) const;
 		virtual void querySpritesByRect(const d2d::Rect& rect, std::vector<d2d::ISprite*>& result) const;		

@@ -102,7 +102,7 @@ void BEStage::insertShape(d2d::IShape* shape)
 	}
 }
 
-void BEStage::clear()
+void BEStage::clearShapes()
 {
 	for (size_t i = 0, n = m_shapes.size(); i < n; ++i)
 		m_shapes[i]->release();
