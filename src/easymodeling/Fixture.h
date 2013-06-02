@@ -37,8 +37,7 @@ namespace emodeling
 		void draw(const d2d::Colorf& cFace, const d2d::Colorf& cEdge) const;
 
 	private:
-		bool isBoundaryContain(const std::vector<d2d::Vector>& boundary, const d2d::Vector& pos) const;
-		bool isBoundaryIntersect(const std::vector<d2d::Vector>& boundary, const d2d::Rect& rect) const;
+		void transLocalToWorld(const std::vector<d2d::Vector>& local, std::vector<d2d::Vector>& world) const;
 
 	public:
 		wxString name;

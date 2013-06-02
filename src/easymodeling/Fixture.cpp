@@ -55,11 +55,22 @@ bool Fixture::isContain(const d2d::Vector& pos) const
 		boundary[1].set(rect->m_rect.xMax, rect->m_rect.yMin);
 		boundary[2].set(rect->m_rect.xMax, rect->m_rect.yMax);
 		boundary[3].set(rect->m_rect.xMin, rect->m_rect.yMax);
-		return isBoundaryContain(boundary, pos);
+
+		std::vector<d2d::Vector> fixed;
+		transLocalToWorld(boundary, fixed);
+		return d2d::Math::isPointInArea(pos, fixed);
+	}
+	else if (d2d::PolygonShape* polygon = dynamic_cast<d2d::PolygonShape*>(shape))
+	{
+		std::vector<d2d::Vector> fixed;
+		transLocalToWorld(polygon->getVertices(), fixed);
+		return d2d::Math::isPointInArea(pos, fixed);
 	}
 	else if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(shape))
 	{
-		return isBoundaryContain(chain->getVertices(), pos);
+		std::vector<d2d::Vector> fixed;
+		transLocalToWorld(chain->getVertices(), fixed);
+		return d2d::Math::getDisPointToPolyline(pos, fixed) < 1;
 	}
 	else
 		return false;
@@ -79,11 +90,22 @@ bool Fixture::isIntersect(const d2d::Rect& rect) const
 		boundary[1].set(r->m_rect.xMax, r->m_rect.yMin);
 		boundary[2].set(r->m_rect.xMax, r->m_rect.yMax);
 		boundary[3].set(r->m_rect.xMin, r->m_rect.yMax);
-		return isBoundaryIntersect(boundary, rect);
+		
+		std::vector<d2d::Vector> fixed;
+		transLocalToWorld(boundary, fixed);
+		return d2d::Math::isPolylineIntersectRect(fixed, true, rect);
+	}
+	else if (d2d::PolygonShape* polygon = dynamic_cast<d2d::PolygonShape*>(shape))
+	{
+		std::vector<d2d::Vector> fixed;
+		transLocalToWorld(polygon->getVertices(), fixed);
+		return d2d::Math::isPolylineIntersectRect(fixed, true, rect);
 	}
 	else if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(shape))
 	{
-		return isBoundaryIntersect(chain->getVertices(), rect);
+		std::vector<d2d::Vector> fixed;
+		transLocalToWorld(chain->getVertices(), fixed);
+		return d2d::Math::isPolylineIntersectRect(fixed, false, rect);
 	}
 	else
 		return false;
@@ -103,28 +125,23 @@ void Fixture::draw(const d2d::Colorf& cFace, const d2d::Colorf& cEdge) const
 		d2d::PrimitiveDraw::drawRect(p0, p1, true, 2, cFace);
 		d2d::PrimitiveDraw::drawRect(p0, p1, false, 2, cEdge);
 	}
-	else if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(shape))
+	else if (d2d::PolygonShape* polygon = dynamic_cast<d2d::PolygonShape*>(shape))
 	{
-		const std::vector<d2d::Vector>& vertices = chain->getVertices();
+		const std::vector<d2d::Vector>& vertices = polygon->getVertices();
 		d2d::PrimitiveDraw::drawPolygon(vertices, cFace);
 		d2d::PrimitiveDraw::drawPolyline(vertices, cEdge, true, 2);
 	}
+	else if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(shape))
+	{
+		const std::vector<d2d::Vector>& vertices = chain->getVertices();
+		d2d::PrimitiveDraw::drawPolyline(vertices, cEdge, chain->isClosed(), 2);
+	}
 }
 
-bool Fixture::isBoundaryContain(const std::vector<d2d::Vector>& boundary, 
-								const d2d::Vector& pos) const
+void Fixture::transLocalToWorld(const std::vector<d2d::Vector>& local, 
+								std::vector<d2d::Vector>& world) const
 {
-	std::vector<d2d::Vector> fixed(boundary);
-	for (size_t i = 0, n = fixed.size(); i < n ; ++i)
-		fixed[i] = d2d::Math::rotateVector(fixed[i], body->sprite->getAngle()) + body->sprite->getPosition();
-	return d2d::Math::isPointInArea(pos, fixed);
-}
-
-bool Fixture::isBoundaryIntersect(const std::vector<d2d::Vector>& boundary, 
-								  const d2d::Rect& rect) const
-{
-	std::vector<d2d::Vector> fixed(boundary);
-	for (size_t i = 0, n = fixed.size(); i < n ; ++i)
-		fixed[i] = d2d::Math::rotateVector(fixed[i], body->sprite->getAngle()) + body->sprite->getPosition();
-	return d2d::Math::isPolylineIntersectRect(fixed, true, rect);
+	world.resize(local.size());
+	for (size_t i = 0, n = local.size(); i < n ; ++i)
+		world[i] = d2d::Math::rotateVector(local[i], body->sprite->getAngle()) + body->sprite->getPosition();
 }

@@ -26,9 +26,10 @@ BEToolbar::BEToolbar(wxWindow* parent, d2d::PropertySettingPanel* property,
 					 BEStage* stage)
 	: d2d::ToolbarPanel(parent, stage)
 {
-	addChild(new d2d::DrawLineCMPT(this, wxT("line"), stage, stage, property));
-	addChild(new d2d::NodeCaptureCMPT<d2d::EditRectOP>(this, wxT("rect"), stage, stage, property));
 	addChild(new d2d::NodeCaptureCMPT<d2d::EditCircleOP>(this, wxT("circle"), stage, stage, property));
+	addChild(new d2d::NodeCaptureCMPT<d2d::EditRectOP>(this, wxT("rect"), stage, stage, property));
+	addChild(new d2d::DrawLineCMPT(this, wxT("chain"), stage, stage, property));
+	addChild(new d2d::EditPolygonCMPT(this, wxT("polygon"), stage, stage, property));
 
 	SetSizer(initLayout());	
 }

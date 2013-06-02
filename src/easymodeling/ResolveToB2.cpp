@@ -98,6 +98,23 @@ b2Body* ResolveToB2::createBody(const Body& data, b2World* world,
 			fd.shape = &shape;
 			body->CreateFixture(&fd);
 		}
+		else if (d2d::PolygonShape* polygon = dynamic_cast<d2d::PolygonShape*>(fData->shape))
+		{
+			const std::vector<d2d::Vector>& src = polygon->getVertices();
+			const size_t size = src.size();
+			std::vector<b2Vec2> dst(size);
+			for (size_t j = 0; j < size; ++j)
+			{
+				dst[j].x = src[j].x / d2d::BOX2D_SCALE_FACTOR;
+				dst[j].y = src[j].y / d2d::BOX2D_SCALE_FACTOR;
+			}
+
+			b2PolygonShape shape;
+			shape.Set(&dst[0], size);
+			fd.shape = &shape;
+
+			body->CreateFixture(&fd);
+		}
 		else if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(fData->shape))
 		{
 			const std::vector<d2d::Vector>& src = chain->getVertices();
@@ -109,10 +126,13 @@ b2Body* ResolveToB2::createBody(const Body& data, b2World* world,
 				dst[j].y = src[j].y / d2d::BOX2D_SCALE_FACTOR;
 			}
 
-			b2PolygonShape shape;
-			shape.Set(&dst[0], size);
-
+			b2ChainShape shape;
+			if (chain->isClosed())
+				shape.CreateLoop(&dst[0], size);
+			else
+				shape.CreateChain(&dst[0], size);
 			fd.shape = &shape;
+
 			body->CreateFixture(&fd);
 		}
 	}

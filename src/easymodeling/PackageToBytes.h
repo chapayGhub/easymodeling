@@ -29,6 +29,15 @@ namespace emodeling
 	class PaskageToBytes
 	{
 	public:
+		enum ShapeType
+		{
+			e_circle = 0,
+			e_rect,
+			e_chain,
+			e_polygon
+		};
+
+	public:
 		static void packBody(const Body& data, std::ofstream& fout);
 
 		static void packJoint(const Joint& data, std::ofstream& fout,

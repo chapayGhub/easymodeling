@@ -163,27 +163,30 @@ void StagePanel::loadBody(const wxString& filepath, Body& body)
 	{
 		Fixture* fixture = new Fixture;
 		fixture->body = &body;
-		if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(shapes[i]))
-		{
-			fixture->shape = new d2d::ChainShape(chain->getVertices(), true);
-		}
-		else if (d2d::RectShape* rect = dynamic_cast<d2d::RectShape*>(shapes[i]))
-		{
-			std::vector<d2d::Vector> vertices(4);
- 			vertices[0] = d2d::Vector(rect->m_rect.xMin, rect->m_rect.yMin);
- 			vertices[1] = d2d::Vector(rect->m_rect.xMax, rect->m_rect.yMin);
- 			vertices[2] = d2d::Vector(rect->m_rect.xMax, rect->m_rect.yMax);
- 			vertices[3] = d2d::Vector(rect->m_rect.xMin, rect->m_rect.yMax);
 
-			fixture->shape = new d2d::ChainShape(vertices, true);
-		}
-		else if (d2d::CircleShape* circle = dynamic_cast<d2d::CircleShape*>(shapes[i]))
-		{
-			fixture->shape = new d2d::CircleShape(d2d::Vector(), circle->radius);
-		}
+		fixture->shape = shapes[i];
+
+// 		if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(shapes[i]))
+// 		{
+// 			fixture->shape = new d2d::ChainShape(chain->getVertices(), true);
+// 		}
+// 		else if (d2d::RectShape* rect = dynamic_cast<d2d::RectShape*>(shapes[i]))
+// 		{
+// 			std::vector<d2d::Vector> vertices(4);
+//  			vertices[0] = d2d::Vector(rect->m_rect.xMin, rect->m_rect.yMin);
+//  			vertices[1] = d2d::Vector(rect->m_rect.xMax, rect->m_rect.yMin);
+//  			vertices[2] = d2d::Vector(rect->m_rect.xMax, rect->m_rect.yMax);
+//  			vertices[3] = d2d::Vector(rect->m_rect.xMin, rect->m_rect.yMax);
+// 
+// 			fixture->shape = new d2d::ChainShape(vertices, true);
+// 		}
+// 		else if (d2d::CircleShape* circle = dynamic_cast<d2d::CircleShape*>(shapes[i]))
+// 		{
+// 			fixture->shape = new d2d::CircleShape(d2d::Vector(), circle->radius);
+// 		}
 		body.fixtures.push_back(fixture);
 
-		shapes[i]->release();
+//		shapes[i]->release();
 	}
 }
 
@@ -191,10 +194,6 @@ void StagePanel::loadBody(d2d::ISprite* sprite, Body& body)
 {
 	Fixture* fixture = new Fixture;
 	fixture->body = &body;
-
-// 	std::vector<d2d::Vector> vertices;
-// 	sprite->getBounding()->getBoundPos(vertices);
-// 	fixture->shape = new d2d::ChainShape(vertices, true);
 
 	const float width = sprite->getSymbol().getWidth(),
 		height = sprite->getSymbol().getHeight();

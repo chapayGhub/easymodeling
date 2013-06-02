@@ -53,12 +53,18 @@ void PaskageToBytes::packBody(const Body& data, std::ofstream& fout)
 
 		if (d2d::CircleShape* circle = dynamic_cast<d2d::CircleShape*>(fData->shape))
 		{
+			int type = e_circle;
+			fout.write(reinterpret_cast<const char*>(&type), sizeof(int));
+
 			fout.write(reinterpret_cast<const char*>(&circle->radius), sizeof(float));
 			fout.write(reinterpret_cast<const char*>(&circle->center.x), sizeof(float));
 			fout.write(reinterpret_cast<const char*>(&circle->center.y), sizeof(float));
 		}
 		else if (d2d::RectShape* rect = dynamic_cast<d2d::RectShape*>(fData->shape))
 		{
+			int type = e_rect;
+			fout.write(reinterpret_cast<const char*>(&type), sizeof(int));
+
 			fout.write(reinterpret_cast<const char*>(&rect->m_rect.xMin), sizeof(float));
 			fout.write(reinterpret_cast<const char*>(&rect->m_rect.xMax), sizeof(float));
 			fout.write(reinterpret_cast<const char*>(&rect->m_rect.yMin), sizeof(float));
@@ -66,6 +72,9 @@ void PaskageToBytes::packBody(const Body& data, std::ofstream& fout)
 		}
 		else if (d2d::ChainShape* chain = dynamic_cast<d2d::ChainShape*>(fData->shape))
 		{
+			int type = dynamic_cast<d2d::PolygonShape*>(chain) ? e_polygon : e_chain;
+			fout.write(reinterpret_cast<const char*>(&type), sizeof(int));
+
 			const std::vector<d2d::Vector>& vertices = chain->getVertices();
 			size_t vSize = vertices.size();
 			fout.write(reinterpret_cast<const char*>(&vSize), sizeof(size_t));
