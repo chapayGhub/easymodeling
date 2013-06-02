@@ -416,9 +416,6 @@ void JointPropertySetting::createPropertyPanel(DistanceJoint* joint, wxPropertyG
 	pg->AppendIn(localAnchorBProp, new wxFloatProperty(wxT("y"), wxPG_LABEL, joint->localAnchorB.y));
 	pg->SetPropertyAttribute(wxT("localAnchorB.y"), "Precision", 2);
 
-	pg->Append(new wxFloatProperty(wxT("length"), wxPG_LABEL, joint->length));
-	pg->SetPropertyAttribute(wxT("length"), "Precision", 2);
-
 	pg->Append(new wxFloatProperty(wxT("frequencyHz"), wxPG_LABEL, joint->frequencyHz));
 	pg->SetPropertyAttribute(wxT("frequencyHz"), "Precision", 2);
 
@@ -433,8 +430,6 @@ void JointPropertySetting::updatePropertyPanel(DistanceJoint* joint, wxPropertyG
 
 	pg->GetProperty(wxT("localAnchorB.x"))->SetValue(joint->localAnchorB.x);
 	pg->GetProperty(wxT("localAnchorB.y"))->SetValue(joint->localAnchorB.y);
-
-	pg->GetProperty(wxT("length"))->SetValue(joint->length);
 
 	pg->GetProperty(wxT("frequencyHz"))->SetValue(joint->frequencyHz);
 
@@ -451,8 +446,6 @@ void JointPropertySetting::onPropertyGridChange(DistanceJoint* joint, const wxSt
 		joint->localAnchorB.x = wxANY_AS(value, float);
 	else if (name == wxT("localAnchorB.y"))
 		joint->localAnchorB.y = wxANY_AS(value, float);
-	else if (name == wxT("length"))
-		joint->length = wxANY_AS(value, float);
 	else if (name == wxT("frequencyHz"))
 		joint->frequencyHz = wxANY_AS(value, float);
 	else if (name == wxT("dampingRatio"))

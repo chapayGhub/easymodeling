@@ -23,7 +23,6 @@ using namespace emodeling;
 
 DistanceJoint::DistanceJoint(Body* b0, Body* b1)
 	: Joint(b0, b1, e_distanceJoint)
-	, length(1.0f)
 	, frequencyHz(0.0f)
 	, dampingRatio(0.0f)
 {

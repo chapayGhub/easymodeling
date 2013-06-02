@@ -49,8 +49,6 @@ namespace emodeling
 		d2d::Vector localAnchorA;
 		d2d::Vector localAnchorB;
 
-		float length;
-
 		float frequencyHz;
 		float dampingRatio;
 

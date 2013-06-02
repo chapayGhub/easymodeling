@@ -279,8 +279,6 @@ Json::Value FileIO::b2j(Joint* joint, const std::map<Body*, int>& bodyIndexMap)
 			value["anchorB"]["x"] = dJoint->localAnchorB.x;
 			value["anchorB"]["y"] = dJoint->localAnchorB.y;
 
-			value["length"] = dJoint->length;
-
 			value["frequencyHz"] = dJoint->frequencyHz;
 			value["dampingRatio"] = dJoint->dampingRatio;
 		}
@@ -557,8 +555,6 @@ Joint* FileIO::j2bJoint(Json::Value jointValue,
 		dJoint->localAnchorA.y = jointValue["anchorA"]["y"].asDouble();
 		dJoint->localAnchorB.x = jointValue["anchorB"]["x"].asDouble();
 		dJoint->localAnchorB.y = jointValue["anchorB"]["y"].asDouble();
-
-		dJoint->length = jointValue["length"].asDouble();
 
 		dJoint->frequencyHz = jointValue["frequencyHz"].asDouble();
 		dJoint->dampingRatio = jointValue["dampingRatio"].asDouble();
