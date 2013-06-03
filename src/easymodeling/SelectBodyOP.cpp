@@ -21,7 +21,7 @@
 #include "WorldPropertySetting.h"
 #include "DrawUtils.h"
 #include "StagePanel.h"
-#include "BEDialog.h"
+#include "BodyEditStage.h"
 #include "Context.h"
 
 using namespace emodeling;
@@ -70,7 +70,7 @@ bool SelectBodyOP::onMouseLeftDClick(int x, int y)
 	d2d::ISprite* selected = m_spritesImpl->querySpriteByPos(pos);
 	if (selected)
 	{
-		BEDialog dlg(Context::Instance()->stage, selected);
+		libshape::MainDialog<BodyEditStage> dlg(Context::Instance()->stage, selected);
 		dlg.ShowModal();
 		Context::Instance()->stage->resetCanvas();
 	}

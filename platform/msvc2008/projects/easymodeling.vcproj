@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\src\easymodeling;..\..\..\..\drag2d\src\common;..\..\..\..\drag2d\src\drag2d;..\..\..\..\drag2d\platform\msvc2008\include"
+				AdditionalIncludeDirectories="..\..\..\src\easymodeling;..\..\..\..\drag2d\src\common;..\..\..\..\drag2d\src\drag2d;..\..\..\..\drag2d\platform\msvc2008\include;..\..\..\..\easyshape\src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -122,7 +122,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\..\src\easymodeling;..\..\..\..\drag2d\src\common;..\..\..\..\drag2d\src\drag2d;..\..\..\..\drag2d\platform\msvc2008\include"
+				AdditionalIncludeDirectories="..\..\..\src\easymodeling;..\..\..\..\drag2d\src\common;..\..\..\..\drag2d\src\drag2d;..\..\..\..\drag2d\platform\msvc2008\include;..\..\..\..\easyshape\src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -430,44 +430,16 @@
 			</Filter>
 		</Filter>
 		<Filter
-			Name="bodyedit"
-			>
-			<File
-				RelativePath="..\..\..\src\easymodeling\BECanvas.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\easymodeling\BECanvas.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\easymodeling\BEDialog.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\easymodeling\BEDialog.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\easymodeling\BEStage.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\easymodeling\BEStage.h"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\easymodeling\BEToolbar.cpp"
-				>
-			</File>
-			<File
-				RelativePath="..\..\..\src\easymodeling\BEToolbar.h"
-				>
-			</File>
-		</Filter>
-		<Filter
 			Name="view"
 			>
+			<File
+				RelativePath="..\..\..\src\easymodeling\BodyEditStage.cpp"
+				>
+			</File>
+			<File
+				RelativePath="..\..\..\src\easymodeling\BodyEditStage.h"
+				>
+			</File>
 			<Filter
 				Name="library"
 				>

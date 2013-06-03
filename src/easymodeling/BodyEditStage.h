@@ -16,31 +16,32 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef EMODELING_BODY_EDIT_TOOLBAR_H
-#define EMODELING_BODY_EDIT_TOOLBAR_H
+#ifndef EMODELING_BODY_EDIT_STAGE_H
+#define EMODELING_BODY_EDIT_STAGE_H
 
 #include <drag2d.h>
+#include <easyshape.h>
 
 namespace emodeling
 {
-	class BEStage;
-
-	class BEToolbar : public d2d::ToolbarPanel
+	class BodyEditStage : public libshape::StagePanel
 	{
 	public:
-		BEToolbar(wxWindow* parent, d2d::PropertySettingPanel* property,
-			BEStage* stage);
+		BodyEditStage(wxWindow* parent, d2d::ISymbol* symbol);
+		BodyEditStage(wxWindow* parent, d2d::ISprite* sprite);
 
-	protected:
-		virtual wxSizer* initLayout();
+		//
+		// d2d::MultiShapesImpl interface
+		//
+		virtual void removeShape(d2d::IShape* shape);
+		virtual void insertShape(d2d::IShape* shape);
 
-	private:
-		void onClearShapes(wxCommandEvent& event);
+		//
+		// libshape::StagePanel interface
+		//
+		virtual void loadShapes();
 
-	private:
-		BEStage* m_stage;
-
-	}; // BEToolbar
+	}; // BodyEditStage
 }
 
-#endif // EMODELING_BODY_EDIT_TOOLBAR_H
+#endif // EMODELING_BODY_EDIT_STAGE_H

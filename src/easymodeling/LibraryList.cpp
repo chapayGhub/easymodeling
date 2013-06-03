@@ -17,7 +17,7 @@
 */
 
 #include "LibraryList.h"
-#include "BEDialog.h"
+#include "BodyEditStage.h"
 #include "Context.h"
 #include "StagePanel.h"
 
@@ -30,7 +30,7 @@ LibraryList::LibraryList(wxWindow* parent)
 
 void LibraryList::onListDoubleClicked(wxCommandEvent& event)
 {
-	BEDialog dlg(this, getSymbol(event.GetInt()));
+	libshape::MainDialog<BodyEditStage> dlg(this, getSymbol(event.GetInt()));
 	dlg.ShowModal();
 	Context::Instance()->stage->resetCanvas();
 }
