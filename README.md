@@ -4,12 +4,30 @@ easymodeling
 Modeling tools for Box2D, to create body, fixture and joint.
 
 ##Preview
-![preview](../../../homepage/blob/gh-pages/emodeling/preview.jpg?raw=true)
+
+Edit shape
+
+![editshape](../../../homepage/blob/gh-pages/emodeling/editshape.jpg?raw=true)
+
+Edit fixture
+
+![editfixture](../../../homepage/blob/gh-pages/emodeling/editfixture.jpg?raw=true)
+
+Edit joint
+
+![editjoint](../../../homepage/blob/gh-pages/emodeling/editjoint.jpg?raw=true)
 
 ##About
 EasyModeling was inspired by [R.U.B.E Box2d editor](https://www.iforce2d.net/rube/).
 
 This editor used to create Box2D's body, fixture, joint and adjust their attributes. 
+
+##Sources
+
+[easymodeling](https://github.com/xzrunner/easymodeling)
+
+
+[libdrag2d](https://github.com/xzrunner/drag2d)	[libshape](https://github.com/xzrunner/easyshape)
 
 ##Binaries
 [easymodeling.exe](platform/msvc2008/easymodeling/x86/Release/easymodeling.exe?raw=true)
@@ -18,16 +36,38 @@ maybe you need these dll files: [freetype6.dll](http://cn.dll-files.com/freetype
 
 ##How to use
 
-1. Use [easyshape](https://github.com/xzrunner/easyshape) to extract the boundary of image and save(F11).
+###1. Load images
 
-2. Load extracted images from EasyModeling's left panel "+".
+Press left panel's "+" button to add images.
 
-3. Drag these symbol to stage.
+![load images](../../../homepage/blob/gh-pages/emodeling/ht1.jpg?raw=true)
 
-4. Adjust the position and angle of actors in stage panel.
+###2. Edit shape
 
-5. Set attributes though left-low panel.
+Double click library's image will save the boundary file on disk, so no need to edit again when loading the same image next time.
 
-6. Change operation to body, fixture or joint by right panel.
+Also you can drag the image to stage, double click to edit it. This will saved at the final file.
 
-7. Press *Ctrl + Enter* to run it at preview panel.
+![edit shape](../../../homepage/blob/gh-pages/emodeling/ht2.jpg?raw=true)
+
+###3. Adjust the position and angle of actors in stage panel
+
+Mouse left drag to move and mouse right drag to rotate.
+
+![Adjust](../../../homepage/blob/gh-pages/emodeling/ht3.jpg?raw=true)
+
+###4. Set attributes though left-low panel
+
+To set b2World, b2Body, b2Fixturem and b2Joint's value.
+
+![attributes](../../../homepage/blob/gh-pages/emodeling/ht4.jpg?raw=true)
+
+###5. Edit joint
+
+Select 2 bodies and press ok to create joint
+
+![edit joint](../../../homepage/blob/gh-pages/emodeling/ht5.jpg?raw=true)
+
+###6. Press *Ctrl + Enter* to run it at preview panel
+
+![preview](../../../homepage/blob/gh-pages/emodeling/ht6.jpg?raw=true)
