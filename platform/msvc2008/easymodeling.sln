@@ -4,6 +4,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "easymodeling", "projects\easymodeling.vcproj", "{753CFBD6-4C2A-43F9-9453-B1BE89FE1EEF}"
 	ProjectSection(ProjectDependencies) = postProject
 		{C1A2E85C-CF62-46A9-B46C-DFA12EC725E7} = {C1A2E85C-CF62-46A9-B46C-DFA12EC725E7}
+		{11082ADE-13CA-49C7-9F6D-C82F69333AD7} = {11082ADE-13CA-49C7-9F6D-C82F69333AD7}
 		{E69A7CDE-521A-45B5-B776-AD16F72F6A07} = {E69A7CDE-521A-45B5-B776-AD16F72F6A07}
 		{8ACA5FE2-AAF7-4B61-87ED-158414EE17CF} = {8ACA5FE2-AAF7-4B61-87ED-158414EE17CF}
 	EndProjectSection
@@ -13,6 +14,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libbox2d", "..\..\..\drag2d\platform\msvc2008\projects\libbox2d.vcproj", "{8ACA5FE2-AAF7-4B61-87ED-158414EE17CF}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libshape", "..\..\..\easyshape\platform\msvc2008\projects\libshape.vcproj", "{C1A2E85C-CF62-46A9-B46C-DFA12EC725E7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libbuilder", "..\..\..\easybuilder\platform\msvc2008\projects\libbuilder.vcproj", "{11082ADE-13CA-49C7-9F6D-C82F69333AD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +39,10 @@ Global
 		{C1A2E85C-CF62-46A9-B46C-DFA12EC725E7}.Debug|Win32.Build.0 = Debug|Win32
 		{C1A2E85C-CF62-46A9-B46C-DFA12EC725E7}.Release|Win32.ActiveCfg = Release|Win32
 		{C1A2E85C-CF62-46A9-B46C-DFA12EC725E7}.Release|Win32.Build.0 = Release|Win32
+		{11082ADE-13CA-49C7-9F6D-C82F69333AD7}.Debug|Win32.ActiveCfg = Debug|Win32
+		{11082ADE-13CA-49C7-9F6D-C82F69333AD7}.Debug|Win32.Build.0 = Debug|Win32
+		{11082ADE-13CA-49C7-9F6D-C82F69333AD7}.Release|Win32.ActiveCfg = Release|Win32
+		{11082ADE-13CA-49C7-9F6D-C82F69333AD7}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

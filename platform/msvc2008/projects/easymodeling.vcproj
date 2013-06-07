@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..\..\..\src\easymodeling;..\..\..\..\drag2d\src\common;..\..\..\..\drag2d\src\drag2d;..\..\..\..\drag2d\platform\msvc2008\include;..\..\..\..\easyshape\src"
+				AdditionalIncludeDirectories="..\..\..\src\easymodeling;..\..\..\..\drag2d\src\common;..\..\..\..\drag2d\src\drag2d;..\..\..\..\drag2d\platform\msvc2008\include;..\..\..\..\easyshape\src;..\..\..\..\easybuilder\src"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -122,7 +122,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
-				AdditionalIncludeDirectories="..\..\..\src\easymodeling;..\..\..\..\drag2d\src\common;..\..\..\..\drag2d\src\drag2d;..\..\..\..\drag2d\platform\msvc2008\include;..\..\..\..\easyshape\src"
+				AdditionalIncludeDirectories="..\..\..\src\easymodeling;..\..\..\..\drag2d\src\common;..\..\..\..\drag2d\src\drag2d;..\..\..\..\drag2d\platform\msvc2008\include;..\..\..\..\easyshape\src;..\..\..\..\easybuilder\src"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -412,6 +412,14 @@
 					>
 				</File>
 				<File
+					RelativePath="..\..\..\src\easymodeling\Love2dCode.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\..\..\src\easymodeling\Love2dCode.h"
+					>
+				</File>
+				<File
 					RelativePath="..\..\..\src\easymodeling\PackageToBytes.cpp"
 					>
 				</File>
@@ -597,6 +605,10 @@
 				</File>
 			</Filter>
 		</Filter>
+		<File
+			RelativePath="..\..\..\..\easybuilder\platform\msvc2008\ebuilder.rc"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

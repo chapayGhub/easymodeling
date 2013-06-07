@@ -23,6 +23,10 @@
 
 #include "Task.h"
 
+#include "Love2dCode.h"
+
+#include <easybuilder.h>
+
 using namespace emodeling;
 
 static const wxString VERSION = wxT("0.13.0515");
@@ -32,7 +36,8 @@ static const wxString FILE_TAG = wxT("modeling");
 enum MenuID
 {
 	ID_OTHERS_BEGIN = 500,
-	ID_PREVIEW = 600
+	ID_PREVIEW = 600,
+	ID_LOVE2D = 700
 };
 
 BEGIN_EVENT_TABLE(Frame, wxFrame)
@@ -44,6 +49,7 @@ BEGIN_EVENT_TABLE(Frame, wxFrame)
 	EVT_MENU(wxID_EXIT, Frame::onQuit)
 	EVT_MENU(wxID_HELP, Frame::onAbout)
 	EVT_MENU(ID_PREVIEW, Frame::onPreview)
+	EVT_MENU(ID_LOVE2D, Frame::onCodeLove2d)
 END_EVENT_TABLE()
 
 Frame::Frame(const wxString& title)
@@ -134,6 +140,24 @@ void Frame::onPreview(wxCommandEvent& event)
 		m_task->onPreview();
 }
 
+void Frame::onCodeLove2d(wxCommandEvent& event)
+{
+	ebuilder::CodeDialog dlg(this);
+
+	ebuilder::love2d::Page* page = new ebuilder::love2d::Page(dlg.notebook, wxT("main.lua"));
+
+	ebuilder::CodeGenerator gen;
+	Love2dCode code(gen);
+	code.resolve();
+	page->SetReadOnly(false);
+	page->SetText(gen.toText());
+	page->SetReadOnly(true);
+
+	dlg.notebook->AddPage(page, page->getName());
+
+	dlg.ShowModal();
+}
+
 void Frame::initMenuBar()
 {
 	wxMenuBar* menuBar = new wxMenuBar;
@@ -142,7 +166,8 @@ void Frame::initMenuBar()
 
 	menuBar->Append(initViewBar(), wxT("View"));
 	menuBar->Append(initSettingsBar(), wxT("Settings"));
-	menuBar->Append(initHelpBar(), wxT("About"));
+	menuBar->Append(initCodesBar(), wxT("Codes"));
+//	menuBar->Append(initHelpBar(), wxT("About"));
 
 	SetMenuBar(menuBar);
 }
@@ -164,6 +189,14 @@ wxMenu* Frame::initViewBar()
 {
 	wxMenu* menu = new wxMenu;
 	menu->Append(ID_PREVIEW, wxT("&Preview\tCtrl+Enter"), wxEmptyString);
+
+	return menu;
+}
+
+wxMenu* Frame::initCodesBar()
+{
+	wxMenu* menu = new wxMenu;
+	menu->Append(ID_LOVE2D, wxT("love2d"), wxEmptyString);
 
 	return menu;
 }

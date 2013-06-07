@@ -16,55 +16,40 @@
 * 3. This notice may not be removed or altered from any source distribution.
 */
 
-#ifndef EMODELING_FRAME_H
-#define EMODELING_FRAME_H
+#ifndef EMODELING_LOVE2D_CODE_H
+#define EMODELING_LOVE2D_CODE_H
 
-#include <wx/wx.h>
+#include <easybuilder.h>
 
 namespace emodeling
 {
-	class Task;
-
-	class Frame : public wxFrame
+	class Love2dCode
 	{
 	public:
-		Frame(const wxString& title);
+		Love2dCode(ebuilder::CodeGenerator& gen);
+
+		void resolve();
 
 	private:
-		void onNew(wxCommandEvent& event);
-		void onOpen(wxCommandEvent& event);
-		void onSave(wxCommandEvent& event);
-		void onSaveAs(wxCommandEvent& event);
+		void resolveHeader();
 
-		void onQuit(wxCommandEvent& event);
-		void onAbout(wxCommandEvent& event);
+		void resolveLoad();
+		void resolveLoadImages();
+		void resolveLoadWorld();
+		void resolveLoadBodies();
+		void resolveLoadJoints();
 
-		void onSettingOperatingMenu(wxCommandEvent& event);
-		void onSettingViewMenu(wxCommandEvent& event);
+		void resolveUpdate();
 
-		void onPreview(wxCommandEvent& event);
-
-		void onCodeLove2d(wxCommandEvent& event);
-
-		void initMenuBar();
-
-		wxMenu* initFileBar();
-
-		wxMenu* initViewBar();
-		wxMenu* initCodesBar();
-		wxMenu* initSettingsBar();
-		wxMenu* initHelpBar();
-
-		void setCurrFilename();
+		void resolveDraw();
 
 	private:
-		Task* m_task;
+		ebuilder::CodeGenerator& m_gen;
+		
+		ebuilder::CodeGenerator *m_genHeader, *m_genLoad, 
+			*m_genUpdate, *m_genDraw;
 
-		wxString m_currFilename;
-
-		DECLARE_EVENT_TABLE()
-
-	}; // Frame
+	}; // Love2dCode
 }
 
-#endif // EMODELING_FRAME_H
+#endif // EMODELING_LOVE2D_CODE_H
