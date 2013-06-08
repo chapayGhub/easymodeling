@@ -23,6 +23,9 @@
 
 namespace emodeling
 {
+	class Body;
+	class Joint;
+
 	class Love2dCode
 	{
 	public:
@@ -37,7 +40,9 @@ namespace emodeling
 		void resolveLoadImages();
 		void resolveLoadWorld();
 		void resolveLoadBodies();
+		void resolveLoadFixtures(Body* body);
 		void resolveLoadJoints();
+		void resolveLoadJoint(Joint* joint);
 
 		void resolveUpdate();
 
