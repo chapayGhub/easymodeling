@@ -17,6 +17,10 @@ Edit joint
 
 ![editjoint](../../../homepage/blob/gh-pages/emodeling/editjoint.jpg?raw=true)
 
+Output to codes
+
+![codes](../../../homepage/blob/gh-pages/emodeling/love2d.jpg?raw=true)
+
 ##About
 EasyModeling was inspired by [R.U.B.E Box2d editor](https://www.iforce2d.net/rube/).
 
@@ -71,3 +75,7 @@ Select 2 bodies and press ok to create joint
 ###6. Press *Ctrl + Enter* to run it at preview panel
 
 ![preview](../../../homepage/blob/gh-pages/emodeling/ht6.jpg?raw=true)
+
+###7. Select menu *Codes* output the modeling to codes
+
+![preview](../../../homepage/blob/gh-pages/emodeling/codes.jpg?raw=true)
