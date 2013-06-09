@@ -412,14 +412,6 @@
 					>
 				</File>
 				<File
-					RelativePath="..\..\..\src\easymodeling\Love2dCode.cpp"
-					>
-				</File>
-				<File
-					RelativePath="..\..\..\src\easymodeling\Love2dCode.h"
-					>
-				</File>
-				<File
 					RelativePath="..\..\..\src\easymodeling\PackageToBytes.cpp"
 					>
 				</File>
@@ -435,6 +427,18 @@
 					RelativePath="..\..\..\src\easymodeling\ResolveToB2.h"
 					>
 				</File>
+				<Filter
+					Name="code"
+					>
+					<File
+						RelativePath="..\..\..\src\easymodeling\Love2dCode.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\..\..\src\easymodeling\Love2dCode.h"
+						>
+					</File>
+				</Filter>
 			</Filter>
 		</Filter>
 		<Filter

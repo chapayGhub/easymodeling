@@ -42,7 +42,8 @@ namespace emodeling
 		void resolveLoadBodies();
 		void resolveLoadFixtures(Body* body);
 		void resolveLoadJoints();
-		void resolveLoadJoint(Joint* joint);
+		void resolveLoadJoint(const std::vector<Joint*>& joints, size_t index,
+			const std::vector<Body*>& bodies);
 
 		void resolveUpdate();
 
