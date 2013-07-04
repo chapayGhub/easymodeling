@@ -32,21 +32,21 @@ namespace emodeling
 	class FileIO
 	{
 	public:
-		static void load(std::ifstream& fin);
-		static void store(std::ofstream& fout);
+		static void load(const char* filename);
+		static void store(const char* filename);
 
 	private:
 		static Json::Value b2j(const World& world);
-		static Json::Value b2j(Body* body);
+		static Json::Value b2j(Body* body, const std::string& dlg);
 		static Json::Value b2j(Fixture* fixture);
 		static Json::Value b2j(Joint* joint, 
 			const std::map<Body*, int>& bodyIndexMap);
 
-		static void j2World(Json::Value worldValue);
+		static void j2World(const Json::Value& worldValue);
 //		static Body* j2bBody(Json::Value bodyValue, StagePanel* stage);
-		static Body* j2bBody(Json::Value bodyValue);
-		static Fixture* j2bFixture(Json::Value fixtureValue);
-		static Joint* j2bJoint(Json::Value jointValue, 
+		static Body* j2bBody(const Json::Value& bodyValue, const std::string& dlg);
+		static Fixture* j2bFixture(const Json::Value& fixtureValue);
+		static Joint* j2bJoint(const Json::Value& jointValue, 
 			const std::vector<Body*>& bodies);
 
 		friend class FileApapter;

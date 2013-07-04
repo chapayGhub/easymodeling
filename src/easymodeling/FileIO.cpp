@@ -34,10 +34,11 @@
 
 using namespace emodeling;
 
-void FileIO::load(std::ifstream& fin)
+void FileIO::load(const char* filename)
 {
 	Json::Value value;
 	Json::Reader reader;
+	std::ifstream fin(filename);
 	reader.parse(fin, value);
 	fin.close();
 
@@ -47,10 +48,12 @@ void FileIO::load(std::ifstream& fin)
 
 	j2World(value["world"]);
 
+	std::string dlg = d2d::FilenameTools::getFileDir(filename);
+
 	int i = 0;
 	Json::Value bodyValue = value["body"][i++];
 	while (!bodyValue.isNull()) {
-		Body* body = j2bBody(bodyValue);
+		Body* body = j2bBody(bodyValue, dlg);
 		context->stage->insertSprite(body->sprite);
 		bodies.push_back(body);
 
@@ -81,7 +84,7 @@ void FileIO::load(std::ifstream& fin)
 	context->stage->resetCanvas();
 }
 
-void FileIO::store(std::ofstream& fout)
+void FileIO::store(const char* filename)
 {
 	std::vector<Body*> bodies;
 	Context::Instance()->stage->traverseBodies(d2d::FetchAllVisitor<Body>(bodies));
@@ -91,13 +94,15 @@ void FileIO::store(std::ofstream& fout)
 
 	Json::Value value;
 
+	std::string dlg = d2d::FilenameTools::getFileDir(filename);
+
 	value["world"] = b2j(Context::Instance()->world);
 
 	std::map<Body*, int> bodyIndexMap;
 	for (size_t i = 0, n = bodies.size(); i < n; ++i)
 	{
 		bodyIndexMap[bodies[i]] = i;
-		value["body"][i] = b2j(bodies[i]);
+		value["body"][i] = b2j(bodies[i], dlg);
 	}
 
 	std::map<Joint*, int> jointIndexMap;
@@ -118,7 +123,9 @@ void FileIO::store(std::ofstream& fout)
 	}
 
 	Json::StyledStreamWriter writer;
+	std::ofstream fout(filename);
 	writer.write(fout, value);
+	fout.close();
 }
 
 Json::Value FileIO::b2j(const World& world)
@@ -139,13 +146,14 @@ Json::Value FileIO::b2j(const World& world)
 	return value;
 }
 
-Json::Value FileIO::b2j(Body* body)
+Json::Value FileIO::b2j(Body* body, const std::string& dlg)
 {
 	Json::Value value;
 
 	value["name"] = body->name.ToStdString();
 
-	value["filepath"] = body->sprite->getSymbol().getFilepath().ToStdString();
+	value["filepath"] = d2d::FilenameTools::getRelativePath(dlg, 
+		body->sprite->getSymbol().getFilepath()).ToStdString();
 
 	value["type"] = body->type;
 	switch (body->type)
@@ -386,7 +394,7 @@ Json::Value FileIO::b2j(Joint* joint, const std::map<Body*, int>& bodyIndexMap)
 	return value;
 }
 
-void FileIO::j2World(Json::Value worldValue)
+void FileIO::j2World(const Json::Value& worldValue)
 {
 	World& world = Context::Instance()->world;
 
@@ -433,9 +441,11 @@ void FileIO::j2World(Json::Value worldValue)
 //	return body;
 //}
 
-Body* FileIO::j2bBody(Json::Value bodyValue)
+Body* FileIO::j2bBody(const Json::Value& bodyValue, const std::string& dlg)
 {
 	std::string filepath = bodyValue["filepath"].asString();
+	filepath = d2d::FilenameTools::getAbsolutePath(dlg, filepath);
+
 	d2d::ISymbol* symbol = d2d::SymbolMgr::Instance()->getSymbol(filepath);
 	d2d::ISprite* sprite = d2d::SpriteFactory::create(symbol);
 
@@ -472,7 +482,7 @@ Body* FileIO::j2bBody(Json::Value bodyValue)
 	return body;
 }
 
-Fixture* FileIO::j2bFixture(Json::Value fixtureValue)
+Fixture* FileIO::j2bFixture(const Json::Value& fixtureValue)
 {
 	Fixture* fixture = new Fixture;
 
@@ -490,7 +500,7 @@ Fixture* FileIO::j2bFixture(Json::Value fixtureValue)
 	return fixture;
 }
 
-Joint* FileIO::j2bJoint(Json::Value jointValue,
+Joint* FileIO::j2bJoint(const Json::Value& jointValue,
 						const std::vector<Body*>& bodies)
 {
 	Joint* joint = NULL;

@@ -40,10 +40,12 @@ void FileApapter::resolve(const wxString& filepath)
 
 	FileIO::j2World(value["world"]);
 
+	std::string dlg = d2d::FilenameTools::getFileDir(filepath);
+
 	int i = 0;
 	Json::Value bodyValue = value["body"][i++];
 	while (!bodyValue.isNull()) {
-		Body* body = FileIO::j2bBody(bodyValue);
+		Body* body = FileIO::j2bBody(bodyValue, dlg);
 		m_nameBodyMap.insert(std::make_pair(body->name, body));
 		m_bodies.push_back(body);
 

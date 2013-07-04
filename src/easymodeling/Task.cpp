@@ -45,16 +45,12 @@ Task::~Task()
 
 void Task::loadFromTextFile(const char* filename)
 {
-	std::ifstream fin(filename);
-  	FileIO::load(fin);
-	fin.close();
+  	FileIO::load(filename);
 }
 
 void Task::storeToTextFile(const char* filename) const
 {
-  	std::ofstream fout(filename);
-  	FileIO::store(fout);
-  	fout.close();
+  	FileIO::store(filename);
 }
 
 void Task::clear()
